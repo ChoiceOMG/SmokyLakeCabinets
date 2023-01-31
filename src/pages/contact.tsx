@@ -1,9 +1,9 @@
-import Head from "next/head";
-import Image from "next/image";
+import Head from 'next/head';
+import Image from 'next/image';
 
-import Header from "@components/layout/header";
-import Feature from "@components/home/feature";
-import Footer from "@components/layout/footer";
+import Header from '@components/layout/header';
+
+import Footer from '@components/layout/footer';
 
 export default function Contact() {
   return (
@@ -16,266 +16,249 @@ export default function Contact() {
       </Head>
       <Header />
 
-      <section className="relative overflow-hidden bg-gray-50 py-36">
-        <img
-          className="absolute bottom-0 right-0"
-          src="flaro-assets/images/contact/gradient2.svg"
-          alt=""
-        />
-        <div className="container relative z-10 mx-auto px-4">
-          <div className="-m-8 flex flex-wrap">
-            <div className="w-full p-8 md:w-1/2">
-              <div className="flex h-full flex-col justify-between">
-                <div className="mb-12 block md:max-w-md">
-                  <p className="tracking-px mb-6 text-sm font-bold uppercase text-indigo-600">
-                    Contact us
-                  </p>
-                  <h2 className="xl:text-10xl font-heading tracking-px-n text-6xl font-bold leading-none md:text-8xl">
-                    Get connected to grow better business.
-                  </h2>
-                </div>
-                <div className="block">
-                  <p className="tracking-px mb-4 text-sm font-bold uppercase text-gray-400">
-                    Email
-                  </p>
-                  <ul className="mb-14">
-                    <li className="text-xl font-semibold leading-normal">
-                      info@email.com
-                    </li>
-                    <li className="text-xl font-semibold leading-normal">
-                      support@gmail.com
-                    </li>
-                  </ul>
-                  <p className="tracking-px mb-4 text-sm font-bold uppercase text-gray-400">
-                    Phone
-                  </p>
-                  <ul>
-                    <li className="text-xl font-semibold leading-normal">
-                      +1 848 4125 690
-                    </li>
-                    <li className="text-xl font-semibold leading-normal">
-                      +1 848 4125 658
-                    </li>
-                  </ul>
-                </div>
+      <section className="overflow-hidden bg-gray-50 py-10">
+        <div className="container mx-auto px-4">
+          <div className="overflow-hidden rounded-3xl bg-white py-16 px-8">
+            <div className="mx-auto max-w-5xl">
+              <div className="mx-auto mb-10 text-center md:max-w-md">
+                <span className="mb-4 inline-block text-sm font-bold uppercase tracking-widest text-blue-500">
+                  Contact Us
+                </span>
+                <h2 className="font-heading mb-6 text-4xl font-black tracking-tight text-gray-900 md:text-5xl lg:text-6xl">
+                  Get connected
+                </h2>
+                <p className="font-bold text-gray-500">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Malesuada tellus vestibulum, commodo pulvinar.
+                </p>
               </div>
-            </div>
-            <div className="w-full p-8 md:w-1/2">
-              <form className="rounded-4xl shadow-12xl ml-auto bg-white bg-opacity-80 px-11 pt-8 pb-12 md:max-w-xl">
-                <label className="mb-4 block">
-                  <p className="mb-2 font-semibold leading-normal text-gray-900">
-                    Name
-                  </p>
-                  <div className="relative">
-                    <svg
-                      className="absolute left-4 top-1/2 -translate-y-1/2 transform"
-                      width="20"
-                      height="26"
-                      viewBox="0 0 20 26"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+              <form className="rounded-3xl border border-gray-100 bg-gray-100 p-10">
+                <div className="-m-5 mb-1 flex flex-wrap">
+                  <div className="w-full p-5 md:w-1/2">
+                    <label
+                      className="mb-2 block text-sm font-bold text-gray-500"
+                      htmlFor="contactLightReverseInput2-1"
                     >
-                      <path
-                        d="M13.3327 8.83358C13.3327 10.6745 11.8403 12.1669 9.99935 12.1669C8.1584 12.1669 6.66602 10.6745 6.66602 8.83358C6.66602 6.99263 8.1584 5.50024 9.99935 5.50024C11.8403 5.50024 13.3327 6.99263 13.3327 8.83358Z"
-                        stroke="#9CA3AF"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      ></path>
-                      <path
-                        d="M9.99935 14.6669C6.77769 14.6669 4.16602 17.2786 4.16602 20.5002H15.8327C15.8327 17.2786 13.221 14.6669 9.99935 14.6669Z"
-                        stroke="#9CA3AF"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      ></path>
-                    </svg>
+                      Full Name
+                    </label>
                     <input
-                      className="w-full rounded-lg border border-gray-300 py-3 pl-12 pr-4 font-medium text-gray-500 placeholder-gray-500 outline-none focus:ring focus:ring-indigo-300"
-                      id="contactInput3-1"
+                      className="w-full appearance-none rounded-full bg-white px-6 py-3.5 text-lg font-bold text-gray-500 placeholder-gray-500 outline-none focus:ring-4 focus:ring-blue-200"
+                      id="contactLightReverseInput2-1"
                       type="text"
-                      placeholder="First &amp; last name"
+                      placeholder="Enter your name"
                     />
                   </div>
-                </label>
-                <label className="mb-4 block">
-                  <p className="mb-2 font-semibold leading-normal text-gray-900">
-                    Email Address
-                  </p>
-                  <div className="relative">
-                    <svg
-                      className="absolute left-4 top-1/2 -translate-y-1/2 transform"
-                      width="20"
-                      height="26"
-                      viewBox="0 0 20 26"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+                  <div className="w-full p-5 md:w-1/2">
+                    <label
+                      className="mb-2 block text-sm font-bold text-gray-500"
+                      htmlFor="contactLightReverseInput2-2"
                     >
-                      <path
-                        d="M13.3327 8.83358C13.3327 10.6745 11.8403 12.1669 9.99935 12.1669C8.1584 12.1669 6.66602 10.6745 6.66602 8.83358C6.66602 6.99263 8.1584 5.50024 9.99935 5.50024C11.8403 5.50024 13.3327 6.99263 13.3327 8.83358Z"
-                        stroke="#9CA3AF"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      ></path>
-                      <path
-                        d="M9.99935 14.6669C6.77769 14.6669 4.16602 17.2786 4.16602 20.5002H15.8327C15.8327 17.2786 13.221 14.6669 9.99935 14.6669Z"
-                        stroke="#9CA3AF"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      ></path>
-                    </svg>
+                      Emaill address
+                    </label>
                     <input
-                      className="w-full rounded-lg border border-gray-300 py-3 pl-12 pr-4 font-medium text-gray-500 placeholder-gray-500 outline-none focus:ring focus:ring-indigo-300"
-                      id="contactInput3-2"
+                      className="w-full appearance-none rounded-full bg-white px-6 py-3.5 text-lg font-bold text-gray-500 placeholder-gray-500 outline-none focus:ring-4 focus:ring-blue-200"
+                      id="contactLightReverseInput2-2"
                       type="text"
                       placeholder="Email address"
                     />
                   </div>
-                </label>
-                <label className="block">
-                  <p className="mb-2 font-semibold leading-normal text-gray-900">
-                    Message
-                  </p>
-                  <div className="relative">
-                    <svg
-                      className="absolute left-4 top-4"
-                      width="20"
-                      height="26"
-                      viewBox="0 0 20 26"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+                </div>
+                <div className="-m-5 flex flex-wrap">
+                  <div className="w-full p-5 md:w-1/2">
+                    <label
+                      className="mb-2 block text-sm font-bold text-gray-500"
+                      htmlFor="contactLightReverseInput2-3"
                     >
-                      <path
-                        d="M13.3327 8.83358C13.3327 10.6745 11.8403 12.1669 9.99935 12.1669C8.1584 12.1669 6.66602 10.6745 6.66602 8.83358C6.66602 6.99263 8.1584 5.50024 9.99935 5.50024C11.8403 5.50024 13.3327 6.99263 13.3327 8.83358Z"
-                        stroke="#9CA3AF"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      ></path>
-                      <path
-                        d="M9.99935 14.6669C6.77769 14.6669 4.16602 17.2786 4.16602 20.5002H15.8327C15.8327 17.2786 13.221 14.6669 9.99935 14.6669Z"
-                        stroke="#9CA3AF"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      ></path>
-                    </svg>
+                      Phone
+                    </label>
+                    <input
+                      className="w-full appearance-none rounded-full bg-white px-6 py-3.5 text-lg font-bold text-gray-500 placeholder-gray-500 outline-none focus:ring-4 focus:ring-blue-200"
+                      id="contactLightReverseInput2-3"
+                      type="text"
+                      placeholder="Enter your phone number"
+                    />
+                  </div>
+                  <div className="w-full p-5 md:w-1/2">
+                    <label
+                      className="mb-2 block text-sm font-bold text-gray-500"
+                      htmlFor="contactLightReverseInput2-4"
+                    >
+                      Subject
+                    </label>
+                    <input
+                      className="w-full appearance-none rounded-full bg-white px-6 py-3.5 text-lg font-bold text-gray-500 placeholder-gray-500 outline-none focus:ring-4 focus:ring-blue-200"
+                      id="contactLightReverseInput2-4"
+                      type="text"
+                      placeholder="Type your subject"
+                    />
+                  </div>
+                </div>
+                <div className="-m-3.5 flex flex-wrap">
+                  <div className="w-full p-3.5">
+                    <label
+                      className="mb-2 block text-sm font-bold text-gray-500"
+                      htmlFor="contactLightReverseInput2-5"
+                    >
+                      Message
+                    </label>
                     <textarea
-                      className="mb-6 h-48 w-full resize-none rounded-lg border border-gray-300 p-4 px-12 font-medium text-gray-500 placeholder-gray-500 outline-none focus:ring focus:ring-indigo-300"
-                      id="contactInput3-3"
-                      placeholder="Write message"
+                      className="w-full appearance-none rounded-3xl bg-white px-6 py-5 text-lg font-bold text-gray-500 placeholder-gray-500 outline-none focus:ring-4 focus:ring-blue-200"
+                      id="contactLightReverseInput2-5"
+                      rows={8}
+                      placeholder="Enter your message"
                     ></textarea>
-                    <div className="md:inline-block">
-                      <button
-                        className="shadow-4xl w-full rounded-xl border border-indigo-700 bg-indigo-600 py-4 px-9 font-semibold text-white transition duration-200 ease-in-out hover:bg-indigo-700 focus:ring focus:ring-indigo-300"
-                        type="button"
-                      >
-                        Send Message
-                      </button>
+                  </div>
+                  <div className="w-full p-3.5">
+                    <div className="-m-2 flex flex-wrap items-center">
+                      <div className="w-full p-2 md:w-1/2">
+                        <div className="flex">
+                          <input
+                            className="absolute h-5 w-5 opacity-0"
+                            id="contactLightReverseCheckbox2-1"
+                            type="checkbox"
+                          />
+                          <div className="mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md border border-gray-200 bg-white text-transparent">
+                            <svg
+                              width="9"
+                              height="7"
+                              viewBox="0 0 9 7"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M0.603516 3.77075L2.68685 5.85409L7.89518 0.645752"
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              ></path>
+                            </svg>
+                          </div>
+                          <label
+                            className="text-sm font-bold text-gray-500"
+                            htmlFor="contactLightReverseCheckbox2-1"
+                          >
+                            I’d llike to occasionally receive other
+                            communication from Zanrly, such as content and
+                            product news.
+                          </label>
+                        </div>
+                      </div>
+                      <div className="w-full p-2 md:w-1/2">
+                        <div className="-m-2 flex flex-wrap md:justify-end">
+                          <div className="w-full p-2 md:w-auto">
+                            <a
+                              className="block w-full rounded-full bg-blue-500 px-8 py-3.5 text-center text-lg font-bold text-white hover:bg-blue-600 focus:ring-4 focus:ring-blue-200 md:px-16"
+                              href="#"
+                            >
+                              Send Message
+                            </a>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </label>
+                </div>
               </form>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="relative overflow-hidden bg-white pt-24 pb-36">
-        <div className="container relative z-10 mx-auto px-4">
-          <div className="-m-3 flex flex-wrap">
-            <div className="w-full p-3 md:w-1/3">
-              <div className="border-blueGray-100 shadow-11xl h-full rounded-xl border bg-white bg-opacity-90 p-11 text-center">
-                <div className="relative mx-auto mb-6 h-16 w-16 rounded-full bg-indigo-600">
-                  <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 transform">
-                    <svg
-                      width="32"
-                      height="33"
-                      viewBox="0 0 32 33"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M4 11.1666L14.5208 18.1805C15.4165 18.7776 16.5835 18.7776 17.4792 18.1805L28 11.1666M6.66667 25.8333H25.3333C26.8061 25.8333 28 24.6394 28 23.1666V9.83329C28 8.36053 26.8061 7.16663 25.3333 7.16663H6.66667C5.19391 7.16663 4 8.36053 4 9.83329V23.1666C4 24.6394 5.19391 25.8333 6.66667 25.8333Z"
-                        stroke="white"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      ></path>
-                    </svg>
+              <div className="-m-4 flex flex-wrap">
+                <div className="w-full p-4 md:w-1/3">
+                  <div className="h-full rounded-3xl p-10 text-center">
+                    <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-gray-100">
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M14 16C14 17.77 13.23 19.37 12 20.46C10.94 21.42 9.54 22 8 22C4.69 22 2 19.31 2 16C2 13.9753 3.01397 12.1814 4.5554 11.0973C4.80358 10.9228 5.1393 11.0422 5.27324 11.3144C6.21715 13.2332 7.95419 14.6699 10.02 15.23C10.65 15.41 11.31 15.5 12 15.5C12.4872 15.5 12.9539 15.4538 13.4074 15.3687C13.6958 15.3146 13.9828 15.4995 13.9955 15.7925C13.9985 15.862 14 15.9314 14 16Z"
+                          fill="#3B82F6"
+                        ></path>
+                        <path
+                          d="M18 8C18 8.78 17.85 9.53 17.58 10.21C16.89 11.95 15.41 13.29 13.58 13.79C13.08 13.93 12.55 14 12 14C11.45 14 10.92 13.93 10.42 13.79C8.59 13.29 7.11 11.95 6.42 10.21C6.15 9.53 6 8.78 6 8C6 4.69 8.69 2 12 2C15.31 2 18 4.69 18 8Z"
+                          fill="#3B82F6"
+                        ></path>
+                        <path
+                          d="M22 16C22 19.31 19.31 22 16 22C15.2555 22 14.5393 21.8643 13.8811 21.6141C13.5624 21.4929 13.503 21.0851 13.7248 20.8262C14.8668 19.4938 15.5 17.786 15.5 16C15.5 15.66 15.47 15.32 15.42 15V15C15.3902 14.8155 15.4844 14.6342 15.6478 14.5437C16.9719 13.8107 18.0532 12.6875 18.727 11.3153C18.8609 11.0427 19.1968 10.923 19.4452 11.0977C20.9863 12.1818 22 13.9755 22 16Z"
+                          fill="#3B82F6"
+                        ></path>
+                      </svg>
+                    </div>
+                    <h3 className="font-heading mb-2 text-xl font-black text-gray-900">
+                      Send Email
+                    </h3>
+                    <p className="font-bold text-gray-500">info@zanrly.com</p>
+                    <p className="font-bold text-gray-500">
+                      support@zanrly.com
+                    </p>
                   </div>
                 </div>
-                <h3 className="font-heading mb-3 text-xl font-bold leading-snug">
-                  Send Email
-                </h3>
-                <p className="font-medium leading-relaxed">info@mail.com</p>
-                <p className="font-medium leading-relaxed">support@mail.com</p>
-              </div>
-            </div>
-            <div className="w-full p-3 md:w-1/3">
-              <div className="border-blueGray-100 shadow-11xl h-full rounded-xl border bg-white bg-opacity-90 p-11 text-center">
-                <div className="border-blueGray-200 relative mx-auto mb-6 h-16 w-16 rounded-full border bg-white">
-                  <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 transform">
-                    <svg
-                      width="32"
-                      height="33"
-                      viewBox="0 0 32 33"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M4 7.16667C4 5.69391 5.19391 4.5 6.66667 4.5H11.039C11.6129 4.5 12.1224 4.86724 12.3039 5.4117L14.301 11.4029C14.5108 12.0324 14.2258 12.7204 13.6324 13.0172L10.6227 14.522C12.0923 17.7816 14.7184 20.4077 17.978 21.8773L19.4828 18.8676C19.7796 18.2742 20.4676 17.9892 21.0971 18.199L27.0883 20.1961C27.6328 20.3776 28 20.8871 28 21.461V25.8333C28 27.3061 26.8061 28.5 25.3333 28.5H24C12.9543 28.5 4 19.5457 4 8.5V7.16667Z"
-                        stroke="#4F46E5"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      ></path>
-                    </svg>
+                <div className="w-full p-4 md:w-1/3">
+                  <div className="h-full rounded-3xl p-10 text-center">
+                    <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-gray-100">
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M14 16C14 17.77 13.23 19.37 12 20.46C10.94 21.42 9.54 22 8 22C4.69 22 2 19.31 2 16C2 13.9753 3.01397 12.1814 4.5554 11.0973C4.80358 10.9228 5.1393 11.0422 5.27324 11.3144C6.21715 13.2332 7.95419 14.6699 10.02 15.23C10.65 15.41 11.31 15.5 12 15.5C12.4872 15.5 12.9539 15.4538 13.4074 15.3687C13.6958 15.3146 13.9828 15.4995 13.9955 15.7925C13.9985 15.862 14 15.9314 14 16Z"
+                          fill="#3B82F6"
+                        ></path>
+                        <path
+                          d="M18 8C18 8.78 17.85 9.53 17.58 10.21C16.89 11.95 15.41 13.29 13.58 13.79C13.08 13.93 12.55 14 12 14C11.45 14 10.92 13.93 10.42 13.79C8.59 13.29 7.11 11.95 6.42 10.21C6.15 9.53 6 8.78 6 8C6 4.69 8.69 2 12 2C15.31 2 18 4.69 18 8Z"
+                          fill="#3B82F6"
+                        ></path>
+                        <path
+                          d="M22 16C22 19.31 19.31 22 16 22C15.2555 22 14.5393 21.8643 13.8811 21.6141C13.5624 21.4929 13.503 21.0851 13.7248 20.8262C14.8668 19.4938 15.5 17.786 15.5 16C15.5 15.66 15.47 15.32 15.42 15V15C15.3902 14.8155 15.4844 14.6342 15.6478 14.5437C16.9719 13.8107 18.0532 12.6875 18.727 11.3153C18.8609 11.0427 19.1968 10.923 19.4452 11.0977C20.9863 12.1818 22 13.9755 22 16Z"
+                          fill="#3B82F6"
+                        ></path>
+                      </svg>
+                    </div>
+                    <h3 className="font-heading mb-2 text-xl font-black text-gray-900">
+                      Call Us
+                    </h3>
+                    <p className="font-bold text-gray-500">+1 8424 199 941</p>
+                    <p className="font-bold text-gray-500">+1 0221 234 554</p>
                   </div>
                 </div>
-                <h3 className="font-heading mb-3 text-xl font-bold leading-snug">
-                  Call Us
-                </h3>
-                <p className="font-medium leading-relaxed">+1 8408 412 569</p>
-                <p className="font-medium leading-relaxed">+1 8408 412 569</p>
-              </div>
-            </div>
-            <div className="w-full p-3 md:w-1/3">
-              <div className="border-blueGray-100 shadow-11xl h-full rounded-xl border bg-white bg-opacity-90 p-11 text-center">
-                <div className="border-blueGray-200 relative mx-auto mb-6 h-16 w-16 rounded-full border bg-white">
-                  <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 transform">
-                    <svg
-                      width="32"
-                      height="33"
-                      viewBox="0 0 32 33"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M23.5431 22.7091C22.1797 24.0725 19.192 27.0602 17.4133 28.8389C16.6323 29.62 15.3693 29.6203 14.5883 28.8392C12.8393 27.0903 9.91373 24.1647 8.45818 22.7091C4.29259 18.5435 4.29259 11.7898 8.45818 7.62419C12.6238 3.4586 19.3775 3.4586 23.5431 7.62419C27.7087 11.7898 27.7087 18.5435 23.5431 22.7091Z"
-                        stroke="#4F46E5"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      ></path>
-                      <path
-                        d="M20.0007 15.1667C20.0007 17.3758 18.2098 19.1667 16.0007 19.1667C13.7915 19.1667 12.0007 17.3758 12.0007 15.1667C12.0007 12.9575 13.7915 11.1667 16.0007 11.1667C18.2098 11.1667 20.0007 12.9575 20.0007 15.1667Z"
-                        stroke="#4F46E5"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      ></path>
-                    </svg>
+                <div className="w-full p-4 md:w-1/3">
+                  <div className="h-full rounded-3xl p-10 text-center">
+                    <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-gray-100">
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M14 16C14 17.77 13.23 19.37 12 20.46C10.94 21.42 9.54 22 8 22C4.69 22 2 19.31 2 16C2 13.9753 3.01397 12.1814 4.5554 11.0973C4.80358 10.9228 5.1393 11.0422 5.27324 11.3144C6.21715 13.2332 7.95419 14.6699 10.02 15.23C10.65 15.41 11.31 15.5 12 15.5C12.4872 15.5 12.9539 15.4538 13.4074 15.3687C13.6958 15.3146 13.9828 15.4995 13.9955 15.7925C13.9985 15.862 14 15.9314 14 16Z"
+                          fill="#3B82F6"
+                        ></path>
+                        <path
+                          d="M18 8C18 8.78 17.85 9.53 17.58 10.21C16.89 11.95 15.41 13.29 13.58 13.79C13.08 13.93 12.55 14 12 14C11.45 14 10.92 13.93 10.42 13.79C8.59 13.29 7.11 11.95 6.42 10.21C6.15 9.53 6 8.78 6 8C6 4.69 8.69 2 12 2C15.31 2 18 4.69 18 8Z"
+                          fill="#3B82F6"
+                        ></path>
+                        <path
+                          d="M22 16C22 19.31 19.31 22 16 22C15.2555 22 14.5393 21.8643 13.8811 21.6141C13.5624 21.4929 13.503 21.0851 13.7248 20.8262C14.8668 19.4938 15.5 17.786 15.5 16C15.5 15.66 15.47 15.32 15.42 15V15C15.3902 14.8155 15.4844 14.6342 15.6478 14.5437C16.9719 13.8107 18.0532 12.6875 18.727 11.3153C18.8609 11.0427 19.1968 10.923 19.4452 11.0977C20.9863 12.1818 22 13.9755 22 16Z"
+                          fill="#3B82F6"
+                        ></path>
+                      </svg>
+                    </div>
+                    <h3 className="font-heading mb-2 text-xl font-black text-gray-900">
+                      Address
+                    </h3>
+                    <p className="font-bold text-gray-500">
+                      380 St Killda Road, Mellbourne
+                    </p>
+                    <p className="font-bold text-gray-500">
+                      VIC 3004, Australia
+                    </p>
                   </div>
                 </div>
-                <h3 className="font-heading mb-3 text-xl font-bold leading-snug">
-                  Address
-                </h3>
-                <p className="mx-auto max-w-xs font-medium leading-relaxed">
-                  380 St Kilda Road, Melbourne VIC 3004, Australia
-                </p>
               </div>
             </div>
           </div>

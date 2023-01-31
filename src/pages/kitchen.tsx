@@ -1,11 +1,45 @@
-import Head from "next/head";
-import Image from "next/image";
+import Head from 'next/head';
+import Image from 'next/image';
+import { useDispatch, useSelector } from 'react-redux';
+import Header from '@components/layout/header';
 
-import Header from "@components/layout/header";
-import Feature from "@components/home/feature";
-import Footer from "@components/layout/footer";
+import Footer from '@components/layout/footer';
+import JobQuestionsForm from '@components/jobQuestions/JobQuestionsForm';
+import clsx from 'clsx';
+import React, { useEffect, useState } from 'react';
+import type { RootState } from '~/store';
+import { setKitchenProgressStep } from '~/reducer/trackProgress';
+import RoomSections from '@components/jobQuestions/RoomSections';
+import Materials from '@components/materials';
+import { useRouter } from 'next/router';
 
 export default function Kitchen() {
+  const dispatch = useDispatch();
+  const { kitchenStep } = useSelector(
+    (state: RootState) => state.progressChange
+  );
+  const router = useRouter();
+  const { step } = router.query;
+  React.useEffect(() => {
+    if (step) {
+      setKStep(Number(step));
+    }
+  }, []);
+
+  const [localKitchenStep, setKStep] = useState(kitchenStep);
+  const handleStepChange = (step: number) => {
+    setKStep(step);
+  };
+
+  useEffect(() => {
+    dispatch(setKitchenProgressStep(localKitchenStep));
+    router.push({
+      query: {
+        step: localKitchenStep,
+      },
+    });
+  }, [dispatch, localKitchenStep]);
+
   return (
     <>
       <Head>
@@ -15,7 +49,162 @@ export default function Kitchen() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <Feature />
+      <section className="overflow-hidden bg-gray-50 pb-16">
+        <div className="container mx-auto px-4">
+          <div className="rounded-3xl bg-white py-16 px-8">
+            <div className="mx-auto max-w-7xl">
+              <div className="flex flex-row items-center gap-16">
+                {localKitchenStep !== 3 ? (
+                  <h2 className="font-heading mb-20 max-w-xl text-4xl font-black tracking-tight text-gray-900 md:text-5xl">
+                    We make kitchen cabinet quotes easy
+                  </h2>
+                ) : null}
+                <div className="mb-10 flex-1 overflow-hidden rounded-3xl bg-gray-100">
+                  <div className="px-8 pt-10">
+                    <div className="mx-auto text-center ">
+                      <div className="-m-2 mb-10 flex flex-wrap justify-center">
+                        {localKitchenStep === 1 && (
+                          <JobQuestionsForm
+                            handleStepChange={handleStepChange}
+                          />
+                        )}
+                        {localKitchenStep === 2 && (
+                          <RoomSections handleStepChange={handleStepChange} />
+                        )}
+                        {localKitchenStep === 3 && (
+                          <Materials handleStepChange={handleStepChange} />
+                        )}
+                        {localKitchenStep === 4 && <>Step4</>}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="-m-3 flex flex-wrap">
+                <div className="w-full p-3 md:w-1/2 lg:w-1/4">
+                  <div className="-m-3 mb-2 flex flex-wrap items-center">
+                    <div className="w-auto p-3">
+                      <button
+                        className={clsx(
+                          'flex h-16 w-16 items-center justify-center rounded-full  text-xl font-black ',
+                          localKitchenStep === 1
+                            ? 'bg-blue-500 text-white'
+                            : 'bg-gray-100 text-gray-900'
+                        )}
+                        onClick={() => setKStep(1)}
+                      >
+                        1
+                      </button>
+                    </div>
+                    <div className="flex-1 p-3">
+                      <div className="h-px bg-gray-200"></div>
+                    </div>
+                  </div>
+                  <div className="md:w-3/4">
+                    <h3 className="font-heading mb-4 text-2xl font-bold text-gray-900">
+                      The Job
+                    </h3>
+                    <p className="font-bold text-gray-700">
+                      Tell us about your project and we will help you measure
+                      and plan your kitchen. We will also provide you with a
+                      quote for your project.
+                    </p>
+                  </div>
+                </div>
+                <div className="w-full p-3 md:w-1/2 lg:w-1/4">
+                  <div className="-m-3 mb-2 flex flex-wrap items-center">
+                    <div className="w-auto p-3">
+                      <button
+                        className={clsx(
+                          'flex h-16 w-16 items-center justify-center rounded-full  text-xl font-black ',
+                          localKitchenStep === 2
+                            ? 'bg-blue-500 text-white'
+                            : 'bg-gray-100 text-gray-900'
+                        )}
+                        onClick={() => setKStep(2)}
+                      >
+                        2
+                      </button>
+                    </div>
+                    <div className="flex-1 p-3">
+                      <div className="h-px bg-gray-200"></div>
+                    </div>
+                  </div>
+                  <div className="md:w-3/4">
+                    <h3 className="font-heading mb-4 text-2xl font-bold text-gray-900">
+                      Rooms & Sections
+                    </h3>
+                    <p className="font-bold text-gray-700">
+                      Important information about your kitchen and other rooms
+                      or areas. Choose the options here that best describe your
+                      project and we will guide you through the process.
+                    </p>
+                  </div>
+                </div>
+                <div className="w-full p-3 md:w-1/2 lg:w-1/4">
+                  <div className="-m-3 mb-2 flex flex-wrap items-center">
+                    <div className="w-auto p-3">
+                      <button
+                        className={clsx(
+                          'flex h-16 w-16 items-center justify-center rounded-full  text-xl font-black ',
+                          localKitchenStep === 3
+                            ? 'bg-blue-500 text-white'
+                            : 'bg-gray-100 text-gray-900'
+                        )}
+                        onClick={() => setKStep(3)}
+                      >
+                        3
+                      </button>
+                    </div>
+                    <div className="flex-1 p-3">
+                      <div className="h-px bg-gray-200"></div>
+                    </div>
+                  </div>
+                  <div className="md:w-3/4">
+                    <h3 className="font-heading mb-4 text-2xl font-bold text-gray-900">
+                      Materials & Finishes
+                    </h3>
+                    <p className="font-bold text-gray-700">
+                      Choose the interior and exterior materials and finishes
+                      for your cabinets and countertops.
+                    </p>
+                  </div>
+                </div>
+                <div className="w-full p-3 md:w-1/2 lg:w-1/4">
+                  <div className="-m-3 mb-2 flex flex-wrap items-center">
+                    <div className="w-auto p-3">
+                      <button
+                        className={clsx(
+                          'flex h-16 w-16 items-center justify-center rounded-full  text-xl font-black ',
+                          localKitchenStep === 4
+                            ? 'bg-blue-500 text-white'
+                            : 'bg-gray-100 text-gray-900'
+                        )}
+                        onClick={() => setKStep(4)}
+                      >
+                        4
+                      </button>
+                    </div>
+                    <div className="flex-1 p-3 lg:hidden">
+                      <div className="h-px bg-gray-200"></div>
+                    </div>
+                  </div>
+                  <div className="md:w-3/4">
+                    <h3 className="font-heading mb-4 text-2xl font-bold text-gray-900">
+                      Design Options
+                    </h3>
+                    <p className="font-bold text-gray-700">
+                      Expand on your style, tastes, and preferences with our
+                      many design options.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </>
   );

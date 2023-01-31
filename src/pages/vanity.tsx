@@ -1,9 +1,9 @@
-import Head from "next/head";
-import Image from "next/image";
+import Head from 'next/head';
+import Image from 'next/image';
 
-import Header from "@components/layout/header";
-import Feature from "@components/home/feature";
-import Footer from "@components/layout/footer";
+import Header from '@components/layout/header';
+
+import Footer from '@components/layout/footer';
 
 export default function Vanity() {
   return (
@@ -15,7 +15,7 @@ export default function Vanity() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <Feature />
+
       <Footer />
     </>
   );

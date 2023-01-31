@@ -1,8 +1,7 @@
-import Head from "next/head";
-import Image from "next/image";
+import Head from 'next/head';
+import Image from 'next/image';
 
-import Header from "@components/layout/header";
-import Feature from "@components/home/feature";
+import Header from '@components/layout/header';
 
 export default function About() {
   return (

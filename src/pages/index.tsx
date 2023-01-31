@@ -3,11 +3,22 @@ import Header from '@components/layout/header';
 import Footer from '@components/layout/footer';
 import Link from 'next/link';
 import { useAppSelector } from '~/store';
+import JobQuestionsForm from '@components/jobQuestions/JobQuestionsForm';
+import router from 'next/router';
 
 export default function Home() {
   const config = useAppSelector((state) => state.userConfig);
   const theme = config.theme;
   const language = config.language;
+  const handleStepChange = (step: number) => {
+    console.log('step', step);
+    router.push({
+      pathname: '/kitchen',
+      query: {
+        step: 1,
+      },
+    });
+  };
 
   return (
     <>
@@ -19,21 +30,14 @@ export default function Home() {
               Best caption here {language} {theme}
             </span>
             <h1 className="font-heading mb-6 text-5xl font-black tracking-tight text-gray-900 lg:text-6xl">
-              Build what you imagine
+              Looking for the best deal on cabinets?
             </h1>
             <p className="mb-8 text-xl font-bold">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis
-              venenatis volutpat velit, quis iaculis velit bibendum a. Maecenas
-              accumsan fermentum nisl.
+              Get a cabinet quote today and see how much you can save!
             </p>
             <div className="-m-2 mb-20 flex flex-wrap justify-center">
               <div className="w-full p-2 md:w-auto">
-                <Link
-                  className="block w-full rounded-full bg-blue-500 px-8 py-3.5 text-center text-lg font-bold text-white hover:bg-blue-600 focus:ring-4 focus:ring-blue-200"
-                  href="/kitchen"
-                >
-                  Get Started
-                </Link>
+                <JobQuestionsForm handleStepChange={handleStepChange} />
               </div>
             </div>
           </div>

@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import clsx from "clsx";
-import { signIn, signOut, useSession } from "next-auth/react";
-import { Button } from "@nextui-org/react";
+import React, { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import clsx from 'clsx';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import { Button } from '@nextui-org/react';
 
 // TODO: Remember state of mobile nav to keep it open and replace the logo
 
@@ -17,7 +17,7 @@ export default function Header({ className }: HeaderProps) {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const toggleNavbarMenu = () => {
     setNavbarMenu(!mobileNavType);
-    console.log(mobileNavType, "navbarMenu");
+    console.log(mobileNavType, 'navbarMenu');
   };
   return (
     <section className="overflow-hidden bg-gray-50 pt-6 pb-20">
@@ -28,6 +28,14 @@ export default function Header({ className }: HeaderProps) {
               <div className="flex flex-wrap items-center">
                 <div className="hidden w-auto lg:block">
                   <ul className="flex items-center justify-center">
+                    <li className="mr-9">
+                      <Link
+                        className="inline-block text-sm font-bold text-gray-900 hover:text-gray-700"
+                        href="/"
+                      >
+                        Home
+                      </Link>
+                    </li>
                     <li className="mr-9">
                       <Link
                         className="inline-block text-sm font-bold text-gray-900 hover:text-gray-700"
@@ -69,20 +77,20 @@ export default function Header({ className }: HeaderProps) {
                 <div className="hidden w-auto lg:block">
                   <div className="-m-2 flex flex-wrap">
                     <div className="w-full p-2 md:w-auto">
-                      <a
-                        className="block w-full rounded-full border bg-white px-4 py-2.5 text-center text-sm font-bold text-gray-900 hover:bg-gray-50 focus:ring-4 focus:ring-gray-200"
-                        href="#"
+                      <button
+                        className="block w-full rounded-full border bg-white px-8 py-3.5  text-center text-base font-bold text-gray-900 hover:bg-gray-50 focus:ring-4 focus:ring-gray-200"
+                        onClick={() => signIn()}
                       >
                         Log In
-                      </a>
+                      </button>
                     </div>
                     <div className="w-full p-2 md:w-auto">
-                      <a
-                        className="block w-full rounded-full bg-blue-500 px-4 py-2.5 text-center text-sm font-bold text-white hover:bg-blue-600 focus:ring-4 focus:ring-blue-200"
-                        href="#"
+                      <button
+                        className="block w-full rounded-full bg-blue-500 px-8 py-3.5 text-center text-base font-bold text-white hover:bg-blue-600 focus:ring-4 focus:ring-blue-200"
+                        type="button"
                       >
-                        Get Started
-                      </a>
+                        Register
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -117,8 +125,8 @@ export default function Header({ className }: HeaderProps) {
           </div>
           <div
             className={clsx(
-              "navbar-menu fixed top-0 left-0 bottom-0 z-50 w-4/6 sm:max-w-xs",
-              mobileNavType ? "block" : "hidden"
+              'navbar-menu fixed top-0 left-0 bottom-0 z-50 w-4/6 sm:max-w-xs',
+              mobileNavType ? 'block' : 'hidden'
             )}
           >
             <div className="navbar-backdrop fixed inset-0 bg-gray-800 opacity-80"></div>
@@ -153,28 +161,28 @@ export default function Header({ className }: HeaderProps) {
                 <div className="flex w-full flex-col justify-center py-8">
                   <ul>
                     <li className="mb-9">
-                      <a
+                      <Link
                         className="inline-block text-sm font-bold text-gray-900 hover:text-gray-700"
                         href="/kitchen"
                       >
                         Kitchen
-                      </a>
+                      </Link>
                     </li>
                     <li className="mb-9">
-                      <a
+                      <Link
                         className="inline-block text-sm font-bold text-gray-900 hover:text-gray-700"
                         href="/island"
                       >
                         Island
-                      </a>
+                      </Link>
                     </li>
                     <li className="mb-9">
-                      <a
+                      <Link
                         className="inline-block text-sm font-bold text-gray-900 hover:text-gray-700"
                         href="/vanity"
                       >
                         Vanity
-                      </a>
+                      </Link>
                     </li>
                     <li>
                       <Link
@@ -239,7 +247,7 @@ export default function Header({ className }: HeaderProps) {
                       </div>
                       <div
                         className={clsx(
-                          "fixed top-20 right-6 mt-2 w-56 origin-bottom-right rounded-md shadow-lg",
+                          'fixed top-20 right-6 mt-2 w-56 origin-bottom-right rounded-md shadow-lg',
                           {
                             hidden: !showUserMenu,
                           }

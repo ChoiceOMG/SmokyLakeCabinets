@@ -20,12 +20,9 @@ const App: AppType<{ session: Session | null }> = ({
     enabled: !!session?.user?.email,
   });
   useEffect(() => {
-    const unlisten = router.events.on('routeChangeComplete', () => {
+    router.events.on('routeChangeComplete', () => {
       persistor.persist();
     });
-    return () => {
-      //unlisten();
-    };
   }, []);
   return (
     <>
