@@ -9,7 +9,7 @@ type Props = {
 const KitchenRoom: React.FC<Props> = ({ nextRoom, kitchenCount }) => {
   console.log('kitchenCount', kitchenCount);
   let [vaultedCeiling, setVaultedCeiling] = useState(false);
-  const wallHeightsList = ['96"', '108"', 'Other (specify)'];
+  const wallHeightsList = ['96"', '108"'];
   const upperCabinetsList = [
     '30" Uppers',
     '33" Uppers',
@@ -17,6 +17,12 @@ const KitchenRoom: React.FC<Props> = ({ nextRoom, kitchenCount }) => {
     '41" Uppers',
     '48" Uppers',
   ];
+
+  const [selectedWallHeights, setselectedWallHeights] = useState('');
+
+  const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setselectedWallHeights(event.target.value);
+  };
   return (
     <div>
       <form className="container mx-auto p-4">
@@ -34,7 +40,10 @@ const KitchenRoom: React.FC<Props> = ({ nextRoom, kitchenCount }) => {
                     id={el}
                     type="radio"
                     name="WallHeights"
+                    value={el}
                     className="h-4 w-4 cursor-pointer"
+                    checked={selectedWallHeights === el}
+                    onChange={handleOptionChange}
                   />
                   <label
                     htmlFor={el}
@@ -44,6 +53,32 @@ const KitchenRoom: React.FC<Props> = ({ nextRoom, kitchenCount }) => {
                   </label>
                 </div>
               ))}
+              <div className="relative flex items-center px-2">
+                <input
+                  id="Other"
+                  type="radio"
+                  value="Other"
+                  name="WallHeights"
+                  className="h-4 w-4 cursor-pointer"
+                  checked={selectedWallHeights === 'Other'}
+                  onChange={handleOptionChange}
+                />
+                <label
+                  htmlFor="Other"
+                  className="pl-2 text-sm font-bold text-gray-500"
+                >
+                  Other (specify)
+                </label>
+                {selectedWallHeights === 'Other' && (
+                  <input
+                    id="Other"
+                    name="text"
+                    type="text"
+                    required
+                    className="ml-3 block appearance-none rounded-full border border-gray-200 bg-white px-3 py-2 text-lg font-bold text-gray-500 placeholder-gray-500 outline-none focus:ring-4 focus:ring-blue-200"
+                  />
+                )}
+              </div>
             </fieldset>
           </label>
 
@@ -109,7 +144,7 @@ const KitchenRoom: React.FC<Props> = ({ nextRoom, kitchenCount }) => {
               name="text"
               type="text"
               required
-              className="relative block w-full appearance-none rounded-3xl border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+              className="relative block w-full appearance-none rounded-full border border-gray-200 bg-white px-3 py-2 text-lg font-bold text-gray-500 placeholder-gray-500 outline-none focus:ring-4 focus:ring-blue-200"
             />
           </label>
           <label className="col-span-6 block sm:col-span-3">
@@ -122,7 +157,7 @@ const KitchenRoom: React.FC<Props> = ({ nextRoom, kitchenCount }) => {
               name="text"
               type="text"
               required
-              className="relative block w-full appearance-none rounded-3xl border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+              className="relative block w-full appearance-none rounded-full border border-gray-200 bg-white px-3 py-2 text-lg font-bold text-gray-500 placeholder-gray-500 outline-none focus:ring-4 focus:ring-blue-200"
             />
           </label>
         </div>
