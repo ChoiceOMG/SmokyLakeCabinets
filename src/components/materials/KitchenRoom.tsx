@@ -118,7 +118,7 @@ const KitchenRoom: React.FC<Props> = ({ nextRoom, kitchenCount }) => {
             </span>
 
             <input
-              id="rooms-project"
+              id="finishes-Section"
               name="text"
               type="text"
               required
