@@ -31,6 +31,9 @@ export default function MaterialsNav({
                     <button
                       className={clsx(
                         selectedRoom ? 'text-gray-500' : 'text-gray-900',
+                        selectedRoom === room
+                          ? 'bg-slate-100 text-slate-900'
+                          : '',
                         'inline-block  rounded-lg p-3.5 text-lg font-bold capitalize hover:bg-slate-100 hover:text-slate-900'
                       )}
                       onClick={handleRoomSelected}

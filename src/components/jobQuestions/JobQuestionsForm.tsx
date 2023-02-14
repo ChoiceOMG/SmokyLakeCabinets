@@ -8,16 +8,27 @@ import {
   setJobQuoteOn,
   setCountertops,
   setDrawings,
+  setDrawingsFile,
+  setFinishQ,
 } from '~/reducer/jobQuestions';
 
 type Props = {
   handleStepChange: (step: number) => void;
 };
-
+/* interface FileState {
+  file: File | null;
+} */
 const JobQuestionsForm: React.FC<Props> = ({ handleStepChange }) => {
   const dispatch = useDispatch();
-  const { jobLocation, jobQuoteOn, cabinets, countertops, hasDrawings } =
-    useSelector((state: RootState) => state.jobQuestionsConfig);
+  const {
+    jobLocation,
+    jobQuoteOn,
+    cabinets,
+    countertops,
+    hasDrawings,
+    hasDrawingsFile,
+    finishQ,
+  } = useSelector((state: RootState) => state.jobQuestionsConfig);
   console.log('jobLocation', jobLocation);
   console.log('cabinets', cabinets);
   const [localJobLocation, setJobLoc] = useState(jobLocation);
@@ -25,7 +36,13 @@ const JobQuestionsForm: React.FC<Props> = ({ handleStepChange }) => {
   const [localCabinets, setCab] = useState(cabinets);
   const [localCountertops, setCtops] = useState(countertops);
   const [localHasDrawings, setDs] = useState(hasDrawings);
-
+  //const [fileDrawing, setFileDrawing] = useState<FileState>({ file: null });
+  const [fileDrawing, setFileDrawing] = useState(hasDrawingsFile);
+  const [finish, setFinish] = useState(finishQ);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log({ file: event.target.files![0] });
+    setFileDrawing({ file: event.target.files![0] || null });
+  };
   const handleJobLocationChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -58,6 +75,14 @@ const JobQuestionsForm: React.FC<Props> = ({ handleStepChange }) => {
     dispatch(setCabinets(localCabinets));
     dispatch(setCountertops(localCountertops));
     dispatch(setDrawings(localHasDrawings));
+    /*   dispatch(
+      setDrawingsFile({
+        file: fileDrawing,
+        lastModifiedDate: new Date(),
+      })
+    ); */
+    dispatch(setFinishQ(finish));
+
     handleStepChange(2);
   };
 
@@ -178,7 +203,7 @@ const JobQuestionsForm: React.FC<Props> = ({ handleStepChange }) => {
             </label>
           </div>
           {/* Has Drawings */}
-          <div className="flex items-center">
+          <div className="flex flex-wrap items-center	">
             <input
               type="checkbox"
               id="hasDrawings"
@@ -186,6 +211,7 @@ const JobQuestionsForm: React.FC<Props> = ({ handleStepChange }) => {
               checked={localHasDrawings}
               onChange={handleHasDrawingsChange}
             />
+
             <div
               className={clsx(
                 'mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md  text-transparent',
@@ -215,6 +241,43 @@ const JobQuestionsForm: React.FC<Props> = ({ handleStepChange }) => {
             >
               Has Drawings
             </label>
+            {localHasDrawings && (
+              <div className="w-full">
+                <form className="space-6 mb-3 flex w-full flex-col items-center 	">
+                  <label className="block">
+                    <span className="sr-only">
+                      Select files to upload (accept most file types)
+                    </span>
+                    <input
+                      type="file"
+                      className="block w-full text-sm text-slate-500
+      file:mr-4 file:rounded-full file:border-0
+      file:bg-violet-50 file:py-2
+      file:px-4 file:text-sm
+      file:font-semibold file:text-violet-700
+      hover:file:bg-violet-100
+    "
+                      onChange={handleFileChange}
+                    />
+                  </label>
+                </form>
+
+                {fileDrawing && (
+                  <div className="mx-auto mb-3">
+                    <p className="py-1 text-sm font-bold text-gray-500">
+                      Would you like to skip to finishes?
+                    </p>
+                    <button
+                      type="submit"
+                      className=" m-auto block rounded-full bg-blue-500 px-8 py-3.5 text-center text-lg font-bold text-white hover:bg-blue-600 focus:ring-4 focus:ring-blue-200 md:px-16"
+                      onClick={() => setFinish(true)}
+                    >
+                      Skip to Finishes
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -222,6 +285,7 @@ const JobQuestionsForm: React.FC<Props> = ({ handleStepChange }) => {
       <button
         type="submit"
         className="block w-full rounded-full bg-blue-500 px-8 py-3.5 text-center text-lg font-bold text-white hover:bg-blue-600 focus:ring-4 focus:ring-blue-200 md:px-16"
+        onClick={() => setFinish(false)}
       >
         Save and Continue
       </button>

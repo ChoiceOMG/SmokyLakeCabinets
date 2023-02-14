@@ -2,6 +2,9 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '~/store';
+
+import { FaPlusCircle } from 'react-icons/fa';
+
 import {
   setKitchen,
   setIsland,
@@ -14,12 +17,15 @@ import {
   setLaundry,
   setBar,
   setOther,
+  setSelectedRooms,
 } from '~/reducer/jobQuestions';
 
 type Props = {
   handleStepChange: (step: number) => void;
 };
-
+interface InputsState {
+  value: string;
+}
 const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
   const dispatch = useDispatch();
   const {
@@ -34,6 +40,7 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
     hasLaundry,
     hasBar,
     hasOther,
+    finishQ,
   } = useSelector((state: RootState) => state.jobQuestionsConfig);
   const [localKitchen, Setktchn] = useState(hasKitchen);
   const [localIsland, setIslnd] = useState(hasIsland);
@@ -46,6 +53,7 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
   const [localLaundry, setLdy] = useState(hasLaundry);
   const [localBar, setBr] = useState(hasBar);
   const [localOther, setOthr] = useState(hasOther);
+  let [addOther, setAddOther] = useState<InputsState[]>([]);
 
   const handleKitchenChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.target.checked ? Setktchn(1) : Setktchn(0);
@@ -80,10 +88,40 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
     event.target.checked ? setBr(1) : setBr(0);
   };
   const handleOtherChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.target.checked ? setOthr(1) : setOthr(0);
+    event.target.checked
+      ? setAddOther([...addOther, { value: '' }])
+      : setAddOther([]);
+  };
+
+  const updateValue = (index: number, newValue: string) => {
+    setAddOther(
+      addOther.map((input, i) => {
+        if (i === index) {
+          return {
+            ...input,
+            value: newValue,
+          };
+        }
+        return input;
+      })
+    );
   };
 
   const handleSubmit = (event: React.FormEvent) => {
+    const selectedRooms = [
+      !!localKitchen && 'kitchen',
+      !!localIsland && 'island',
+      !!localPantry && 'pantry',
+      !!localVanity && 'vanity',
+      !!localEnsuite && 'ensuite',
+      !!localJackJill && 'jackJill',
+      !!localBasementVanity && 'basementVanity',
+      !!localMudroom && 'mudroom',
+      !!localLaundry && 'laundry',
+      !!localBar && 'bar',
+      Object.keys(addOther).length && 'other',
+    ].filter(Boolean);
+
     event.preventDefault();
     dispatch(setKitchen(localKitchen));
     dispatch(setIsland(localIsland));
@@ -95,8 +133,11 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
     dispatch(setMudroom(localMudroom));
     dispatch(setLaundry(localLaundry));
     dispatch(setBar(localBar));
-    dispatch(setOther(localOther));
-    handleStepChange(3);
+    dispatch(setOther(addOther));
+    dispatch(setSelectedRooms(selectedRooms));
+    finishQ ? handleStepChange(4) : handleStepChange(3);
+
+    // handleStepChange(3);
   };
 
   return (
@@ -106,6 +147,7 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
           <p className="mb-2 block text-left text-sm font-bold text-gray-500">
             Check items to include in your plan:
           </p>
+
           <div className="grid grid-cols-2">
             {/* Kitchen */}
             <div className="flex items-center">
@@ -498,11 +540,11 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
               </label>
             </div>
             {/* Other */}
-            <div className="flex items-center">
+            <div className="relative flex flex-wrap items-center">
               <input
                 type="checkbox"
                 id="Other"
-                className="absolute h-6 w-6 opacity-0"
+                className="absolute top-0 top-5 h-6 w-6 cursor-pointer opacity-0"
                 checked={localOther >= 1 ? true : false}
                 onChange={handleOtherChange}
               />
@@ -535,6 +577,22 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
               >
                 Other
               </label>
+              {addOther.length > 0 && (
+                <FaPlusCircle
+                  className="absolute left-1/3 top-5 cursor-pointer fill-blue-500 hover:fill-blue-600"
+                  onClick={() => setAddOther([...addOther, { value: '' }])}
+                />
+              )}
+              {addOther &&
+                addOther.map((input, index) => (
+                  <input
+                    className="mb-3 ml-5 w-full appearance-none rounded-full border border-gray-200 bg-white px-3 py-2 text-lg font-bold text-gray-500 placeholder-gray-500 outline-none focus:ring-4 focus:ring-blue-200"
+                    key={index}
+                    onChange={(e) => updateValue(index, e.target.value)}
+                    value={input.value}
+                    placeholder={`Other ${index + 1}`}
+                  />
+                ))}
             </div>
           </div>
         </div>

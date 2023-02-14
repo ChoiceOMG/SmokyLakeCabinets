@@ -14,12 +14,14 @@ import {
 import storage from 'redux-persist/lib/storage';
 import jobQuestions from '~/reducer/jobQuestions';
 import progressChange from '~/reducer/trackProgress';
+import materialsFinishesReducer from '~/reducer/materialsFinishes';
 import userConfig from './reducer/userConfig';
 
 const rootReducer = combineReducers({
   userConfig,
   jobQuestionsConfig: jobQuestions,
   progressChange,
+  materialsFinishesReducer
 });
 
 const persistConfig = {
