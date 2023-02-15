@@ -6,16 +6,16 @@ export interface JobQuestionsState {
   countertops: boolean;
   hasDrawings: boolean;
   hasDrawingsFile: object;
-  hasKitchen: number;
-  hasIsland: number;
-  hasPantry: number;
-  hasVanity: number;
-  hasEnsuite: number;
-  hasJackJill: number;
-  hasBasementVanity: number;
-  hasMudroom: number;
-  hasLaundry: number;
-  hasBar: number;
+  hasKitchen: boolean;
+  hasIsland: boolean;
+  hasPantry: boolean;
+  hasVanity: boolean;
+  hasEnsuite: boolean;
+  hasJackJill: boolean;
+  hasBasementVanity: boolean;
+  hasMudroom: boolean;
+  hasLaundry: boolean;
+  hasBar: boolean;
   hasOther: object;
   finishQ: boolean;
   selectedRooms: Array<string>
@@ -53,43 +53,43 @@ interface SetDrawingsFileAction {
 
 interface SetKitchenAction {
   type: 'SET_KITCHEN';
-  payload: number;
+  payload: boolean;
 }
 interface SetIslandAction {
   type: 'SET_ISLAND';
-  payload: number;
+  payload: boolean;
 }
 interface SetPantryAction {
   type: 'SET_PANTRY';
-  payload: number;
+  payload: boolean;
 }
 interface SetVanityAction {
   type: 'SET_VANITY';
-  payload: number;
+  payload: boolean;
 }
 interface SetEnsuiteAction {
   type: 'SET_ENSUITE';
-  payload: number;
+  payload: boolean;
 }
 interface SetJackJillAction {
   type: 'SET_JACK_JILL';
-  payload: number;
+  payload: boolean;
 }
 interface SetBasementVanityAction {
   type: 'SET_BASEMENT_VANITY';
-  payload: number;
+  payload: boolean;
 }
 interface SetMudroomAction {
   type: 'SET_MUDROOM';
-  payload: number;
+  payload: boolean;
 }
 interface SetLaundryAction {
   type: 'SET_LAUNDRY';
-  payload: number;
+  payload: boolean;
 }
 interface SetBarAction {
   type: 'SET_BAR';
-  payload: number;
+  payload: boolean;
 }
 interface SetOtherAction {
   type: 'SET_OTHER';
@@ -129,16 +129,16 @@ const initialState: JobQuestionsState = {
   countertops: false,
   hasDrawings: false,
   hasDrawingsFile: {},
-  hasKitchen: 0,
-  hasIsland: 0,
-  hasPantry: 0,
-  hasVanity: 0,
-  hasEnsuite: 0,
-  hasJackJill: 0,
-  hasBasementVanity: 0,
-  hasMudroom: 0,
-  hasLaundry: 0,
-  hasBar: 0,
+  hasKitchen: false,
+  hasIsland: false,
+  hasPantry: false,
+  hasVanity: false,
+  hasEnsuite: false,
+  hasJackJill: false,
+  hasBasementVanity: false,
+  hasMudroom: false,
+  hasLaundry: false,
+  hasBar: false,
   hasOther: {},
   finishQ: false,
   selectedRooms: []
@@ -226,43 +226,43 @@ export const setFinishQ = (finishq: boolean) => ({
   payload: finishq,
 });
 
-export const setKitchen = (kitchen: number) => ({
+export const setKitchen = (kitchen: boolean) => ({
   type: 'SET_KITCHEN',
   payload: kitchen,
 });
-export const setIsland = (island: number) => ({
+export const setIsland = (island: boolean) => ({
   type: 'SET_ISLAND',
   payload: island,
 });
-export const setPantry = (pantry: number) => ({
+export const setPantry = (pantry: boolean) => ({
   type: 'SET_PANTRY',
   payload: pantry,
 });
-export const setVanity = (vanity: number) => ({
+export const setVanity = (vanity: boolean) => ({
   type: 'SET_VANITY',
   payload: vanity,
 });
-export const setEnsuite = (ensuite: number) => ({
+export const setEnsuite = (ensuite: boolean) => ({
   type: 'SET_ENSUITE',
   payload: ensuite,
 });
-export const setJackJill = (jackJill: number) => ({
+export const setJackJill = (jackJill: boolean) => ({
   type: 'SET_JACK_JILL',
   payload: jackJill,
 });
-export const setBasementVanity = (basementVanity: number) => ({
+export const setBasementVanity = (basementVanity: boolean) => ({
   type: 'SET_BASEMENT_VANITY',
   payload: basementVanity,
 });
-export const setMudroom = (mudroom: number) => ({
+export const setMudroom = (mudroom: boolean) => ({
   type: 'SET_MUDROOM',
   payload: mudroom,
 });
-export const setLaundry = (laundry: number) => ({
+export const setLaundry = (laundry: boolean) => ({
   type: 'SET_LAUNDRY',
   payload: laundry,
 });
-export const setBar = (bar: number) => ({
+export const setBar = (bar: boolean) => ({
   type: 'SET_BAR',
   payload: bar,
 });

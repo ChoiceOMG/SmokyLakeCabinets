@@ -19,6 +19,7 @@ import {
   setOther,
   setSelectedRooms,
 } from '~/reducer/jobQuestions';
+import CheckBox from '@components/inputs/CheckBox';
 
 type Props = {
   handleStepChange: (step: number) => void;
@@ -56,36 +57,36 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
   let [addOther, setAddOther] = useState<InputsState[]>([]);
 
   const handleKitchenChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.target.checked ? Setktchn(1) : Setktchn(0);
+    Setktchn(event.target.checked);
   };
   const handleIslandChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.target.checked ? setIslnd(1) : setIslnd(0);
+    setIslnd(event.target.checked);
   };
   const handlePantryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.target.checked ? setPntry(1) : setPntry(0);
+    setPntry(event.target.checked);
   };
   const handleVanityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.target.checked ? setVty(1) : setVty(0);
+    setVty(event.target.checked);
   };
   const handleEnsuiteChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.target.checked ? setEnst(1) : setEnst(0);
+    setEnst(event.target.checked);
   };
   const handleJackJillChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.target.checked ? setJckJll(1) : setJckJll(0);
+    setJckJll(event.target.checked);
   };
   const handleBasementVanityChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    event.target.checked ? setBsmtVty(1) : setBsmtVty(0);
+    setBsmtVty(event.target.checked);
   };
   const handleMudroomChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.target.checked ? setMdrm(1) : setMdrm(0);
+    setMdrm(event.target.checked);
   };
   const handleLaundryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.target.checked ? setLdy(1) : setLdy(0);
+    setLdy(event.target.checked);
   };
   const handleBarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.target.checked ? setBr(1) : setBr(0);
+    setBr(event.target.checked);
   };
   const handleOtherChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.target.checked
@@ -134,7 +135,7 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
     dispatch(setLaundry(localLaundry));
     dispatch(setBar(localBar));
     dispatch(setOther(addOther));
-    dispatch(setSelectedRooms(selectedRooms));
+    dispatch(setSelectedRooms(selectedRooms as string[]));
     finishQ ? handleStepChange(4) : handleStepChange(3);
 
     // handleStepChange(3);
@@ -151,38 +152,13 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
           <div className="grid grid-cols-2">
             {/* Kitchen */}
             <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="cabinets"
-                className="absolute h-6 w-6 opacity-0"
-                checked={localKitchen >= 1 ? true : false}
-                onChange={handleKitchenChange}
+              <CheckBox
+                id="kitchen"
+                checkedBox={localKitchen}
+                onChangeBox={handleKitchenChange}
               />
-              <div
-                className={clsx(
-                  'mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md  text-transparent',
-                  localKitchen >= 1
-                    ? 'bg-blue-500 text-white'
-                    : 'border border-gray-200  bg-gray-100'
-                )}
-              >
-                <svg
-                  width="9"
-                  height="7"
-                  viewBox="0 0 9 7"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M0.603516 3.77075L2.68685 5.85409L7.89518 0.645752"
-                    stroke={clsx(localKitchen ? 'white' : 'gray-200')}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  ></path>
-                </svg>
-              </div>
               <label
-                htmlFor="cabinets"
+                htmlFor="kitchen"
                 className=" py-3.5 text-lg font-bold text-gray-500"
               >
                 Kitchen
@@ -190,36 +166,12 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
             </div>
             {/* Island */}
             <div className="flex items-center">
-              <input
-                type="checkbox"
+              <CheckBox
                 id="island"
-                className="absolute h-6 w-6 opacity-0"
-                checked={localIsland >= 1 ? true : false}
-                onChange={handleIslandChange}
+                checkedBox={localIsland}
+                onChangeBox={handleIslandChange}
               />
-              <div
-                className={clsx(
-                  'mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md  text-transparent',
-                  localIsland >= 1
-                    ? 'bg-blue-500 text-white'
-                    : 'border border-gray-200  bg-gray-100'
-                )}
-              >
-                <svg
-                  width="9"
-                  height="7"
-                  viewBox="0 0 9 7"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M0.603516 3.77075L2.68685 5.85409L7.89518 0.645752"
-                    stroke={clsx(localIsland ? 'white' : 'gray-200')}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  ></path>
-                </svg>
-              </div>
+
               <label
                 htmlFor="island"
                 className=" py-3.5 text-lg font-bold text-gray-500"
@@ -229,36 +181,12 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
             </div>
             {/* Pantry */}
             <div className="flex items-center">
-              <input
-                type="checkbox"
+              <CheckBox
                 id="pantry"
-                className="absolute h-6 w-6 opacity-0"
-                checked={localPantry >= 1 ? true : false}
-                onChange={handlePantryChange}
+                checkedBox={localPantry}
+                onChangeBox={handlePantryChange}
               />
-              <div
-                className={clsx(
-                  'mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md  text-transparent',
-                  localPantry >= 1
-                    ? 'bg-blue-500 text-white'
-                    : 'border border-gray-200  bg-gray-100'
-                )}
-              >
-                <svg
-                  width="9"
-                  height="7"
-                  viewBox="0 0 9 7"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M0.603516 3.77075L2.68685 5.85409L7.89518 0.645752"
-                    stroke={clsx(localPantry ? 'white' : 'gray-200')}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  ></path>
-                </svg>
-              </div>
+
               <label
                 htmlFor="pantry"
                 className=" py-3.5 text-lg font-bold text-gray-500"
@@ -268,36 +196,12 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
             </div>
             {/* Vanity */}
             <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="Vanity"
-                className="absolute h-6 w-6 opacity-0"
-                checked={localVanity >= 1 ? true : false}
-                onChange={handleVanityChange}
+              <CheckBox
+                id="vanity"
+                checkedBox={localVanity}
+                onChangeBox={handleVanityChange}
               />
-              <div
-                className={clsx(
-                  'mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md  text-transparent',
-                  localVanity >= 1
-                    ? 'bg-blue-500 text-white'
-                    : 'border border-gray-200  bg-gray-100'
-                )}
-              >
-                <svg
-                  width="9"
-                  height="7"
-                  viewBox="0 0 9 7"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M0.603516 3.77075L2.68685 5.85409L7.89518 0.645752"
-                    stroke={clsx(localVanity ? 'white' : 'gray-200')}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  ></path>
-                </svg>
-              </div>
+
               <label
                 htmlFor="Vanity"
                 className=" py-3.5 text-lg font-bold text-gray-500"
@@ -307,36 +211,12 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
             </div>
             {/* Ensuite */}
             <div className="flex items-center">
-              <input
-                type="checkbox"
+              <CheckBox
                 id="Ensuite"
-                className="absolute h-6 w-6 opacity-0"
-                checked={localEnsuite >= 1 ? true : false}
-                onChange={handleEnsuiteChange}
+                checkedBox={localEnsuite}
+                onChangeBox={handleEnsuiteChange}
               />
-              <div
-                className={clsx(
-                  'mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md  text-transparent',
-                  localEnsuite >= 1
-                    ? 'bg-blue-500 text-white'
-                    : 'border border-gray-200  bg-gray-100'
-                )}
-              >
-                <svg
-                  width="9"
-                  height="7"
-                  viewBox="0 0 9 7"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M0.603516 3.77075L2.68685 5.85409L7.89518 0.645752"
-                    stroke={clsx(localEnsuite ? 'white' : 'gray-200')}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  ></path>
-                </svg>
-              </div>
+
               <label
                 htmlFor="Ensuite"
                 className=" py-3.5 text-lg font-bold text-gray-500"
@@ -346,36 +226,12 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
             </div>
             {/* JackJill */}
             <div className="flex items-center">
-              <input
-                type="checkbox"
+              <CheckBox
                 id="JackJill"
-                className="absolute h-6 w-6 opacity-0"
-                checked={localJackJill >= 1 ? true : false}
-                onChange={handleJackJillChange}
+                checkedBox={localJackJill}
+                onChangeBox={handleJackJillChange}
               />
-              <div
-                className={clsx(
-                  'mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md  text-transparent',
-                  localJackJill >= 1
-                    ? 'bg-blue-500 text-white'
-                    : 'border border-gray-200  bg-gray-100'
-                )}
-              >
-                <svg
-                  width="9"
-                  height="7"
-                  viewBox="0 0 9 7"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M0.603516 3.77075L2.68685 5.85409L7.89518 0.645752"
-                    stroke={clsx(localJackJill ? 'white' : 'gray-200')}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  ></path>
-                </svg>
-              </div>
+
               <label
                 htmlFor="JackJill"
                 className=" py-3.5 text-lg font-bold text-gray-500"
@@ -385,36 +241,12 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
             </div>
             {/* BasementVanity */}
             <div className="flex items-center">
-              <input
-                type="checkbox"
+              <CheckBox
                 id="BasementVanity"
-                className="absolute h-6 w-6 opacity-0"
-                checked={localBasementVanity >= 1 ? true : false}
-                onChange={handleBasementVanityChange}
+                checkedBox={localBasementVanity}
+                onChangeBox={handleBasementVanityChange}
               />
-              <div
-                className={clsx(
-                  'mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md  text-transparent',
-                  localBasementVanity >= 1
-                    ? 'bg-blue-500 text-white'
-                    : 'border border-gray-200  bg-gray-100'
-                )}
-              >
-                <svg
-                  width="9"
-                  height="7"
-                  viewBox="0 0 9 7"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M0.603516 3.77075L2.68685 5.85409L7.89518 0.645752"
-                    stroke={clsx(localBasementVanity ? 'white' : 'gray-200')}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  ></path>
-                </svg>
-              </div>
+
               <label
                 htmlFor="BasementVanity"
                 className=" py-3.5 text-lg font-bold text-gray-500"
@@ -424,36 +256,12 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
             </div>
             {/* Mudroom */}
             <div className="flex items-center">
-              <input
-                type="checkbox"
+              <CheckBox
                 id="Mudroom"
-                className="absolute h-6 w-6 opacity-0"
-                checked={localMudroom >= 1 ? true : false}
-                onChange={handleMudroomChange}
+                checkedBox={localMudroom}
+                onChangeBox={handleMudroomChange}
               />
-              <div
-                className={clsx(
-                  'mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md  text-transparent',
-                  localMudroom >= 1
-                    ? 'bg-blue-500 text-white'
-                    : 'border border-gray-200  bg-gray-100'
-                )}
-              >
-                <svg
-                  width="9"
-                  height="7"
-                  viewBox="0 0 9 7"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M0.603516 3.77075L2.68685 5.85409L7.89518 0.645752"
-                    stroke={clsx(localMudroom ? 'white' : 'gray-200')}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  ></path>
-                </svg>
-              </div>
+
               <label
                 htmlFor="Mudroom"
                 className=" py-3.5 text-lg font-bold text-gray-500"
@@ -463,36 +271,12 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
             </div>
             {/* Laundry */}
             <div className="flex items-center">
-              <input
-                type="checkbox"
+              <CheckBox
                 id="Laundry"
-                className="absolute h-6 w-6 opacity-0"
-                checked={localLaundry >= 1 ? true : false}
-                onChange={handleLaundryChange}
+                checkedBox={localLaundry}
+                onChangeBox={handleLaundryChange}
               />
-              <div
-                className={clsx(
-                  'mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md  text-transparent',
-                  localLaundry >= 1
-                    ? 'bg-blue-500 text-white'
-                    : 'border border-gray-200  bg-gray-100'
-                )}
-              >
-                <svg
-                  width="9"
-                  height="7"
-                  viewBox="0 0 9 7"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M0.603516 3.77075L2.68685 5.85409L7.89518 0.645752"
-                    stroke={clsx(localLaundry ? 'white' : 'gray-200')}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  ></path>
-                </svg>
-              </div>
+
               <label
                 htmlFor="Laundry"
                 className=" py-3.5 text-lg font-bold text-gray-500"
@@ -502,36 +286,12 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
             </div>
             {/* Bar */}
             <div className="flex items-center">
-              <input
-                type="checkbox"
+              <CheckBox
                 id="Bar"
-                className="absolute h-6 w-6 opacity-0"
-                checked={localBar >= 1 ? true : false}
-                onChange={handleBarChange}
+                checkedBox={localBar}
+                onChangeBox={handleBarChange}
               />
-              <div
-                className={clsx(
-                  'mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md  text-transparent',
-                  localBar >= 1
-                    ? 'bg-blue-500 text-white'
-                    : 'border border-gray-200  bg-gray-100'
-                )}
-              >
-                <svg
-                  width="9"
-                  height="7"
-                  viewBox="0 0 9 7"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M0.603516 3.77075L2.68685 5.85409L7.89518 0.645752"
-                    stroke={clsx(localBar ? 'white' : 'gray-200')}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  ></path>
-                </svg>
-              </div>
+
               <label
                 htmlFor="Bar"
                 className=" py-3.5 text-lg font-bold text-gray-500"
@@ -545,13 +305,13 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
                 type="checkbox"
                 id="Other"
                 className="absolute top-0 top-5 h-6 w-6 cursor-pointer opacity-0"
-                checked={localOther >= 1 ? true : false}
+                checked={Object.keys(localOther).length > 0 ? true : false}
                 onChange={handleOtherChange}
               />
               <div
                 className={clsx(
                   'mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md  text-transparent',
-                  localOther >= 1
+                  Object.keys(localOther).length >= 0
                     ? 'bg-blue-500 text-white'
                     : 'border border-gray-200  bg-gray-100'
                 )}

@@ -8,12 +8,14 @@ type Props = {
 };
 
 const MultiSelect: React.FC<Props> = ({ Title, allSelectItems, nextStep }) => {
-  const [selectedItems, setSelectedItems] = useState([]);
+  //add string ts
+
+  const [selectedItems, setSelectedItems] = useState<Array<string>>([]);
 
   const [addOther, setAddOther] = useState(false);
   const [newOther, setNewOther] = useState('');
   const [openSelect, setOpenSelect] = useState(false);
-  const handleSelectItem = (item: string & never) => {
+  const handleSelectItem = (item: string) => {
     if (selectedItems.includes(item)) {
       const filteredItems = selectedItems.filter((i) => i !== item);
       setSelectedItems(filteredItems);
@@ -40,7 +42,7 @@ const MultiSelect: React.FC<Props> = ({ Title, allSelectItems, nextStep }) => {
                   <span className="text-xs text-gray-700">{item}</span>
 
                   <FaPlusCircle
-                    onClick={() => handleSelectItem(item)}
+                    onClick={() => handleSelectItem(item + '')}
                     className=" ml-5	rotate-45 cursor-pointer fill-blue-500 text-sm hover:fill-blue-600"
                   />
                 </div>
@@ -75,7 +77,7 @@ const MultiSelect: React.FC<Props> = ({ Title, allSelectItems, nextStep }) => {
                 <div
                   key={item}
                   className=" m-1 max-w-fit cursor-pointer	 rounded-lg border border-gray-200 bg-gray-100 px-5 text-left hover:border-gray-500"
-                  onClick={() => handleSelectItem(item)}
+                  onClick={() => handleSelectItem(item + '')}
                 >
                   <span className="text-xs  text-gray-700">{item}</span>
                 </div>
@@ -117,7 +119,7 @@ const MultiSelect: React.FC<Props> = ({ Title, allSelectItems, nextStep }) => {
       <button
         className="relative bottom-5 mb-3 block w-1/5 rounded-full bg-blue-500 px-8 py-3.5 text-center text-base font-bold text-white hover:bg-blue-600 focus:ring-4 focus:ring-blue-200"
         type="button"
-        onClick={() => nextStep()}
+        onClick={() => nextStep(20)}
       >
         Done
       </button>

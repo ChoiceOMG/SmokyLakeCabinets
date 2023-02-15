@@ -11,6 +11,7 @@ import {
   setDrawingsFile,
   setFinishQ,
 } from '~/reducer/jobQuestions';
+import CheckBox from '@components/inputs/CheckBox';
 
 type Props = {
   handleStepChange: (step: number) => void;
@@ -126,36 +127,11 @@ const JobQuestionsForm: React.FC<Props> = ({ handleStepChange }) => {
           </p>
           {/* Cabinets */}
           <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="cabinets"
-              className="absolute h-6 w-6 opacity-0"
-              checked={localCabinets}
-              onChange={handleCabinetsChange}
+            <CheckBox
+              checkedBox={localCabinets}
+              onChangeBox={handleCabinetsChange}
             />
-            <div
-              className={clsx(
-                'mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md  text-transparent',
-                localCabinets
-                  ? 'bg-blue-500 text-white'
-                  : 'border border-gray-200  bg-gray-100'
-              )}
-            >
-              <svg
-                width="9"
-                height="7"
-                viewBox="0 0 9 7"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M0.603516 3.77075L2.68685 5.85409L7.89518 0.645752"
-                  stroke={clsx(localCabinets ? 'white' : 'gray-200')}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                ></path>
-              </svg>
-            </div>
+
             <label
               htmlFor="cabinets"
               className=" py-3.5 text-lg font-bold text-gray-500"
@@ -165,36 +141,11 @@ const JobQuestionsForm: React.FC<Props> = ({ handleStepChange }) => {
           </div>
           {/* Countertops */}
           <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="cabinets"
-              className="absolute h-6 w-6 opacity-0"
-              checked={localCountertops}
-              onChange={handleCountertopsChange}
+            <CheckBox
+              checkedBox={localCountertops}
+              onChangeBox={handleCountertopsChange}
             />
-            <div
-              className={clsx(
-                'mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md  text-transparent',
-                localCountertops
-                  ? 'bg-blue-500 text-white'
-                  : 'border border-gray-200  bg-gray-100'
-              )}
-            >
-              <svg
-                width="9"
-                height="7"
-                viewBox="0 0 9 7"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M0.603516 3.77075L2.68685 5.85409L7.89518 0.645752"
-                  stroke={clsx(cabinets ? 'white' : 'gray-200')}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                ></path>
-              </svg>
-            </div>
+
             <label
               htmlFor="cabinets"
               className=" py-3.5 text-lg font-bold text-gray-500"
@@ -203,38 +154,12 @@ const JobQuestionsForm: React.FC<Props> = ({ handleStepChange }) => {
             </label>
           </div>
           {/* Has Drawings */}
-          <div className="flex flex-wrap items-center	">
-            <input
-              type="checkbox"
-              id="hasDrawings"
-              className="absolute h-6 w-6 opacity-0"
-              checked={localHasDrawings}
-              onChange={handleHasDrawingsChange}
+          <div className="relative flex flex-wrap	items-center">
+            <CheckBox
+              checkedBox={localHasDrawings}
+              onChangeBox={handleHasDrawingsChange}
             />
 
-            <div
-              className={clsx(
-                'mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md  text-transparent',
-                localHasDrawings
-                  ? 'bg-blue-500 text-white'
-                  : 'border border-gray-200  bg-gray-100'
-              )}
-            >
-              <svg
-                width="9"
-                height="7"
-                viewBox="0 0 9 7"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M0.603516 3.77075L2.68685 5.85409L7.89518 0.645752"
-                  stroke={clsx(localHasDrawings ? 'white' : 'gray-200')}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                ></path>
-              </svg>
-            </div>
             <label
               htmlFor="hasDrawings"
               className=" py-3.5 text-lg font-bold text-gray-500"
