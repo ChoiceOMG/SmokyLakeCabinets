@@ -201,7 +201,7 @@ const ForAnyRooms: React.FC<Props> = ({ nextProgress }) => {
             <div
               className="cursor-pointer"
               onClick={() => {
-                nextStep(100);
+                nextProgress(100);
                 setSelectDrawers('Metal Drawers');
               }}
             >
@@ -228,7 +228,7 @@ const ForAnyRooms: React.FC<Props> = ({ nextProgress }) => {
             <div
               className="cursor-pointer"
               onClick={() => {
-                nextStep(100);
+                nextProgress(100);
                 setSelectDrawers('Standard Drawers');
               }}
             >
@@ -255,8 +255,10 @@ const ForAnyRooms: React.FC<Props> = ({ nextProgress }) => {
             <div
               className="cursor-pointer"
               onClick={() => {
-                nextStep(100);
-
+                nextProgress(100);
+                if (document.getElementById('Other') !== null) {
+                  document.getElementById('Other').checked = true;
+                }
                 setSelectDrawers('Dovetail');
               }}
             >
