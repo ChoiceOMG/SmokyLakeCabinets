@@ -39,7 +39,9 @@ const Materials: React.FC<Props> = ({ handleStepChange }) => {
     hasPantry,
     hasVanity,
   } = useSelector((state: RootState) => state.jobQuestionsConfig);
-  const [selectedRoom, setSelectedRoom] = useState(selectedRooms[0] || '');
+  const [selectedRoom, setSelectedRoom] = useState<string>(
+    selectedRooms[0] || ''
+  );
 
   const roomCount = {
     kitchen: hasKitchen,
