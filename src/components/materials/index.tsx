@@ -16,6 +16,7 @@ import MudroomRoom from '@components/materials/MudRoom';
 import LaundryRoom from '@components/materials/LaundryRoom';
 import BarRoom from '@components/materials/BarRoom';
 import OtherRoom from '@components/materials/OtherRoom';
+import RoomsForm from '@components/RoomsForm/RoomsForm';
 
 type Props = {
   handleStepChange: (step: number) => void;
@@ -23,10 +24,6 @@ type Props = {
 
 const Materials: React.FC<Props> = ({ handleStepChange }) => {
   const dispatch = useDispatch();
-  const { materialStep } = useSelector(
-    (state: RootState) => state.progressChange
-  );
-  const [selectedRoom, setSelectedRoom] = useState<string>(materialStep);
 
   const {
     hasBar,
@@ -38,9 +35,11 @@ const Materials: React.FC<Props> = ({ handleStepChange }) => {
     hasLaundry,
     hasMudroom,
     hasOther,
+    selectedRooms,
     hasPantry,
     hasVanity,
   } = useSelector((state: RootState) => state.jobQuestionsConfig);
+  const [selectedRoom, setSelectedRoom] = useState(selectedRooms[0] || '');
 
   const roomCount = {
     kitchen: hasKitchen,
@@ -56,11 +55,6 @@ const Materials: React.FC<Props> = ({ handleStepChange }) => {
     other: hasOther,
   };
 
-  // make array of roomCount keys that have a value more than 0
-  const rooms = Object.keys(roomCount).filter(
-    (key) => (roomCount[key] as number) > 0
-  );
-
   useEffect(() => {
     if (selectedRoom) {
       router.push({
@@ -69,6 +63,8 @@ const Materials: React.FC<Props> = ({ handleStepChange }) => {
           room: selectedRoom,
         },
       });
+    } else {
+      handleStepChange(4);
     }
   }, [selectedRoom]);
   useEffect(() => {
@@ -77,8 +73,9 @@ const Materials: React.FC<Props> = ({ handleStepChange }) => {
   }, [selectedRoom]);
 
   const handleNextRoom = () => {
-    const currentRoomIndex = rooms.indexOf(selectedRoom);
-    const nextRoom = rooms[currentRoomIndex + 1];
+    const currentRoomIndex = selectedRooms.indexOf(selectedRoom);
+    const nextRoom = selectedRooms[currentRoomIndex + 1];
+
     if (nextRoom) {
       setSelectedRoom(nextRoom);
     } else {
@@ -93,7 +90,12 @@ const Materials: React.FC<Props> = ({ handleStepChange }) => {
 
   return (
     <div className="min-w-full">
-      <MaterialsNav
+      <RoomsForm
+        nameRoom={selectedRoom}
+        setSelectedRoom={handleNextRoom}
+        allRooms={selectedRooms}
+      />
+      {/* <MaterialsNav
         selectedRoom={selectedRoom}
         setSelectedRoom={setSelectedRoom}
         rooms={rooms}
@@ -134,7 +136,7 @@ const Materials: React.FC<Props> = ({ handleStepChange }) => {
         {selectedRoom === 'other' && (
           <OtherRoom nextRoom={handleNextRoom} otherCount={1} />
         )}
-      </MaterialsNav>
+      </MaterialsNav> */}
     </div>
   );
 };
