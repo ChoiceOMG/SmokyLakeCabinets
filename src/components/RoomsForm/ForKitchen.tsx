@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 import Card from '@components/Card/Card';
 import MultiSelect from '@components/MultiSelect/MultiSelect';
@@ -91,6 +91,8 @@ const ForKitchen: React.FC<Props> = ({
       img: '/images/kitchen.jpg',
     },
   ]);
+  const transitionRef = useRef(null);
+
   useEffect(() => {
     if (checkMaterialsFinishes) {
       const propsObj = Object.values(checkMaterialsFinishes).find(
@@ -130,9 +132,10 @@ const ForKitchen: React.FC<Props> = ({
     <>
       <CSSTransition
         in={stepCount === 0 && !hasDiffUpLower}
-        timeout={700}
+        timeout={200}
         classNames="slide"
         unmountOnExit
+        ref={transitionRef}
       >
         <div className="grid grid-cols-2 grid-rows-1 items-center gap-5">
           {/* Cabinet Styles */}
@@ -147,6 +150,7 @@ const ForKitchen: React.FC<Props> = ({
                 type="radio"
                 name="CabinetStyles"
                 className="h-4 w-4 cursor-pointer"
+                onChange={() => {}}
                 checked={hasDiffUpLower === false}
                 onClick={() => {
                   nextStep(10, { hasDiffUpLower: false });
@@ -190,9 +194,10 @@ const ForKitchen: React.FC<Props> = ({
 
       <CSSTransition
         in={hasDiffUpLower === true}
-        timeout={700}
+        timeout={200}
         classNames="slide"
         unmountOnExit
+        ref={transitionRef}
       >
         <MultiSelect
           Title="Wall Heights"
@@ -207,9 +212,10 @@ const ForKitchen: React.FC<Props> = ({
 
       <CSSTransition
         in={stepCount === 1}
-        timeout={700}
+        timeout={200}
         classNames="slide"
         unmountOnExit
+        ref={transitionRef}
       >
         <div>
           {/* Glass Style */}
@@ -233,6 +239,7 @@ const ForKitchen: React.FC<Props> = ({
                   name="GlassStyle"
                   value={el.value}
                   checked={selectedGlassStyle === el.value}
+                  onChange={() => {}}
                   className="h-4 w-4 cursor-pointer"
                 />
                 <label
@@ -253,9 +260,10 @@ const ForKitchen: React.FC<Props> = ({
       </CSSTransition>
       <CSSTransition
         in={stepCount === 2}
-        timeout={700}
+        timeout={200}
         classNames="slide"
         unmountOnExit
+        ref={transitionRef}
       >
         <div>
           {/* Pantry\Tall */}
@@ -285,6 +293,7 @@ const ForKitchen: React.FC<Props> = ({
                   type="radio"
                   name="PantryTall"
                   value={el.value}
+                  onChange={() => {}}
                   checked={selectedPantryTall === el.value}
                   className="h-4 w-4 cursor-pointer"
                 />

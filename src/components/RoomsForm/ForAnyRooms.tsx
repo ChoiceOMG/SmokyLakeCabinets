@@ -103,7 +103,7 @@ const ForAnyRooms: React.FC<Props> = ({
       {/* Cabinet Styles */}
       <CSSTransition
         in={stepCount === 0}
-        timeout={700}
+        timeout={200}
         classNames="slide"
         unmountOnExit
       >
@@ -132,6 +132,7 @@ const ForAnyRooms: React.FC<Props> = ({
                     type="radio"
                     name="selectBoxMaterial"
                     checked={selectBoxMaterial === item.value}
+                    onChange={() => {}}
                     className="h-4 w-4 cursor-pointer"
                   />
                   <label
@@ -150,7 +151,7 @@ const ForAnyRooms: React.FC<Props> = ({
       {/* Select Hardware Package */}
       <CSSTransition
         in={stepCount === 1}
-        timeout={700}
+        timeout={200}
         classNames="slide"
         unmountOnExit
       >
@@ -178,6 +179,7 @@ const ForAnyRooms: React.FC<Props> = ({
                     id={item.value}
                     type="radio"
                     checked={selectHardwarePackage === item.value}
+                    onChange={() => {}}
                     name="selectHardwarePackageList"
                     className="h-4 w-4 cursor-pointer"
                   />
@@ -197,7 +199,7 @@ const ForAnyRooms: React.FC<Props> = ({
       {/* Select Drawers */}
       <CSSTransition
         in={stepCount === 2}
-        timeout={700}
+        timeout={200}
         classNames="slide"
         unmountOnExit
       >
@@ -227,6 +229,7 @@ const ForAnyRooms: React.FC<Props> = ({
                     type="radio"
                     name="selectDrawersList"
                     checked={selectDrawers === item.value}
+                    onChange={() => {}}
                     className="h-4 w-4 cursor-pointer"
                   />
                   <label

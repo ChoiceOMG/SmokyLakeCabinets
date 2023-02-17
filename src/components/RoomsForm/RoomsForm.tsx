@@ -160,7 +160,7 @@ const RoomsForm: React.FC<Props> = ({
       {/* Modal window */}
       <CSSTransition
         in={openApplyInterioRooms}
-        timeout={700}
+        timeout={400}
         classNames="openModal"
         unmountOnExit
       >

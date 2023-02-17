@@ -32,11 +32,11 @@
 .slide-enter-done {
   transform: translate3d(0, 0, 0);
   max-height: 100%;
-  transition: transform 500ms, max-height 300ms;
-  -webkit-transition: transform 500ms, max-height 300ms;
-  -moz-transition: transform 500ms, max-height 300ms;
-  -ms-transition: transform 500ms, max-height 300ms;
-  -o-transition: transform 500ms, max-height 300ms;
+  transition: transform 300ms, max-height 300ms;
+  -webkit-transition: transform 300ms, max-height 300ms;
+  -moz-transition: transform 300ms, max-height 300ms;
+  -ms-transition: transform 300ms, max-height 300ms;
+  -o-transition: transform 300ms, max-height 300ms;
   -webkit-transform: translate3d(0, 0, 0);
   -moz-transform: translate3d(0, 0, 0);
   -ms-transform: translate3d(0, 0, 0);
@@ -46,11 +46,11 @@
 .slide-exit-active {
   transform: translate3d(-100vw, 0, 0);
   max-height: 0;
-  transition: transform 500ms, max-height 300ms;
-  -webkit-transition: transform 500ms, max-height 300ms;
-  -moz-transition: transform 500ms, max-height 300ms;
-  -ms-transition: transform 500ms, max-height 300ms;
-  -o-transition: transform 500ms, max-height 300ms;
+  transition: transform 300ms, max-height 300ms;
+  -webkit-transition: transform 300ms, max-height 300ms;
+  -moz-transition: transform 300ms, max-height 300ms;
+  -ms-transition: transform 300ms, max-height 300ms;
+  -o-transition: transform 300ms, max-height 300ms;
   -webkit-transform: translate3d(-100vw, 0, 0);
   -moz-transform: translate3d(-100vw, 0, 0);
   -ms-transform: translate3d(-100vw, 0, 0);
