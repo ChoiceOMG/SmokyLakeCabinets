@@ -2,21 +2,100 @@ import React, { useEffect, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import Card from '@components/Card/Card';
 type Props = {
-  nextProgress: (progress: number) => void;
+  nextProgress: (progress: number, option?: object) => void;
+  nameRoom: string;
+  checkMaterialsFinishes:
+    | {
+        room: { name: string; props: any; progress: number };
+      }[]
+    | any;
 };
 
-const ForAnyRooms: React.FC<Props> = ({ nextProgress }) => {
+const ForAnyRooms: React.FC<Props> = ({
+  nextProgress,
+  nameRoom,
+  checkMaterialsFinishes,
+}) => {
   const [stepCount, setStepCount] = useState(0);
   const [selectBoxMaterial, setSelectBoxMaterial] = useState('');
   const [selectHardwarePackage, setSelectHardwarePackage] = useState('');
   const [selectDrawers, setSelectDrawers] = useState('');
+  const [selectHardwarePackageList, setSelectHardwarePackageList] = useState([
+    {
+      value: 'Standard',
+      img: '/images/kitchen.jpg',
+      title:
+        'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
+    },
+    {
+      value: 'Upgraded',
+      img: '/images/kitchen.jpg',
+      title:
+        'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
+    },
+  ]);
+  const [selectDrawersList, setSelectDrawersList] = useState([
+    {
+      value: 'Metal Drawers',
+      img: '/images/kitchen.jpg',
+      title:
+        'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
+    },
+    {
+      value: 'Standard Drawers',
+      img: '/images/kitchen.jpg',
+      title:
+        'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
+    },
+    {
+      value: 'Dovetail',
+      img: '/images/kitchen.jpg',
+      title:
+        'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
+    },
+  ]);
+  const [selectBoxMaterialList, setSelectBoxMaterialList] = useState([
+    {
+      value: 'Melamine White',
+      img: '/images/kitchen.jpg',
+      title:
+        'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
+    },
+    {
+      value: 'Prefinished Plywood Standard',
+      img: '/images/kitchen.jpg',
+      title:
+        'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
+    },
+    {
+      value: 'Prefinished Plywood Domestic',
+      img: '/images/kitchen.jpg',
+      title:
+        'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
+    },
+  ]);
   useEffect(() => {
-    if (stepCount === 0) {
-      nextProgress(0);
+    if (checkMaterialsFinishes) {
+      const propsObj = Object.values(checkMaterialsFinishes).find(
+        (item) => item.room && item.room.name === nameRoom
+      );
+      if (propsObj?.room) {
+        setSelectBoxMaterial(propsObj.room.props.selectBoxMaterial);
+        setSelectBoxMaterial(propsObj.room.props.selectBoxMaterial);
+        setSelectDrawers(propsObj.room.props.selectDrawers);
+        setSelectHardwarePackage(propsObj.room.props.selectHardwarePackage);
+      }
     }
-  }, [stepCount]);
-  const nextStep = (e: number) => {
-    nextProgress(e);
+  }, [checkMaterialsFinishes]);
+  useEffect(() => {
+    if (nameRoom !== 'kitchen') {
+      nextProgress(0);
+      setStepCount(0);
+    }
+  }, [nameRoom]);
+
+  const nextStep = (e: number, o?: object) => {
+    nextProgress(e, o);
     setStepCount(stepCount + 1);
   };
   return (
@@ -33,87 +112,38 @@ const ForAnyRooms: React.FC<Props> = ({ nextProgress }) => {
             Select Box Material
           </h2>
           <div className="grid grid-cols-3 grid-rows-1 items-center gap-5">
-            <div
-              className="cursor-pointer"
-              onClick={() => {
-                nextStep(10);
-                setSelectBoxMaterial('Melamine White');
-              }}
-            >
-              <div className="mb-4 flex items-center">
-                <input
-                  id="Other"
-                  type="radio"
-                  name="MelamineWhite"
-                  className="h-4 w-4 cursor-pointer"
-                />
-                <label
-                  htmlFor="MelamineWhite"
-                  className="pl-2 font-normal text-gray-500"
-                >
-                  Melamine White
-                </label>
+            {selectBoxMaterialList.map((item, i) => (
+              <div
+                key={i}
+                className="cursor-pointer"
+                onClick={() => {
+                  nextStep(10, { selectBoxMaterial: item.value });
+                  setSelectBoxMaterial(item.value);
+                  let itemHTML: HTMLInputElement | null =
+                    document.getElementById(item.value) as HTMLInputElement;
+                  if (itemHTML !== null) {
+                    itemHTML.checked = true;
+                  }
+                }}
+              >
+                <div className="mb-4 flex items-center">
+                  <input
+                    id={item.value}
+                    type="radio"
+                    name="selectBoxMaterial"
+                    checked={selectBoxMaterial === item.value}
+                    className="h-4 w-4 cursor-pointer"
+                  />
+                  <label
+                    htmlFor={item.value}
+                    className="pl-2 font-normal text-gray-500"
+                  >
+                    {item.value}
+                  </label>
+                </div>
+                <Card title={item.title} img={item.img} />
               </div>
-              <Card
-                title="Here are the biggest enterprise technology acquisitions of 2021 so
-            far, in reverse chronological order."
-                img="/images/kitchen.jpg"
-              />
-            </div>
-            <div
-              className="cursor-pointer"
-              onClick={() => {
-                nextStep(10);
-                setSelectBoxMaterial('Prefinished Plywood Standard');
-              }}
-            >
-              <div className="mb-4 flex items-center">
-                <input
-                  id="Other"
-                  type="radio"
-                  name="PrefinishedPlywoodStandard"
-                  className="h-4 w-4 cursor-pointer"
-                />
-                <label
-                  htmlFor="PrefinishedPlywoodStandard"
-                  className="pl-2 font-normal text-gray-500"
-                >
-                  Prefinished Plywood Standard
-                </label>
-              </div>
-              <Card
-                title="Here are the biggest enterprise technology acquisitions of 2021 so
-            far, in reverse chronological order."
-                img="/images/kitchen.jpg"
-              />
-            </div>
-            <div
-              className="cursor-pointer"
-              onClick={() => {
-                nextStep(10);
-                setSelectBoxMaterial('Prefinished Plywood Domestic');
-              }}
-            >
-              <div className="mb-4 flex items-center">
-                <input
-                  id="Other"
-                  type="radio"
-                  name="PrefinishedPlywoodDomestic"
-                  className="h-4 w-4 cursor-pointer"
-                />
-                <label
-                  htmlFor="PrefinishedPlywoodDomestic"
-                  className="pl-2 font-normal text-gray-500"
-                >
-                  Prefinished Plywood Domestic
-                </label>
-              </div>
-              <Card
-                title="Here are the biggest enterprise technology acquisitions of 2021 so
-            far, in reverse chronological order."
-                img="/images/kitchen.jpg"
-              />
-            </div>
+            ))}
           </div>
         </div>
       </CSSTransition>
@@ -129,60 +159,38 @@ const ForAnyRooms: React.FC<Props> = ({ nextProgress }) => {
             Select Hardware Package
           </h2>
           <div className="grid grid-cols-3 grid-rows-1 items-center gap-5">
-            <div
-              className="cursor-pointer"
-              onClick={() => {
-                nextStep(10);
-                setSelectHardwarePackage('Standard');
-              }}
-            >
-              <div className="mb-4 flex items-center">
-                <input
-                  id="Other"
-                  type="radio"
-                  name="Standard"
-                  className="h-4 w-4 cursor-pointer"
-                />
-                <label
-                  htmlFor="Standard"
-                  className="pl-2 font-normal text-gray-500"
-                >
-                  Standard
-                </label>
+            {selectHardwarePackageList.map((item, i) => (
+              <div
+                key={i}
+                className="cursor-pointer"
+                onClick={() => {
+                  nextStep(10, { selectHardwarePackage: item.value });
+                  setSelectHardwarePackage(item.value);
+                  let itemHTML: HTMLInputElement | null =
+                    document.getElementById(item.value) as HTMLInputElement;
+                  if (itemHTML !== null) {
+                    itemHTML.checked = true;
+                  }
+                }}
+              >
+                <div className="mb-4 flex items-center">
+                  <input
+                    id={item.value}
+                    type="radio"
+                    checked={selectHardwarePackage === item.value}
+                    name="selectHardwarePackageList"
+                    className="h-4 w-4 cursor-pointer"
+                  />
+                  <label
+                    htmlFor={item.value}
+                    className="pl-2 font-normal text-gray-500"
+                  >
+                    {item.value}
+                  </label>
+                </div>
+                <Card title={item.title} img={item.img} />
               </div>
-              <Card
-                title="Here are the biggest enterprise technology acquisitions of 2021 so
-            far, in reverse chronological order."
-                img="/images/kitchen.jpg"
-              />
-            </div>
-            <div
-              className="cursor-pointer"
-              onClick={() => {
-                nextStep(10);
-                setSelectHardwarePackage('Upgraded');
-              }}
-            >
-              <div className="mb-4 flex items-center">
-                <input
-                  id="Other"
-                  type="radio"
-                  name="Upgraded"
-                  className="h-4 w-4 cursor-pointer"
-                />
-                <label
-                  htmlFor="Upgraded"
-                  className="pl-2 font-normal text-gray-500"
-                >
-                  Upgraded
-                </label>
-              </div>
-              <Card
-                title="Here are the biggest enterprise technology acquisitions of 2021 so
-            far, in reverse chronological order."
-                img="/images/kitchen.jpg"
-              />
-            </div>
+            ))}
           </div>
         </div>
       </CSSTransition>
@@ -198,90 +206,39 @@ const ForAnyRooms: React.FC<Props> = ({ nextProgress }) => {
             Select Drawers
           </h2>
           <div className="grid grid-cols-3 grid-rows-1 items-center gap-5">
-            <div
-              className="cursor-pointer"
-              onClick={() => {
-                nextProgress(100);
-                setSelectDrawers('Metal Drawers');
-              }}
-            >
-              <div className="mb-4 flex items-center">
-                <input
-                  id="Other"
-                  type="radio"
-                  name="MetalDrawers"
-                  className="h-4 w-4 cursor-pointer"
-                />
-                <label
-                  htmlFor="MetalDrawers"
-                  className="pl-2 font-normal text-gray-500"
-                >
-                  Metal Drawers
-                </label>
+            {selectDrawersList.map((item, i) => (
+              <div
+                key={i}
+                className="cursor-pointer"
+                onClick={() => {
+                  nextProgress(100, { selectDrawers: item.value });
+                  setSelectDrawers(item.value);
+
+                  let itemHTML: HTMLInputElement | null =
+                    document.getElementById(item.value) as HTMLInputElement;
+                  if (itemHTML !== null) {
+                    itemHTML.checked = true;
+                  }
+                }}
+              >
+                <div className="mb-4 flex items-center">
+                  <input
+                    id={item.value}
+                    type="radio"
+                    name="selectDrawersList"
+                    checked={selectDrawers === item.value}
+                    className="h-4 w-4 cursor-pointer"
+                  />
+                  <label
+                    htmlFor={item.value}
+                    className="pl-2 font-normal text-gray-500"
+                  >
+                    {item.value}
+                  </label>
+                </div>
+                <Card title={item.title} img={item.img} />
               </div>
-              <Card
-                title="Here are the biggest enterprise technology acquisitions of 2021 so
-            far, in reverse chronological order."
-                img="/images/kitchen.jpg"
-              />
-            </div>
-            <div
-              className="cursor-pointer"
-              onClick={() => {
-                nextProgress(100);
-                setSelectDrawers('Standard Drawers');
-              }}
-            >
-              <div className="mb-4 flex items-center">
-                <input
-                  id="Other"
-                  type="radio"
-                  name="StandardDrawers"
-                  className="h-4 w-4 cursor-pointer"
-                />
-                <label
-                  htmlFor="StandardDrawers"
-                  className="pl-2 font-normal text-gray-500"
-                >
-                  Standard Drawers
-                </label>
-              </div>
-              <Card
-                title="Here are the biggest enterprise technology acquisitions of 2021 so
-            far, in reverse chronological order."
-                img="/images/kitchen.jpg"
-              />
-            </div>
-            <div
-              className="cursor-pointer"
-              onClick={() => {
-                nextProgress(100);
-                if (document.getElementById('Other') !== null) {
-                  document.getElementById('Other').checked = true;
-                }
-                setSelectDrawers('Dovetail');
-              }}
-            >
-              <div className="mb-4 flex items-center">
-                <input
-                  id="Other"
-                  type="radio"
-                  name="Dovetail"
-                  className="h-4 w-4 cursor-pointer"
-                />
-                <label
-                  htmlFor="Dovetail"
-                  className="pl-2 font-normal text-gray-500"
-                >
-                  Dovetail
-                </label>
-              </div>
-              <Card
-                title="Here are the biggest enterprise technology acquisitions of 2021 so
-            far, in reverse chronological order."
-                img="/images/kitchen.jpg"
-              />
-            </div>
+            ))}
           </div>
         </div>
       </CSSTransition>

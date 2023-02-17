@@ -4,7 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '~/store';
 
 import { FaPlusCircle } from 'react-icons/fa';
-
+import {
+  addMaterialsFinishes,
+  deleteFinishes,
+} from '~/reducer/materialsFinishes';
 import {
   setKitchen,
   setIsland,
@@ -43,6 +46,9 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
     hasOther,
     finishQ,
   } = useSelector((state: RootState) => state.jobQuestionsConfig);
+  const { materialsFinishes } = useSelector(
+    (state: any) => state.materialsFinishesReducer
+  );
   const [localKitchen, Setktchn] = useState(hasKitchen);
   const [localIsland, setIslnd] = useState(hasIsland);
   const [localPantry, setPntry] = useState(hasPantry);
@@ -120,9 +126,13 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
       !!localMudroom && 'mudroom',
       !!localLaundry && 'laundry',
       !!localBar && 'bar',
-      Object.keys(addOther).length && 'other',
     ].filter(Boolean);
-
+    if (Object.keys(addOther).length > 0) {
+      for (let i = 0; i < Object.keys(addOther).length; i++) {
+        selectedRooms.push(addOther[i].value);
+      }
+    }
+    console.log(Object.keys(addOther));
     event.preventDefault();
     dispatch(setKitchen(localKitchen));
     dispatch(setIsland(localIsland));
@@ -137,6 +147,12 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
     dispatch(setOther(addOther));
     dispatch(setSelectedRooms(selectedRooms as string[]));
     finishQ ? handleStepChange(4) : handleStepChange(3);
+    dispatch(deleteFinishes());
+
+    selectedRooms.map((room) => {
+      let roomString = typeof room === 'string' ? room : String(room);
+      dispatch(addMaterialsFinishes(roomString, []));
+    });
 
     // handleStepChange(3);
   };
@@ -305,13 +321,14 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
                 type="checkbox"
                 id="Other"
                 className="absolute top-0 top-5 h-6 w-6 cursor-pointer opacity-0"
-                checked={Object.keys(localOther).length > 0 ? true : false}
+                checked={Object.keys(addOther).length > 0 ? true : false}
                 onChange={handleOtherChange}
               />
               <div
                 className={clsx(
                   'mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md  text-transparent',
-                  Object.keys(localOther).length >= 0
+
+                  Object.keys(addOther).length > 0
                     ? 'bg-blue-500 text-white'
                     : 'border border-gray-200  bg-gray-100'
                 )}

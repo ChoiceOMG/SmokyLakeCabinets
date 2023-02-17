@@ -1,19 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import ProgressBar from '@components/ProgressBar/ProgressBar';
 import ForKitchen from '@components/RoomsForm/ForKitchen';
 import ForAnyRooms from '@components/RoomsForm/ForAnyRooms';
 import { CSSTransition } from 'react-transition-group';
+import { updateMaterialsFinishes } from '~/reducer/materialsFinishes';
+import { useSelector, useDispatch } from 'react-redux';
+import type { RootState } from '~/store';
+
 type Props = {
   nameRoom: string;
   setSelectedRoom: React.Dispatch<React.SetStateAction<string>>;
   allRooms: string[];
+  setUDPLink: React.Dispatch<React.SetStateAction<string>>;
 };
 type ProgressState = number;
 
 const RoomsForm: React.FC<Props> = ({
   nameRoom,
   setSelectedRoom,
+  setUDPLink,
   allRooms,
 }) => {
   let [progress, setProgress]: [
@@ -21,24 +27,50 @@ const RoomsForm: React.FC<Props> = ({
     React.Dispatch<React.SetStateAction<ProgressState>>
   ] = useState(0);
   const [openApplyInterioRooms, setOpenApplyInterioRooms] = useState(false);
+  const [kitchenQuestion, setKitchenQuestion] = useState(false);
+  const [checkMaterialsFinishes, setCheckMaterialsFinishes] = useState<Object>(
+    {}
+  );
+  const dispatch = useDispatch();
+
+  const { materialsFinishes } = useSelector(
+    (state: RootState) => state.materialsFinishesReducer
+  );
+  useEffect(() => {
+    setCheckMaterialsFinishes(materialsFinishes);
+  }, [materialsFinishes]);
   const ApplyInterioRooms = () => {
-    let index = allRooms.indexOf(nameRoom);
-    if (index === allRooms.length - 1) {
-      setSelectedRoom('interior');
-      return;
-    }
+    const currentProps = Object.keys(materialsFinishes)
+      .map((key) => {
+        if (
+          materialsFinishes[key].room.name === nameRoom &&
+          materialsFinishes[key].room.progress === 100
+        ) {
+          return materialsFinishes[key].room.props;
+        }
+      })
+      .filter((item) => item !== undefined); //I get all the props from the object
+    //update all the rooms with the same props
+    allRooms.forEach((room) => {
+      dispatch(updateMaterialsFinishes(room, currentProps[0], 100));
+    });
+    setOpenApplyInterioRooms(false);
   };
 
-  const nextProgress = (e: number) => {
+  const nextProgress = (e: number, option?: object) => {
     if (e === 100) {
       setProgress(100);
+      dispatch(updateMaterialsFinishes(nameRoom, option, 100));
       return;
     }
     if (e === 0) {
       setProgress(0);
+      dispatch(updateMaterialsFinishes(nameRoom, option, 0));
       return;
     }
     setProgress(progress + e);
+
+    dispatch(updateMaterialsFinishes(nameRoom, option, progress));
   };
   return (
     <form className="container mx-auto p-4">
@@ -51,19 +83,27 @@ const RoomsForm: React.FC<Props> = ({
         className="overflow-hidde 	 h-full	 w-full max-w-full"
         style={{ minHeight: '45vh' }}
       >
-        {nameRoom === 'kitchen' ? (
-          <ForKitchen nextProgress={nextProgress} />
+        {nameRoom === 'kitchen' && !kitchenQuestion ? (
+          <ForKitchen
+            nextProgress={nextProgress}
+            checkMaterialsFinishes={checkMaterialsFinishes}
+            done={setKitchenQuestion}
+          />
         ) : (
-          <ForAnyRooms nextProgress={nextProgress} />
+          <ForAnyRooms
+            nameRoom={nameRoom}
+            checkMaterialsFinishes={checkMaterialsFinishes}
+            nextProgress={nextProgress}
+          />
         )}
       </div>
       {/* Footer form */}
       <div className="mt-5 flex	items-center justify-between">
         <button
           className={`block w-1/5 rounded-full  px-8 py-3.5 text-center text-base font-bold text-white  ${
-            progress < 100
-              ? 'bg-gray-500'
-              : 'bg-blue-600 hover:bg-blue-500 focus:ring-4 focus:ring-blue-200'
+            progress === 100
+              ? 'bg-blue-600 hover:bg-blue-500 focus:ring-4 focus:ring-blue-200'
+              : 'bg-gray-500'
           }`}
           type="button"
           onClick={() => {
@@ -91,11 +131,30 @@ const RoomsForm: React.FC<Props> = ({
             Apply Interior to All Rooms
           </button>
         )}
-        <div className="flex h-fit justify-between gap-5">
-          {allRooms.map((el, i) => (
-            <span className="capitalize">{el}</span>
-          ))}
-        </div>
+        {Object.keys(materialsFinishes).length > 0 && (
+          <div className="flex h-fit justify-between gap-5">
+            {Object.keys(materialsFinishes).map((key, i) => (
+              <span
+                onClick={() => {
+                  setUDPLink(materialsFinishes[key].room.name);
+                }}
+                className={`cursor-pointer capitalize ${
+                  materialsFinishes[key].room.progress === 100
+                    ? 'text-green-600'
+                    : 'text-red-600'
+                }`}
+                key={i}
+                title={
+                  materialsFinishes[key].room.progress === 100
+                    ? 'Done'
+                    : 'Not done'
+                }
+              >
+                {materialsFinishes[key].room.name}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Modal window */}
@@ -132,8 +191,13 @@ const RoomsForm: React.FC<Props> = ({
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
                         You're settings for {nameRoom} will overwrite the
-                        settings you have selected for {allRooms} rooms. Are you
-                        sure you want to continue?
+                        settings you have selected for:
+                        {allRooms.map((e, i) => (
+                          <p key={i} className=" font-bold capitalize">
+                            {e}
+                          </p>
+                        ))}
+                        rooms. Are you sure you want to continue?
                       </p>
                     </div>
                   </div>

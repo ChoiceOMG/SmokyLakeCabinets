@@ -1,142 +1,133 @@
-type CabinetInteriorPreference = {
-  id: number;
-  boxMaterial: string;
-  hardware: string;
-  drawerMaterial: string;
-  applyToSections: string[];
-};
-type CabinetExteriorPreference = {
-  id: number;
-  doorStyle: string;
-  upperDoorStyle: string;
-  finishes: string;
-};
 
 
-export interface MaterialsFinishesState {
-  interior: CabinetInteriorPreference[];
-  exterior: CabinetExteriorPreference[];
-  kitchenSpecs: {
-    wallHeight: number;
-    vaultedCeiling: boolean;
-    upperCabinetHeight: number;
-    ultraUpperCabinetHeight: number; // 12" above upper cabinet requires glass
-    matchingDoors: boolean;
-    glassInsertsType: string;
-    tallCabinets: number;
-    closedToCeiling: boolean;
-    toeKickHeight: number;
-    toeKickHeightType: string;
-    crownMolding: boolean;
-    lightValance: boolean;
-    lightValanceType: string;
-    floatingShelves: boolean;
-    coffeeHutch: boolean;
-    coffeeHutchType: string;
-    coffeeHutchDoor: number;
-  };
-}
-interface SetInteriorPreferenceAction {
-  type: 'SET_INTERIOR_PREFERENCE';
-  payload: CabinetInteriorPreference;
-}
-interface SetExteriorPreferenceAction {
-  type: 'SET_EXTERIOR_PREFERENCE';
-  payload: CabinetExteriorPreference;
-}
-interface SetKitchenSpecsAction {
-  type: 'SET_KITCHEN_SPECS';
+
+interface MaterialsFinishesAction {
+  type: string;
   payload: {
-    wallHeight: number;
-    vaultedCeiling: boolean;
-    upperCabinetHeight: number;
-    ultraUpperCabinetHeight: number; // 12" above upper cabinet requires glass
-    matchingDoors: boolean;
-    glassInsertsType: string;
-    tallCabinets: number;
-    closedToCeiling: boolean;
-    toeKickHeight: number;
-    toeKickHeightType: string;
-    crownMolding: boolean;
-    lightValance: boolean;
-    lightValanceType: string;
-    floatingShelves: boolean;
-    coffeeHutch: boolean;
-    coffeeHutchType: string;
-    coffeeHutchDoor: number;
+    roomName: string;
+    props?: object | any;
+    progress?: number
   };
 }
-type MaterialsFinishesAction =
-  | SetInteriorPreferenceAction
-  | SetExteriorPreferenceAction
-  | SetKitchenSpecsAction;
 
-const initialState: MaterialsFinishesState = {
-  interior: [
-    {
-      id: 1,
-      boxMaterial: 'MDF',
-      hardware: 'Hinges',
-      drawerMaterial: 'MDF',
-      applyToSections: ['All'],
-    },
-  ],
-  exterior: [
-    {
-      id: 1,
-      doorStyle: 'Shaker',
-      upperDoorStyle: 'Shaker',
-      finishes: 'White',
-    },
-  ],
-  kitchenSpecs: {
-    wallHeight: 84,
-    vaultedCeiling: false,
-    upperCabinetHeight: 12,
-    ultraUpperCabinetHeight: 12, // 12" above upper cabinet requires glass
-    matchingDoors: false,
-    glassInsertsType: 'None',
-    tallCabinets: 0,
-    closedToCeiling: false,
-    toeKickHeight: 4,
-    toeKickHeightType: 'Standard',
-    crownMolding: false,
-    lightValance: false,
-    lightValanceType: 'None',
-    floatingShelves: false,
-    coffeeHutch: false,
-    coffeeHutchType: 'None',
-    coffeeHutchDoor: 0,
-  },
+
+// Action Types
+export const ADD_MATERIALS_FINISHES = 'ADD_MATERIALS_FINISHES';
+
+export const DELETE_FINISHES = 'DELETE_FINISHES';
+
+export const UPDATE_MATERIALS_FINISHES = 'UPDATE_MATERIALS_FINISHES';
+// Action Creators 
+export const addMaterialsFinishes = (roomName: string, props: any) => {
+  console.log('addMaterialsFinishes', roomName, props)
+  return {
+    type: ADD_MATERIALS_FINISHES,
+    payload: { roomName, props }
+  };
+};
+export const updateMaterialsFinishes = (roomName: string, props?: object, progress?: number): MaterialsFinishesAction => {
+  return {
+    type: UPDATE_MATERIALS_FINISHES,
+    payload: { roomName, props, progress }
+  };
 };
 
- const materialsFinishesReducer = (
-  state = initialState,
-  action: MaterialsFinishesAction
-): MaterialsFinishesState => {
+export const deleteFinishes = () => {
+
+  return {
+    type: DELETE_FINISHES,
+    payload: {}
+  };
+};
+
+
+// Reducer 
+const initialState = {
+  materialsFinishes: [{ "room": { "name": "", "props": [], "progress": 0 } }]
+};
+
+
+const materialsFinishesReducer = (state = initialState, action: MaterialsFinishesAction) => {
   switch (action.type) {
-    case 'SET_INTERIOR_PREFERENCE':
+    case ADD_MATERIALS_FINISHES: {
       return {
         ...state,
-        interior: state.interior.map((preference) =>
-          preference.id === action.payload.id ? action.payload : preference
-        ),
+        materialsFinishes: [...state.materialsFinishes, { room: { name: action.payload.roomName, props: action.payload.props } }]
       };
-    case 'SET_EXTERIOR_PREFERENCE':
+    }
+    case DELETE_FINISHES: {
       return {
         ...state,
-        exterior: state.exterior.map((preference) =>
-          preference.id === action.payload.id ? action.payload : preference
-        ),
+        materialsFinishes: []
       };
-    case 'SET_KITCHEN_SPECS':
+
+    }
+
+    case UPDATE_MATERIALS_FINISHES: {
       return {
         ...state,
-        kitchenSpecs: action.payload,
+        materialsFinishes: state.materialsFinishes.map((room) => {
+          let updateProps = {};
+          if (room.room.name === action.payload.roomName) {
+
+            const PropKey = action.payload.props ? Object.keys(action.payload.props)[0] : null;
+            if (!Object.prototype.hasOwnProperty.call(room.room.props, PropKey ? PropKey : '')) {
+              const newObj = { ...room.room.props, ...action.payload.props };
+              console.log('--- room.room.name', room.room.name)
+              console.log('room.room.props', room.room.props)
+              console.log('newObj', newObj)
+              return { room: { name: action.payload.roomName, props: newObj, progress: action.payload.progress } };
+            } else {
+              console.log('--- Have a props! room.room.name', room.room.name)
+              console.log('room.room.props', room.room.props)
+
+              Object.entries(room.room.props).forEach((value, key) => {
+
+
+
+                if (PropKey) {
+                  Object.entries(action.payload.props).map((element: any, key: number) => {
+
+
+                    if (value[0] === element[0]) {
+
+                      updateProps[value[0]] = element[1]
+                      console.log('updateProps', updateProps[value[0]]);
+                    }
+
+                  });
+
+                }
+                updateProps[value[0]] = value[1]
+
+
+              });
+
+
+
+
+
+              return {
+
+                room: {
+                  name: action.payload.roomName, props: updateProps ? updateProps : null
+                  , progress: action.payload.progress
+                }
+
+              };
+            }
+          }
+          return room;
+        }),
+
       };
-    default:
-      return state;
+    }
+    default: return state;
   }
 };
 
 export default materialsFinishesReducer;
+
+
+
+

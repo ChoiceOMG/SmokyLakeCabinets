@@ -4,23 +4,38 @@ import Card from '@components/Card/Card';
 import MultiSelect from '@components/MultiSelect/MultiSelect';
 import { CSSTransition } from 'react-transition-group';
 import CheckBox from '@components/inputs/CheckBox';
+
+import { useDispatch } from 'react-redux';
+
 type Props = {
-  nextProgress: (progress: number) => void;
+  nextProgress: (progress: number, option?: object) => void;
+  done: (e: boolean) => void;
+  checkMaterialsFinishes:
+    | {
+        room: { name: string; props: any; progress: number };
+      }[]
+    | any;
 };
 
-const ForKitchen: React.FC<Props> = ({ nextProgress }) => {
-  const [hasDiffUpLower, setHasDiffUpLower] = useState(false);
+const ForKitchen: React.FC<Props> = ({
+  nextProgress,
+  done,
+  checkMaterialsFinishes,
+}) => {
+  const [hasDiffUpLower, setHasDiffUpLower] = useState<Boolean>();
   const [stepCount, setStepCount] = useState(0);
   const [localClosedCeiling, setLocalClosedCeiling] = useState(false);
   const [localCrownFlat, setLocalCrownFlat] = useState(false);
-
+  const [wallHeights, setWallHeights] = useState<Array<string>>([]);
+  const dispatch = useDispatch();
   const handleClosedCeiling = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLocalClosedCeiling(event.target.checked);
   };
   const handleCrownFlat = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLocalCrownFlat(event.target.checked);
   };
-  const [selectedGlassStyle, setSelectedGlassStyle] = useState('');
+  // Cabinet Styles
+  const [selectedGlassStyle, setSelectedGlassStyle] = useState<String>('');
 
   const [glassStyleList, setGlassStyleList] = useState([
     {
@@ -49,7 +64,7 @@ const ForKitchen: React.FC<Props> = ({ nextProgress }) => {
     },
   ]);
   //Pantry\Tall
-  const [selectedPantryTall, setSelectedPantryTall] = useState('');
+  const [selectedPantryTall, setSelectedPantryTall] = useState<String>('');
   const [pantryTallList, setPantryTallList] = useState([
     {
       value: '1',
@@ -76,7 +91,21 @@ const ForKitchen: React.FC<Props> = ({ nextProgress }) => {
       img: '/images/kitchen.jpg',
     },
   ]);
-
+  useEffect(() => {
+    if (checkMaterialsFinishes) {
+      const propsObj = Object.values(checkMaterialsFinishes).find(
+        (item) => item.room && item.room.name === 'kitchen'
+      );
+      if (propsObj?.room) {
+        setHasDiffUpLower(propsObj.room.props.hasDiffUpLower);
+        if (propsObj.room.props.wallHeights) {
+          setWallHeights(propsObj.room.props.wallHeights);
+        }
+        setSelectedGlassStyle(propsObj.room.props.selectedGlassStyle);
+        setSelectedPantryTall(propsObj.room.props.selectedPantryTall);
+      }
+    }
+  }, [checkMaterialsFinishes]);
   useEffect(() => {
     if (stepCount === 0 && !hasDiffUpLower) {
       nextProgress(0);
@@ -90,9 +119,12 @@ const ForKitchen: React.FC<Props> = ({ nextProgress }) => {
     '41"',
     '48"',
   ]);
-  const nextStep = (e: number) => {
-    nextProgress(e);
+  const nextStep = (e: number, o?: object) => {
+    nextProgress(e, o);
     setStepCount(stepCount + 1);
+    if (stepCount === 2) {
+      done(true);
+    }
   };
   return (
     <>
@@ -115,8 +147,9 @@ const ForKitchen: React.FC<Props> = ({ nextProgress }) => {
                 type="radio"
                 name="CabinetStyles"
                 className="h-4 w-4 cursor-pointer"
+                checked={hasDiffUpLower === false}
                 onClick={() => {
-                  nextStep(10);
+                  nextStep(10, { hasDiffUpLower: false });
                 }}
               />
               <label
@@ -133,6 +166,7 @@ const ForKitchen: React.FC<Props> = ({ nextProgress }) => {
                 name="CabinetStyles"
                 className="h-4 w-4 cursor-pointer"
                 checked={hasDiffUpLower === true}
+                onChange={() => {}}
                 onClick={() => {
                   setHasDiffUpLower(true);
                 }}
@@ -155,7 +189,7 @@ const ForKitchen: React.FC<Props> = ({ nextProgress }) => {
       </CSSTransition>
 
       <CSSTransition
-        in={hasDiffUpLower}
+        in={hasDiffUpLower === true}
         timeout={700}
         classNames="slide"
         unmountOnExit
@@ -163,10 +197,11 @@ const ForKitchen: React.FC<Props> = ({ nextProgress }) => {
         <MultiSelect
           Title="Wall Heights"
           allSelectItems={allSelectItems}
-          nextStep={() => {
-            nextStep(20);
+          nextStep={(e) => {
+            nextStep(20, { wallHeights: e });
             setHasDiffUpLower(false);
           }}
+          wallHeights={wallHeights}
         />
       </CSSTransition>
 
@@ -188,7 +223,8 @@ const ForKitchen: React.FC<Props> = ({ nextProgress }) => {
                 key={i}
                 onClick={() => {
                   setSelectedGlassStyle(el.value);
-                  nextStep(40);
+
+                  nextStep(20, { selectedGlassStyle: el.value });
                 }}
               >
                 <input
@@ -196,6 +232,7 @@ const ForKitchen: React.FC<Props> = ({ nextProgress }) => {
                   type="radio"
                   name="GlassStyle"
                   value={el.value}
+                  checked={selectedGlassStyle === el.value}
                   className="h-4 w-4 cursor-pointer"
                 />
                 <label
@@ -230,19 +267,25 @@ const ForKitchen: React.FC<Props> = ({ nextProgress }) => {
               <div
                 className="flex max-w-sm cursor-pointer flex-wrap items-center rounded-lg border border-gray-200 bg-white p-2 shadow dark:border-gray-700 dark:bg-gray-800"
                 key={i}
-                onClick={(e) => {
+                onClick={() => {
                   setSelectedPantryTall(el.value);
-                  nextProgress(100);
-                  if (document.getElementById(el.value) !== null) {
-                    document.getElementById(el.value).checked = true;
-                  }
+
+                  selectedPantryTall
+                    ? nextStep(30, { selectedPantryTall: el.value })
+                    : '';
+                  /* let itemHTML: HTMLInputElement | null =
+                    document.getElementById(el.value) as HTMLInputElement;
+                  if (itemHTML !== null && itemHTML.checked) {
+                    itemHTML.checked = true;
+                  } */
                 }}
               >
                 <input
                   id={el.value}
                   type="radio"
-                  name="GlassStyle"
+                  name="PantryTall"
                   value={el.value}
+                  checked={selectedPantryTall === el.value}
                   className="h-4 w-4 cursor-pointer"
                 />
                 <label
