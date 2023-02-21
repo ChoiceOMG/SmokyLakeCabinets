@@ -6,9 +6,20 @@ interface MaterialsFinishesAction {
   payload: {
     roomName: string;
     props?: object | any;
-    progress?: number
+    progress?: number;
+    room?: {
+      name: string;
+      progress: number;
+    };
   };
+
 }
+export interface MaterialFinish {
+  room: {
+    name: string;
+    progress: number;
+  };
+};
 
 
 // Action Types
@@ -43,7 +54,7 @@ export const deleteFinishes = () => {
 
 // Reducer 
 const initialState = {
-  materialsFinishes: [{ "room": { "name": "", "props": [], "progress": 0 } }]
+  materialsFinishes: [{ room: { name: "", props: [], progress: 0 } }] || []
 };
 
 
@@ -67,7 +78,7 @@ const materialsFinishesReducer = (state = initialState, action: MaterialsFinishe
       return {
         ...state,
         materialsFinishes: state.materialsFinishes.map((room) => {
-          let updateProps = {};
+          let updateProps = <any>{};
           if (room.room.name === action.payload.roomName) {
 
             const PropKey = action.payload.props ? Object.keys(action.payload.props)[0] : null;
@@ -92,7 +103,6 @@ const materialsFinishesReducer = (state = initialState, action: MaterialsFinishe
                     if (value[0] === element[0]) {
 
                       updateProps[value[0]] = element[1]
-                      console.log('updateProps', updateProps[value[0]]);
                     }
 
                   });

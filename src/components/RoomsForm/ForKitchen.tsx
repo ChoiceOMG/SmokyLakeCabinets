@@ -4,12 +4,14 @@ import Card from '@components/Card/Card';
 import MultiSelect from '@components/MultiSelect/MultiSelect';
 import { CSSTransition } from 'react-transition-group';
 import CheckBox from '@components/inputs/CheckBox';
+import type { RootState } from '~/store';
 
 import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 type Props = {
-  nextProgress: (progress: number, option?: object) => void;
-  done: (e: boolean) => void;
+  newStep: (e: number) => void;
+  newOption: (e: object) => void;
   checkMaterialsFinishes:
     | {
         room: { name: string; props: any; progress: number };
@@ -18,22 +20,18 @@ type Props = {
 };
 
 const ForKitchen: React.FC<Props> = ({
-  nextProgress,
-  done,
   checkMaterialsFinishes,
+  newStep,
+  newOption,
 }) => {
   const [hasDiffUpLower, setHasDiffUpLower] = useState<Boolean>();
-  const [stepCount, setStepCount] = useState(0);
   const [localClosedCeiling, setLocalClosedCeiling] = useState(false);
   const [localCrownFlat, setLocalCrownFlat] = useState(false);
   const [wallHeights, setWallHeights] = useState<Array<string>>([]);
+  const [localProgress, setLocalProgress] = useState(0);
+  const { formStep } = useSelector((state: RootState) => state.progressChange);
   const dispatch = useDispatch();
-  const handleClosedCeiling = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLocalClosedCeiling(event.target.checked);
-  };
-  const handleCrownFlat = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLocalCrownFlat(event.target.checked);
-  };
+
   // Cabinet Styles
   const [selectedGlassStyle, setSelectedGlassStyle] = useState<String>('');
 
@@ -92,14 +90,34 @@ const ForKitchen: React.FC<Props> = ({
     },
   ]);
   const transitionRef = useRef(null);
+  const [allSelectItems, setAllSelectItems] = useState([
+    '30"',
+    '33"',
+    '38"',
+    '41"',
+    '48"',
+  ]);
 
+  //Functions
+  const handleClosedCeiling = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    el: String
+  ) => {
+    setLocalClosedCeiling(event.target.checked);
+  };
+  const handleCrownFlat = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLocalCrownFlat(event.target.checked);
+  };
+
+  //Use Effect
   useEffect(() => {
     if (checkMaterialsFinishes) {
       const propsObj = Object.values(checkMaterialsFinishes).find(
-        (item) => item.room && item.room.name === 'kitchen'
-      );
+        (item: any) => item.room && item.room.name === 'kitchen'
+      ) as any;
       if (propsObj?.room) {
-        setHasDiffUpLower(propsObj.room.props.hasDiffUpLower);
+        setLocalProgress(propsObj.room.progress);
+        // setHasDiffUpLower(propsObj.room.props.hasDiffUpLower);
         if (propsObj.room.props.wallHeights) {
           setWallHeights(propsObj.room.props.wallHeights);
         }
@@ -108,30 +126,11 @@ const ForKitchen: React.FC<Props> = ({
       }
     }
   }, [checkMaterialsFinishes]);
-  useEffect(() => {
-    if (stepCount === 0 && !hasDiffUpLower) {
-      nextProgress(0);
-    }
-  }, [stepCount]);
 
-  const [allSelectItems, setAllSelectItems] = useState([
-    '30"',
-    '33"',
-    '38"',
-    '41"',
-    '48"',
-  ]);
-  const nextStep = (e: number, o?: object) => {
-    nextProgress(e, o);
-    setStepCount(stepCount + 1);
-    if (stepCount === 2) {
-      done(true);
-    }
-  };
   return (
     <>
       <CSSTransition
-        in={stepCount === 0 && !hasDiffUpLower}
+        in={formStep === 0 && !hasDiffUpLower}
         timeout={200}
         classNames="slide"
         unmountOnExit
@@ -150,11 +149,12 @@ const ForKitchen: React.FC<Props> = ({
                 type="radio"
                 name="CabinetStyles"
                 className="h-4 w-4 cursor-pointer"
-                onChange={() => {}}
-                checked={hasDiffUpLower === false}
-                onClick={() => {
-                  nextStep(10, { hasDiffUpLower: false });
+                onChange={() => {
+                  newStep(10);
+                  newOption({ hasDiffUpLower: false });
+                  setHasDiffUpLower(false);
                 }}
+                checked={hasDiffUpLower === false}
               />
               <label
                 htmlFor="CabinetStyles"
@@ -170,8 +170,7 @@ const ForKitchen: React.FC<Props> = ({
                 name="CabinetStyles"
                 className="h-4 w-4 cursor-pointer"
                 checked={hasDiffUpLower === true}
-                onChange={() => {}}
-                onClick={() => {
+                onChange={() => {
                   setHasDiffUpLower(true);
                 }}
               />
@@ -193,7 +192,7 @@ const ForKitchen: React.FC<Props> = ({
       </CSSTransition>
 
       <CSSTransition
-        in={hasDiffUpLower === true}
+        in={hasDiffUpLower === true && formStep === 0}
         timeout={200}
         classNames="slide"
         unmountOnExit
@@ -203,15 +202,16 @@ const ForKitchen: React.FC<Props> = ({
           Title="Wall Heights"
           allSelectItems={allSelectItems}
           nextStep={(e) => {
-            nextStep(20, { wallHeights: e });
-            setHasDiffUpLower(false);
+            newStep(20);
+            newOption({ wallHeights: e, hasDiffUpLower: true });
+            // setHasDiffUpLower(false);
           }}
           wallHeights={wallHeights}
         />
       </CSSTransition>
 
       <CSSTransition
-        in={stepCount === 1}
+        in={formStep === 2}
         timeout={200}
         classNames="slide"
         unmountOnExit
@@ -229,8 +229,8 @@ const ForKitchen: React.FC<Props> = ({
                 key={i}
                 onClick={() => {
                   setSelectedGlassStyle(el.value);
-
-                  nextStep(20, { selectedGlassStyle: el.value });
+                  newStep(20);
+                  newOption({ selectedGlassStyle: el.value });
                 }}
               >
                 <input
@@ -259,7 +259,7 @@ const ForKitchen: React.FC<Props> = ({
         </div>
       </CSSTransition>
       <CSSTransition
-        in={stepCount === 2}
+        in={formStep === 3}
         timeout={200}
         classNames="slide"
         unmountOnExit
@@ -278,9 +278,9 @@ const ForKitchen: React.FC<Props> = ({
                 onClick={() => {
                   setSelectedPantryTall(el.value);
 
-                  selectedPantryTall
-                    ? nextStep(30, { selectedPantryTall: el.value })
-                    : '';
+                  newStep(30);
+                  newOption({ selectedPantryTall: el.value });
+
                   /* let itemHTML: HTMLInputElement | null =
                     document.getElementById(el.value) as HTMLInputElement;
                   if (itemHTML !== null && itemHTML.checked) {

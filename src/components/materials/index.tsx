@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '~/store';
 
-import { setMaterialsRoom } from '~/reducer/trackProgress';
 import router from 'next/router';
 
 import RoomsForm from '@components/RoomsForm/RoomsForm';
@@ -69,10 +68,6 @@ const Materials: React.FC<Props> = ({ handleStepChange }) => {
     } else {
       handleStepChange(4);
     }
-  }, [selectedRoom]);
-  useEffect(() => {
-    dispatch(setMaterialsRoom(selectedRoom));
-    console.log('setMaterialProgressStep', selectedRoom);
   }, [selectedRoom]);
 
   const handleNextRoom = () => {

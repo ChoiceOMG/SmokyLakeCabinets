@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import Card from '@components/Card/Card';
+import { useSelector } from 'react-redux';
+import type { RootState } from '~/store';
+
 type Props = {
-  nextProgress: (progress: number, option?: object) => void;
+  newStep: (e: number) => void;
+  newOption: (e: object) => void;
   nameRoom: string;
   checkMaterialsFinishes:
     | {
@@ -12,11 +16,11 @@ type Props = {
 };
 
 const ForAnyRooms: React.FC<Props> = ({
-  nextProgress,
+  newStep,
+  newOption,
   nameRoom,
   checkMaterialsFinishes,
 }) => {
-  const [stepCount, setStepCount] = useState(0);
   const [selectBoxMaterial, setSelectBoxMaterial] = useState('');
   const [selectHardwarePackage, setSelectHardwarePackage] = useState('');
   const [selectDrawers, setSelectDrawers] = useState('');
@@ -74,11 +78,14 @@ const ForAnyRooms: React.FC<Props> = ({
         'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
     },
   ]);
+
+  const { formStep } = useSelector((state: RootState) => state.progressChange);
+
   useEffect(() => {
     if (checkMaterialsFinishes) {
       const propsObj = Object.values(checkMaterialsFinishes).find(
-        (item) => item.room && item.room.name === nameRoom
-      );
+        (item: any) => item.room && item.room.name === nameRoom
+      ) as any;
       if (propsObj?.room) {
         setSelectBoxMaterial(propsObj.room.props.selectBoxMaterial);
         setSelectBoxMaterial(propsObj.room.props.selectBoxMaterial);
@@ -87,22 +94,12 @@ const ForAnyRooms: React.FC<Props> = ({
       }
     }
   }, [checkMaterialsFinishes]);
-  useEffect(() => {
-    if (nameRoom !== 'kitchen') {
-      nextProgress(0);
-      setStepCount(0);
-    }
-  }, [nameRoom]);
 
-  const nextStep = (e: number, o?: object) => {
-    nextProgress(e, o);
-    setStepCount(stepCount + 1);
-  };
   return (
     <>
       {/* Cabinet Styles */}
       <CSSTransition
-        in={stepCount === 0}
+        in={formStep === 0}
         timeout={200}
         classNames="slide"
         unmountOnExit
@@ -117,7 +114,8 @@ const ForAnyRooms: React.FC<Props> = ({
                 key={i}
                 className="cursor-pointer"
                 onClick={() => {
-                  nextStep(10, { selectBoxMaterial: item.value });
+                  newStep(10);
+                  newOption({ selectBoxMaterial: item.value });
                   setSelectBoxMaterial(item.value);
                   let itemHTML: HTMLInputElement | null =
                     document.getElementById(item.value) as HTMLInputElement;
@@ -150,7 +148,7 @@ const ForAnyRooms: React.FC<Props> = ({
       </CSSTransition>
       {/* Select Hardware Package */}
       <CSSTransition
-        in={stepCount === 1}
+        in={formStep === 1}
         timeout={200}
         classNames="slide"
         unmountOnExit
@@ -165,7 +163,8 @@ const ForAnyRooms: React.FC<Props> = ({
                 key={i}
                 className="cursor-pointer"
                 onClick={() => {
-                  nextStep(10, { selectHardwarePackage: item.value });
+                  newStep(10);
+                  newOption({ selectHardwarePackage: item.value });
                   setSelectHardwarePackage(item.value);
                   let itemHTML: HTMLInputElement | null =
                     document.getElementById(item.value) as HTMLInputElement;
@@ -198,7 +197,7 @@ const ForAnyRooms: React.FC<Props> = ({
       </CSSTransition>
       {/* Select Drawers */}
       <CSSTransition
-        in={stepCount === 2}
+        in={formStep === 2}
         timeout={200}
         classNames="slide"
         unmountOnExit
@@ -213,7 +212,8 @@ const ForAnyRooms: React.FC<Props> = ({
                 key={i}
                 className="cursor-pointer"
                 onClick={() => {
-                  nextProgress(100, { selectDrawers: item.value });
+                  newStep(100);
+                  newOption({ selectDrawers: item.value });
                   setSelectDrawers(item.value);
 
                   let itemHTML: HTMLInputElement | null =

@@ -34,6 +34,11 @@ const MultiSelect: React.FC<Props> = ({
       setSelectedItems(wallHeights);
     }
   }, [wallHeights]);
+  useEffect(() => {
+    if (selectedItems.length > 0) {
+      nextStep(selectedItems);
+    }
+  }, [selectedItems]);
   return (
     <div className="h-64 w-1/2">
       <span className=" mb-2 block text-left text-sm font-bold text-gray-500">
@@ -126,13 +131,6 @@ const MultiSelect: React.FC<Props> = ({
           </div>
         </div>
       </div>
-      <button
-        className="relative bottom-5 mb-3 block w-1/5 rounded-full bg-blue-500 px-8 py-3.5 text-center text-base font-bold text-white hover:bg-blue-600 focus:ring-4 focus:ring-blue-200"
-        type="button"
-        onClick={() => nextStep(selectedItems)}
-      >
-        Done
-      </button>
     </div>
   );
 };
