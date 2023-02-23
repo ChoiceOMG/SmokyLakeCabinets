@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import clsx from 'clsx';
 import ProgressBar from '@components/ProgressBar/ProgressBar';
 import ForKitchen from '@components/RoomsForm/ForKitchen';
 import ForAnyRooms from '@components/RoomsForm/ForAnyRooms';
@@ -28,11 +27,11 @@ const RoomsForm: React.FC<Props> = ({
     React.Dispatch<React.SetStateAction<ProgressState>>
   ] = useState(0);
   const [newStep, setNewStep] = useState<number>(0);
-  const [newOption, setNewOption] = useState<Object>({});
+  const [newOption, setNewOption] = useState<object>({});
   const [openApplyInterioRooms, setOpenApplyInterioRooms] =
     useState<boolean>(false);
-  const [kitchenQuestion, setKitchenQuestion] = useState<Boolean>(false);
-  const [checkMaterialsFinishes, setCheckMaterialsFinishes] = useState<Object>(
+  const [kitchenQuestion, setKitchenQuestion] = useState<boolean>(false);
+  const [checkMaterialsFinishes, setCheckMaterialsFinishes] = useState<object>(
     {}
   );
   const dispatch = useDispatch();
@@ -249,7 +248,7 @@ const RoomsForm: React.FC<Props> = ({
                     </h3>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        You're settings for {nameRoom} will overwrite the
+                        You`re settings for {nameRoom} will overwrite the
                         settings you have selected for:
                         {allRooms.map((e, i) => (
                           <p key={i} className=" font-bold capitalize">

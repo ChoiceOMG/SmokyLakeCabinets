@@ -24,7 +24,7 @@ const ForKitchen: React.FC<Props> = ({
   newStep,
   newOption,
 }) => {
-  const [hasDiffUpLower, setHasDiffUpLower] = useState<Boolean>();
+  const [hasDiffUpLower, setHasDiffUpLower] = useState<boolean>();
   const [localClosedCeiling, setLocalClosedCeiling] = useState(false);
   const [localCrownFlat, setLocalCrownFlat] = useState(false);
   const [wallHeights, setWallHeights] = useState<Array<string>>([]);
@@ -33,7 +33,7 @@ const ForKitchen: React.FC<Props> = ({
   const dispatch = useDispatch();
 
   // Cabinet Styles
-  const [selectedGlassStyle, setSelectedGlassStyle] = useState<String>('');
+  const [selectedGlassStyle, setSelectedGlassStyle] = useState<string>('');
 
   const [glassStyleList, setGlassStyleList] = useState([
     {
@@ -62,7 +62,7 @@ const ForKitchen: React.FC<Props> = ({
     },
   ]);
   //Pantry\Tall
-  const [selectedPantryTall, setSelectedPantryTall] = useState<String>('');
+  const [selectedPantryTall, setSelectedPantryTall] = useState<string>('');
   const [pantryTallList, setPantryTallList] = useState([
     {
       value: '1',
@@ -101,7 +101,7 @@ const ForKitchen: React.FC<Props> = ({
   //Functions
   const handleClosedCeiling = (
     event: React.ChangeEvent<HTMLInputElement>,
-    el: String
+    el: string
   ) => {
     setLocalClosedCeiling(event.target.checked);
   };
@@ -239,7 +239,7 @@ const ForKitchen: React.FC<Props> = ({
                   name="GlassStyle"
                   value={el.value}
                   checked={selectedGlassStyle === el.value}
-                  onChange={() => {}}
+                  onChange={() => undefined}
                   className="h-4 w-4 cursor-pointer"
                 />
                 <label
@@ -293,7 +293,7 @@ const ForKitchen: React.FC<Props> = ({
                   type="radio"
                   name="PantryTall"
                   value={el.value}
-                  onChange={() => {}}
+                  onChange={() => undefined}
                   checked={selectedPantryTall === el.value}
                   className="h-4 w-4 cursor-pointer"
                 />

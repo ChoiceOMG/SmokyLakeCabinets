@@ -25,7 +25,7 @@ type TrackProgressActions =
 const initialState: ProgressState = {
   kitchenStep: 1,
   materialStep: '',
-  formStep: 0
+  formStep: 0,
 };
 
 const trackProgress = (

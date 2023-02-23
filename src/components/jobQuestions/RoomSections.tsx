@@ -150,7 +150,7 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
     dispatch(deleteFinishes());
 
     selectedRooms.map((room) => {
-      let roomString = typeof room === 'string' ? room : String(room);
+      const roomString = typeof room === 'string' ? room : String(room);
       dispatch(addMaterialsFinishes(roomString, []));
     });
 

@@ -117,7 +117,7 @@ const ForAnyRooms: React.FC<Props> = ({
                   newStep(10);
                   newOption({ selectBoxMaterial: item.value });
                   setSelectBoxMaterial(item.value);
-                  let itemHTML: HTMLInputElement | null =
+                  const itemHTML: HTMLInputElement | null =
                     document.getElementById(item.value) as HTMLInputElement;
                   if (itemHTML !== null) {
                     itemHTML.checked = true;
@@ -130,7 +130,7 @@ const ForAnyRooms: React.FC<Props> = ({
                     type="radio"
                     name="selectBoxMaterial"
                     checked={selectBoxMaterial === item.value}
-                    onChange={() => {}}
+                    onChange={() => undefined}
                     className="h-4 w-4 cursor-pointer"
                   />
                   <label
@@ -166,7 +166,7 @@ const ForAnyRooms: React.FC<Props> = ({
                   newStep(10);
                   newOption({ selectHardwarePackage: item.value });
                   setSelectHardwarePackage(item.value);
-                  let itemHTML: HTMLInputElement | null =
+                  const itemHTML: HTMLInputElement | null =
                     document.getElementById(item.value) as HTMLInputElement;
                   if (itemHTML !== null) {
                     itemHTML.checked = true;
@@ -178,7 +178,7 @@ const ForAnyRooms: React.FC<Props> = ({
                     id={item.value}
                     type="radio"
                     checked={selectHardwarePackage === item.value}
-                    onChange={() => {}}
+                    onChange={() => undefined}
                     name="selectHardwarePackageList"
                     className="h-4 w-4 cursor-pointer"
                   />
@@ -216,7 +216,7 @@ const ForAnyRooms: React.FC<Props> = ({
                   newOption({ selectDrawers: item.value });
                   setSelectDrawers(item.value);
 
-                  let itemHTML: HTMLInputElement | null =
+                  const itemHTML: HTMLInputElement | null =
                     document.getElementById(item.value) as HTMLInputElement;
                   if (itemHTML !== null) {
                     itemHTML.checked = true;
@@ -229,7 +229,7 @@ const ForAnyRooms: React.FC<Props> = ({
                     type="radio"
                     name="selectDrawersList"
                     checked={selectDrawers === item.value}
-                    onChange={() => {}}
+                    onChange={() => undefined}
                     className="h-4 w-4 cursor-pointer"
                   />
                   <label

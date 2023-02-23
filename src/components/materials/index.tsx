@@ -11,8 +11,6 @@ type Props = {
 };
 
 const Materials: React.FC<Props> = ({ handleStepChange }) => {
-  const dispatch = useDispatch();
-
   const {
     hasBar,
     hasBasementVanity,
