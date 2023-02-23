@@ -10,10 +10,10 @@ export const pageview = (url: string) => {
   const dataLayer = (window as unknown as window).dataLayer;
   try {
     dataLayer.push({
-      event: "pageview",
+      event: 'pageview',
       page: url,
     });
   } catch (e) {
-    console.error("gtm error ", e);
+    console.error('gtm error ', e);
   }
 };

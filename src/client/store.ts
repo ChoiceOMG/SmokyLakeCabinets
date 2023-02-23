@@ -21,7 +21,7 @@ const rootReducer = combineReducers({
   userConfig,
   jobQuestionsConfig: jobQuestions,
   progressChange,
-  materialsFinishesReducer
+  materialsFinishesReducer,
 });
 
 const persistConfig = {

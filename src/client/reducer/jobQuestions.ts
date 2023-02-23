@@ -18,7 +18,7 @@ export interface JobQuestionsState {
   hasBar: boolean;
   hasOther: object;
   finishQ: boolean;
-  selectedRooms: Array<string>
+  selectedRooms: Array<string>;
 }
 
 interface SetJobLocationAction {
@@ -49,7 +49,6 @@ interface SetDrawingsFileAction {
   type: 'SET_DRAWINGSFILE';
   payload: object;
 }
-
 
 interface SetKitchenAction {
   type: 'SET_KITCHEN';
@@ -96,9 +95,9 @@ interface SetOtherAction {
   payload: object;
 }
 
-interface SetSelectedRoomsAction{
+interface SetSelectedRoomsAction {
   type: 'SET_SELECTED_ROOMS';
-  payload: Array<string>
+  payload: Array<string>;
 }
 
 type JobQuestionsActions =
@@ -108,7 +107,7 @@ type JobQuestionsActions =
   | SetCountertopsAction
   | SetDrawingsAction
   | SetKitchenAction
-  | SetDrawingsFileAction 
+  | SetDrawingsFileAction
   | SetFinishQAction
   | SetIslandAction
   | SetPantryAction
@@ -141,8 +140,7 @@ const initialState: JobQuestionsState = {
   hasBar: false,
   hasOther: {},
   finishQ: false,
-  selectedRooms: []
-
+  selectedRooms: [],
 };
 
 const jobQuestions = (
@@ -161,7 +159,7 @@ const jobQuestions = (
     case 'SET_DRAWINGS':
       return { ...state, hasDrawings: action.payload };
     case 'SET_FINISHQ':
-        return { ...state, finishQ: action.payload };
+      return { ...state, finishQ: action.payload };
     case 'SET_DRAWINGSFILE':
       return { ...state, hasDrawingsFile: action.payload };
     case 'SET_KITCHEN':
@@ -187,7 +185,7 @@ const jobQuestions = (
     case 'SET_OTHER':
       return { ...state, hasOther: action.payload };
     case 'SET_SELECTED_ROOMS':
-      return {...state, selectedRooms: action.payload}
+      return { ...state, selectedRooms: action.payload };
     default:
       return state;
   }
@@ -214,9 +212,7 @@ export const setDrawings = (drawings: boolean) => ({
   type: 'SET_DRAWINGS',
   payload: drawings,
 });
-export const setDrawingsFile = (drawingsfile: object) => (
- 
-  {
+export const setDrawingsFile = (drawingsfile: object) => ({
   type: 'SET_DRAWINGSFILE',
   payload: drawingsfile,
 });
@@ -267,13 +263,14 @@ export const setBar = (bar: boolean) => ({
   payload: bar,
 });
 export const setOther = (other: object) => (
-  console.log(other),{
-  type: 'SET_OTHER',
-  payload: other,
-});
-export const setSelectedRooms = (select: Array<string>) => (
+  console.log(other),
   {
+    type: 'SET_OTHER',
+    payload: other,
+  }
+);
+export const setSelectedRooms = (select: Array<string>) => ({
   type: 'SET_SELECTED_ROOMS',
-  payload: select
-})
+  payload: select,
+});
 export default jobQuestions;

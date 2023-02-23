@@ -233,8 +233,11 @@ const ForKitchen: React.FC<Props> = ({ nextProgress }) => {
                 onClick={(e) => {
                   setSelectedPantryTall(el.value);
                   nextProgress(100);
-                  if (document.getElementById(el.value) !== null) {
-                    document.getElementById(el.value).checked = true;
+                  const checkbox = document.getElementById(
+                    el.value
+                  ) as HTMLInputElement;
+                  if (checkbox !== null) {
+                    checkbox.checked = true;
                   }
                 }}
               >

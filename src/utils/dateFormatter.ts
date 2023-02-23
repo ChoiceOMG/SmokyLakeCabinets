@@ -4,16 +4,16 @@ import {
   isDate,
   isValid,
   startOfWeek,
-} from "date-fns";
-import { enUS, nl } from "date-fns/locale";
+} from 'date-fns';
+import { enUS, nl } from 'date-fns/locale';
 
-export const FORMAT_LOCALE_DATE = "PP";
-export const FORMAT_YEAR = "yyyy";
-export const FORMAT_MONTH_YEAR = "MMM yyyy";
-export const FORMAT_MONTH = "MMMM";
-export const FORMAT_WEEK = "II";
-export const FORMAT_DAY_OF_WEEK = "EEEEEE";
-export const FORMAT_DAY_OF_MONTH = "dd";
+export const FORMAT_LOCALE_DATE = 'PP';
+export const FORMAT_YEAR = 'yyyy';
+export const FORMAT_MONTH_YEAR = 'MMM yyyy';
+export const FORMAT_MONTH = 'MMMM';
+export const FORMAT_WEEK = 'II';
+export const FORMAT_DAY_OF_WEEK = 'EEEEEE';
+export const FORMAT_DAY_OF_MONTH = 'dd';
 
 const locales: { [key: string]: Locale } = { en: enUS, nl };
 
@@ -25,7 +25,7 @@ export const getLocaleDayValues = (locale: string) => {
 
   return Array.from({ length: 7 }).map((_, index) =>
     localeConfig?.localize?.day((index + weekStartsOn) % 7, {
-      width: "short",
+      width: 'short',
     })
   );
 };

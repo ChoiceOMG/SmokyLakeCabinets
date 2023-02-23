@@ -11,7 +11,13 @@ const KitchenRoom: React.FC<Props> = ({ nextRoom, kitchenCount }) => {
 
   return (
     <div>
-      <RoomsForm nameRoom="kitchen" />
+      <RoomsForm
+        nameRoom="kitchen"
+        setSelectedRoom={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+        allRooms={[]}
+      />
       <button onClick={() => nextRoom('bathroom')}>Next Room</button>
     </div>
   );

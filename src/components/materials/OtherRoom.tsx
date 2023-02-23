@@ -14,7 +14,7 @@ const OtherRoom: React.FC<Props> = ({ nextRoom, otherCount }) => {
   return (
     <div>
       {Object.values(hasOther).map((e, i) => (
-        <p>
+        <p key={i}>
           Other {i + 1} : {e.value}
         </p>
       ))}

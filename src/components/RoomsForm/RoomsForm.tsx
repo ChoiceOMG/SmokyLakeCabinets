@@ -16,13 +16,13 @@ const RoomsForm: React.FC<Props> = ({
   setSelectedRoom,
   allRooms,
 }) => {
-  let [progress, setProgress]: [
+  const [progress, setProgress]: [
     ProgressState,
     React.Dispatch<React.SetStateAction<ProgressState>>
   ] = useState(0);
   const [openApplyInterioRooms, setOpenApplyInterioRooms] = useState(false);
   const ApplyInterioRooms = () => {
-    let index = allRooms.indexOf(nameRoom);
+    const index = allRooms.indexOf(nameRoom);
     if (index === allRooms.length - 1) {
       setSelectedRoom('interior');
       return;
@@ -93,7 +93,9 @@ const RoomsForm: React.FC<Props> = ({
         )}
         <div className="flex h-fit justify-between gap-5">
           {allRooms.map((el, i) => (
-            <span className="capitalize">{el}</span>
+            <span key={i} className="capitalize">
+              {el}
+            </span>
           ))}
         </div>
       </div>
@@ -131,7 +133,7 @@ const RoomsForm: React.FC<Props> = ({
                     </h3>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        You're settings for {nameRoom} will overwrite the
+                        You&apos;re settings for {nameRoom} will overwrite the
                         settings you have selected for {allRooms} rooms. Are you
                         sure you want to continue?
                       </p>

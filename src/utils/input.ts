@@ -1,6 +1,6 @@
-import { z } from "zod";
-import type Project from "@prisma/client";
-import type { Image, User, Appointment } from "@prisma/client";
+import { z } from 'zod';
+import type Project from '@prisma/client';
+import type { Image, User, Appointment } from '@prisma/client';
 
 // this is a zod schema for validating an Image object
 export const imageInputs = z.object({
@@ -45,8 +45,8 @@ export type AppointmentInput = z.infer<typeof appointmentInputs>;
 export const projectInputs = z.object({
   id: z.string().optional(),
   name: z.string().min(1).max(50),
-  description: z.string().nullable(),
-  slug: z.string().nullable(),
+  description: z.string(),
+  slug: z.string(),
   // images: z.array(imageInputs).optional(),
   // users: z.array(userInputs).optional(),
   // appointments: z.array(appointmentInputs).optional(),
@@ -63,7 +63,7 @@ export type CategoryInput = z.infer<typeof categoryInputs>;
 // Refactor below this line so that it uses less input objects and then move above this line when done.
 
 export const serviceInputValidation = z.object({
-  serviceName: z.string().min(3, { message: "min 3 characters" }),
+  serviceName: z.string().min(3, { message: 'min 3 characters' }),
   serviceDescription: z.string(),
   timeRequired: z.number().default(0),
   categoryId: z.number(),
@@ -72,7 +72,7 @@ export type CreateServiceInput = z.infer<typeof serviceInputValidation>;
 
 export const serviceUpdateValidation = z.object({
   id: z.number(),
-  serviceName: z.string().min(3, { message: "min 3 characters" }),
+  serviceName: z.string().min(3, { message: 'min 3 characters' }),
   serviceDescription: z.string(),
   timeRequired: z.number().default(0),
   categoryId: z.number(),
@@ -90,7 +90,7 @@ export const appointmentInputValidation = z.object({
   materialsCost: z.number().nullable(),
   laborCost: z.number().nullable(),
   connectProjectName: z.string(),
-  connectServiceIds: z.array(z.number()).min(1, { message: "min 1 service" }),
+  connectServiceIds: z.array(z.number()).min(1, { message: 'min 1 service' }),
 });
 export type CreateAppointmentInput = z.infer<typeof appointmentInputValidation>;
 
@@ -105,7 +105,7 @@ export const appointmentUpdateValidation = z.object({
   materialsCost: z.number().nullable(),
   laborCost: z.number().nullable(),
   projectId: z.string().optional(),
-  connectServiceIds: z.array(z.number()).min(1, { message: "min 1 service" }),
+  connectServiceIds: z.array(z.number()).min(1, { message: 'min 1 service' }),
 });
 export type UpdateAppointmentInput = z.infer<
   typeof appointmentUpdateValidation

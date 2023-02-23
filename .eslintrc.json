@@ -1,6 +1,5 @@
 {
   "parser": "@typescript-eslint/parser",
-  "eslint.enable": false,
   "plugins": ["@typescript-eslint"],
   "overrides": [
     {

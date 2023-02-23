@@ -256,8 +256,11 @@ const ForAnyRooms: React.FC<Props> = ({ nextProgress }) => {
               className="cursor-pointer"
               onClick={() => {
                 nextProgress(100);
-                if (document.getElementById('Other') !== null) {
-                  document.getElementById('Other').checked = true;
+                const otherCheckbox = document.getElementById(
+                  'Other'
+                ) as HTMLInputElement;
+                if (otherCheckbox !== null) {
+                  otherCheckbox.checked = true;
                 }
                 setSelectDrawers('Dovetail');
               }}

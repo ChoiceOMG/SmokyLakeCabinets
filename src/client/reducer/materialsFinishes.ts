@@ -12,7 +12,6 @@ type CabinetExteriorPreference = {
   finishes: string;
 };
 
-
 export interface MaterialsFinishesState {
   interior: CabinetInteriorPreference[];
   exterior: CabinetExteriorPreference[];
@@ -110,7 +109,7 @@ const initialState: MaterialsFinishesState = {
   },
 };
 
- const materialsFinishesReducer = (
+const materialsFinishesReducer = (
   state = initialState,
   action: MaterialsFinishesAction
 ): MaterialsFinishesState => {
