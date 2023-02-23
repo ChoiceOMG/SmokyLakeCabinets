@@ -23,7 +23,7 @@ const RoomsForm: React.FC<Props> = ({
   setUDPLink,
   allRooms,
 }) => {
-  let [progress, setProgress]: [
+  const [progress, setProgress]: [
     ProgressState,
     React.Dispatch<React.SetStateAction<ProgressState>>
   ] = useState(0);

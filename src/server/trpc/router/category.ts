@@ -1,6 +1,6 @@
-import { categoryInputs } from "@utils/input";
-import { router, publicProcedure, protectedProcedure } from "../trpc";
-import { z } from "zod";
+import { categoryInputs } from '@utils/input';
+import { router, publicProcedure, protectedProcedure } from '../trpc';
+import { z } from 'zod';
 
 export const categoryRouter = router({
   getAll: publicProcedure.query(({ ctx }) => {

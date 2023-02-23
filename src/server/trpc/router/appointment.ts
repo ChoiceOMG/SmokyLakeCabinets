@@ -1,9 +1,9 @@
-import { router, publicProcedure, protectedProcedure } from "../trpc";
-import { z } from "zod";
+import { router, publicProcedure, protectedProcedure } from '../trpc';
+import { z } from 'zod';
 import {
   appointmentInputValidation,
   appointmentUpdateValidation,
-} from "@utils/input";
+} from '@utils/input';
 
 export const appointmentRouter = router({
   getAll: publicProcedure.query(({ ctx }) => {

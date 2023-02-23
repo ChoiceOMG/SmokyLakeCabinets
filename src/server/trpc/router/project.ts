@@ -1,6 +1,6 @@
-import { projectInputs } from "@utils/input";
-import { router, publicProcedure, protectedProcedure } from "../trpc";
-import { z } from "zod";
+import { projectInputs } from '@utils/input';
+import { router, publicProcedure, protectedProcedure } from '../trpc';
+import { z } from 'zod';
 
 export const projectRouter = router({
   getAll: publicProcedure.query(({ ctx }) => {

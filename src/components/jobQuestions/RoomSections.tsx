@@ -60,7 +60,7 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
   const [localLaundry, setLdy] = useState(hasLaundry);
   const [localBar, setBr] = useState(hasBar);
   const [localOther, setOthr] = useState(hasOther);
-  let [addOther, setAddOther] = useState<InputsState[]>([]);
+  const [addOther, setAddOther] = useState<InputsState[]>([]);
 
   const handleKitchenChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     Setktchn(event.target.checked);
