@@ -127,9 +127,14 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
       !!localLaundry && 'laundry',
       !!localBar && 'bar',
     ].filter(Boolean);
-    if (Object.keys(addOther).length > 0) {
-      for (let i = 0; i < Object.keys(addOther).length; i++) {
-        selectedRooms.push(addOther[i].value);
+    if (addOther.length > 0) {
+      for (let i = 0; i < addOther.length; i++) {
+        if (addOther[i] !== undefined) {
+          const otherName = addOther[i]?.value as string;
+          if (otherName !== '') {
+            selectedRooms.push(otherName);
+          }
+        }
       }
     }
     console.log(Object.keys(addOther));

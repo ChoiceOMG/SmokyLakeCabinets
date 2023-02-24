@@ -42,7 +42,7 @@ const Materials: React.FC<Props> = ({ handleStepChange }) => {
     basementVanity: hasBasementVanity,
     other: hasOther,
   };
-  /*   useEffect(() => {
+  useEffect(() => {
     const handleRouteChange = (url: any) => {
       const regex = /&room=([^&]+)/;
       const match = url.match(regex);
@@ -56,7 +56,7 @@ const Materials: React.FC<Props> = ({ handleStepChange }) => {
     return () => {
       router.events.off('routeChangeStart', handleRouteChange);
     };
-  }, []); // Fix router */
+  }, []); // Fix router
   useEffect(() => {
     if (selectedRoom) {
       router.push({
