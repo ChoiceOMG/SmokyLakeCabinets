@@ -2,7 +2,6 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from '@components/layout/header';
-
 import Footer from '@components/layout/footer';
 import JobQuestionsForm from '@components/jobQuestions/JobQuestionsForm';
 import clsx from 'clsx';
@@ -20,24 +19,32 @@ export default function Kitchen() {
   );
   const router = useRouter();
   const { step } = router.query;
+
+  // Update localKitchenStep when the URL query parameter 'step' changes
   React.useEffect(() => {
     if (step) {
       setKStep(Number(step));
     }
-  }, []);
+  }, [step]);
 
   const [localKitchenStep, setKStep] = useState(kitchenStep);
+
   const handleStepChange = (step: number) => {
     setKStep(step);
   };
 
   useEffect(() => {
+    // Dispatch the updated kitchen progress step to the store
     dispatch(setKitchenProgressStep(localKitchenStep));
+
+    // Update the URL query parameter 'step' with the current localKitchenStep value
     router.push({
       query: {
         step: localKitchenStep,
       },
     });
+
+    console.log(localKitchenStep);
   }, [dispatch, localKitchenStep]);
 
   return (
@@ -49,6 +56,7 @@ export default function Kitchen() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
+
       <section className="overflow-hidden bg-gray-50 pb-16">
         <div className="container mx-auto px-4">
           <div className="rounded-3xl bg-white py-16 px-8">
@@ -81,13 +89,14 @@ export default function Kitchen() {
                 </div>
               </div>
               <div className="-m-3 flex flex-wrap">
+                {/* Step 1 */}
                 <div className="w-full p-3 md:w-1/2 lg:w-1/4">
                   <div className="-m-3 mb-2 flex flex-wrap items-center">
                     <div className="w-auto p-3">
                       <button
                         className={clsx(
                           'flex h-16 w-16 items-center justify-center rounded-full  text-xl font-black ',
-                          localKitchenStep === 1
+                          localKitchenStep >= 1
                             ? 'bg-blue-500 text-white'
                             : 'bg-gray-100 text-gray-900'
                         )}
@@ -111,13 +120,14 @@ export default function Kitchen() {
                     </p>
                   </div>
                 </div>
+                {/* Step 2 */}
                 <div className="w-full p-3 md:w-1/2 lg:w-1/4">
                   <div className="-m-3 mb-2 flex flex-wrap items-center">
                     <div className="w-auto p-3">
                       <button
                         className={clsx(
                           'flex h-16 w-16 items-center justify-center rounded-full  text-xl font-black ',
-                          localKitchenStep === 2
+                          localKitchenStep >= 2
                             ? 'bg-blue-500 text-white'
                             : 'bg-gray-100 text-gray-900'
                         )}
@@ -141,13 +151,14 @@ export default function Kitchen() {
                     </p>
                   </div>
                 </div>
+                {/* Step 3 */}
                 <div className="w-full p-3 md:w-1/2 lg:w-1/4">
                   <div className="-m-3 mb-2 flex flex-wrap items-center">
                     <div className="w-auto p-3">
                       <button
                         className={clsx(
                           'flex h-16 w-16 items-center justify-center rounded-full  text-xl font-black ',
-                          localKitchenStep === 3
+                          localKitchenStep >= 3
                             ? 'bg-blue-500 text-white'
                             : 'bg-gray-100 text-gray-900'
                         )}
@@ -170,13 +181,14 @@ export default function Kitchen() {
                     </p>
                   </div>
                 </div>
+                {/* Step 4 */}
                 <div className="w-full p-3 md:w-1/2 lg:w-1/4">
                   <div className="-m-3 mb-2 flex flex-wrap items-center">
                     <div className="w-auto p-3">
                       <button
                         className={clsx(
                           'flex h-16 w-16 items-center justify-center rounded-full  text-xl font-black ',
-                          localKitchenStep === 4
+                          localKitchenStep >= 4
                             ? 'bg-blue-500 text-white'
                             : 'bg-gray-100 text-gray-900'
                         )}

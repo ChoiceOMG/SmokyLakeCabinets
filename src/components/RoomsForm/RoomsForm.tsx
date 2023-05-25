@@ -14,7 +14,6 @@ type Props = {
   allRooms: string[];
   setUDPLink: React.Dispatch<React.SetStateAction<string>>;
 };
-type ProgressState = number;
 
 const RoomsForm: React.FC<Props> = ({
   nameRoom,
@@ -22,10 +21,7 @@ const RoomsForm: React.FC<Props> = ({
   setUDPLink,
   allRooms,
 }) => {
-  const [progress, setProgress]: [
-    ProgressState,
-    React.Dispatch<React.SetStateAction<ProgressState>>
-  ] = useState(0);
+  const [progress, setProgress] = useState<number>(0);
   const [newStep, setNewStep] = useState<number>(0);
   const [newOption, setNewOption] = useState<object>({});
   const [openApplyInterioRooms, setOpenApplyInterioRooms] =
@@ -39,69 +35,77 @@ const RoomsForm: React.FC<Props> = ({
   const { materialsFinishes } = useSelector(
     (state: RootState) => state.materialsFinishesReducer
   );
-
   const { formStep } = useSelector((state: RootState) => state.progressChange);
 
-  //Functions
+  useEffect(() => {
+    if (progress > 100) {
+      setProgress(100);
+    }
+  }, [progress]);
+
+  // Functions
   const nextStep = (e: number, o?: object) => {
+    console.log('nextStep', e, o);
     nextProgress(e, o);
-    //                  newOption({ hasDiffUpLower: false });
 
     if (o && o.hasOwnProperty('hasDiffUpLower')) {
       dispatch(setFormStep(2));
     } else {
       dispatch(setFormStep(formStep + 1));
     }
-    if (nameRoom === 'kitchen' && formStep === 3 && kitchenQuestion === false) {
+
+    if (nameRoom === 'kitchen' && formStep === 3 && !kitchenQuestion) {
       setKitchenQuestion(true);
       dispatch(setFormStep(0));
     }
-    console.log('formStep', formStep);
-    /* if (materialStep === 2) {
-      done(true);
-    } */
   };
-  const ApplyInterioRooms = () => {
-    const keys = materialsFinishes as Array<any>;
-    const currentProps = Object.keys(materialsFinishes)
-      .map((key) => {
-        if (
-          keys[key].room.name === nameRoom &&
-          keys[key].room.progress === 100
-        ) {
-          return keys[key].room.props;
+  const prevStep = (e: number) => {
+    nextProgress(e);
+    dispatch(setFormStep(formStep - 1));
+  };
+
+  const applyInteriorToRooms = () => {
+    const currentProps = Object.values(materialsFinishes).reduce(
+      (props: object | undefined, item: any) => {
+        if (item.room.name === nameRoom && item.room.progress === 100) {
+          return item.room.props;
         }
-      })
-      .filter((item) => item !== undefined); //I get all the props from the object
-    //update all the rooms with the same props
+        return props;
+      },
+      undefined
+    );
+
+    // Update all the rooms with the same props
     allRooms.forEach((room) => {
-      dispatch(updateMaterialsFinishes(room, currentProps[0], 100));
+      dispatch(updateMaterialsFinishes(room, currentProps, 100));
     });
+
     setOpenApplyInterioRooms(false);
   };
-  const ListCurrectRooms = () => {
-    const keys = materialsFinishes as Array<any>;
+
+  const ListCurrentRooms = () => {
     return (
       <div className="mt-4 flex h-fit w-full justify-center gap-5">
-        {Object.keys(materialsFinishes).map((key, i) => (
+        {Object.values(materialsFinishes).map((item: any, i: number) => (
           <span
             onClick={() => {
-              setUDPLink(keys[key].room.name);
+              setUDPLink(item.room.name);
             }}
             className={`cursor-pointer rounded-full px-3 capitalize ${
-              keys[key].room.progress === 100
+              item.room.progress === 100
                 ? 'bg-green-200 text-green-600'
                 : 'bg-red-200 text-red-600'
             }`}
             key={i}
-            title={keys[key].room.progress === 100 ? 'Done' : 'Not done'}
+            title={item.room.progress === 100 ? 'Done' : 'Not done'}
           >
-            {keys[key].room.name}
+            {item.room.name}
           </span>
         ))}
       </div>
     );
   };
+
   const nextProgress = (e?: number, option?: object) => {
     if (e) {
       if (e === 100) {
@@ -114,35 +118,66 @@ const RoomsForm: React.FC<Props> = ({
         dispatch(updateMaterialsFinishes(nameRoom, option, 0));
         return;
       }
-      setProgress(progress + e);
-
+      setProgress((prevProgress) => prevProgress + e);
       dispatch(updateMaterialsFinishes(nameRoom, option, progress));
     }
+
     if (!e && option) {
       dispatch(updateMaterialsFinishes(nameRoom, option, progress));
     }
   };
 
-  //Use Effect
-  /* useEffect(() => {
-    
-    console.log('setMaterialProgressStep', selectedRoom);
-  }, [selectedRoom]); */
   useEffect(() => {
     setCheckMaterialsFinishes(materialsFinishes);
   }, [materialsFinishes]);
+
   useEffect(() => {
     dispatch(setFormStep(0));
   }, [nameRoom]);
+
   return (
     <form className="container mx-auto p-4">
+      <div className="flex pb-5">
+        {progress > 10 && (
+          <button
+            className={`block w-1/5 rounded-full bg-blue-600 px-8 py-3.5 text-center text-base font-bold text-white hover:bg-blue-500 focus:ring-4 focus:ring-blue-200`}
+            type="button"
+            onClick={() => {
+              prevStep(-10);
+              setNewOption({});
+              setNewStep(0);
+            }}
+            disabled={!newStep}
+          >
+            Prev Step
+          </button>
+        )}
+        {progress < 90 && (
+          <button
+            className={`ml-auto block w-1/5 rounded-full px-8 py-3.5 text-center text-base font-bold text-white ${
+              newStep > 0
+                ? 'bg-blue-600 hover:bg-blue-500 focus:ring-4 focus:ring-blue-200'
+                : 'bg-gray-500'
+            }`}
+            type="button"
+            onClick={() => {
+              nextStep(newStep, newOption);
+              setNewOption({});
+              setNewStep(0);
+            }}
+            disabled={!newStep}
+          >
+            Next Step
+          </button>
+        )}
+      </div>
       <h1 className="mb-3 text-left text-2xl font-bold capitalize text-gray-500">
         {nameRoom} Materials & Finishes Exterior
       </h1>
 
       <ProgressBar progressPercentage={progress} />
       <div
-        className="overflow-hidde 	 h-full	 w-full max-w-full"
+        className="overflow-hidde h-full w-full max-w-full"
         style={{ minHeight: '45vh' }}
       >
         {nameRoom === 'kitchen' && !kitchenQuestion ? (
@@ -157,13 +192,14 @@ const RoomsForm: React.FC<Props> = ({
             checkMaterialsFinishes={checkMaterialsFinishes}
             newStep={setNewStep}
             newOption={setNewOption}
+            nextStep={(e, o) => nextStep(e, o)}
           />
         )}
       </div>
       {/* Footer form */}
-      <div className="mt-5 flex	flex-wrap items-center justify-between">
+      <div className="mt-5 flex flex-wrap items-center justify-between">
         <button
-          className={`block w-1/5 rounded-full  px-8 py-3.5 text-center text-base font-bold text-white  ${
+          className={`block w-1/5 rounded-full px-8 py-3.5 text-center text-base font-bold text-white ${
             progress === 100
               ? 'bg-blue-600 hover:bg-blue-500 focus:ring-4 focus:ring-blue-200'
               : 'bg-gray-500'
@@ -173,14 +209,14 @@ const RoomsForm: React.FC<Props> = ({
             setSelectedRoom(nameRoom);
             setProgress(0);
           }}
-          disabled={progress < 100 && true}
+          disabled={progress !== 100}
         >
           Next Room
         </button>
 
         {nameRoom !== 'kitchen' && (
           <button
-            className={`ml-3 mr-auto block w-1/5 rounded-full px-4 py-3.5 text-center text-base font-bold text-white  ${
+            className={`ml-3 mr-auto block w-1/5 rounded-full px-4 py-3.5 text-center text-base font-bold text-white ${
               progress < 100
                 ? 'bg-gray-500'
                 : 'bg-blue-600 hover:bg-blue-500 focus:ring-4 focus:ring-blue-200'
@@ -189,30 +225,13 @@ const RoomsForm: React.FC<Props> = ({
             onClick={() => {
               setOpenApplyInterioRooms(true);
             }}
-            disabled={progress < 100 && true}
+            disabled={progress !== 100}
           >
             Apply Interior to All Rooms
           </button>
         )}
-        {progress < 90 && (
-          <button
-            className={`block w-1/5 rounded-full  px-8 py-3.5 text-center text-base font-bold text-white  ${
-              newStep > 0
-                ? 'bg-blue-600 hover:bg-blue-500 focus:ring-4 focus:ring-blue-200'
-                : 'bg-gray-500'
-            }`}
-            type="button"
-            onClick={() => {
-              nextStep(newStep, newOption);
-              setNewOption({});
-              setNewStep(0);
-            }}
-            disabled={newStep > 0 ? false : true}
-          >
-            Next Step
-          </button>
-        )}
-        {Object.keys(materialsFinishes).length > 0 && <ListCurrectRooms />}
+
+        {Object.keys(materialsFinishes).length > 0 && <ListCurrentRooms />}
       </div>
 
       {/* Modal window */}
@@ -248,14 +267,16 @@ const RoomsForm: React.FC<Props> = ({
                     </h3>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        You`re settings for {nameRoom} will overwrite the
-                        settings you have selected for:
-                        {allRooms.map((e, i) => (
-                          <p key={i} className=" font-bold capitalize">
-                            {e}
-                          </p>
-                        ))}
-                        rooms. Are you sure you want to continue?
+                        Your settings for {nameRoom} will overwrite the settings
+                        you have selected for the following rooms:
+                      </p>
+                      {allRooms.map((room, index) => (
+                        <p key={index} className="font-bold capitalize">
+                          {room}
+                        </p>
+                      ))}
+                      <p className="text-sm text-gray-500">
+                        Are you sure you want to continue?
                       </p>
                     </div>
                   </div>
@@ -266,7 +287,7 @@ const RoomsForm: React.FC<Props> = ({
                   type="button"
                   className="inline-flex w-full justify-center rounded-full border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
                   onClick={() => {
-                    ApplyInterioRooms();
+                    applyInteriorToRooms();
                   }}
                 >
                   Apply

@@ -8,6 +8,7 @@ type Props = {
   newStep: (e: number) => void;
   newOption: (e: object) => void;
   nameRoom: string;
+  nextStep: (e: number, o: object) => void;
   checkMaterialsFinishes:
     | {
         room: { name: string; props: any; progress: number };
@@ -20,6 +21,7 @@ const ForAnyRooms: React.FC<Props> = ({
   newOption,
   nameRoom,
   checkMaterialsFinishes,
+  nextStep,
 }) => {
   const [selectBoxMaterial, setSelectBoxMaterial] = useState('');
   const [selectHardwarePackage, setSelectHardwarePackage] = useState('');
@@ -104,8 +106,8 @@ const ForAnyRooms: React.FC<Props> = ({
         classNames="slide"
         unmountOnExit
       >
-        <div className=" block text-left">
-          <h2 className=" mb-4 block font-bold text-gray-500">
+        <div className="block text-left">
+          <h2 className="mb-4 block font-bold text-gray-500">
             Select Box Material
           </h2>
           <div className="grid grid-cols-3 grid-rows-1 items-center gap-5">
@@ -153,8 +155,8 @@ const ForAnyRooms: React.FC<Props> = ({
         classNames="slide"
         unmountOnExit
       >
-        <div className=" block text-left">
-          <h2 className=" mb-4 block font-bold text-gray-500">
+        <div className="block text-left">
+          <h2 className="mb-4 block font-bold text-gray-500">
             Select Hardware Package
           </h2>
           <div className="grid grid-cols-3 grid-rows-1 items-center gap-5">
@@ -202,20 +204,18 @@ const ForAnyRooms: React.FC<Props> = ({
         classNames="slide"
         unmountOnExit
       >
-        <div className=" block text-left">
-          <h2 className=" mb-4 block font-bold text-gray-500">
-            Select Drawers
-          </h2>
+        <div className="block text-left">
+          <h2 className="mb-4 block font-bold text-gray-500">Select Drawers</h2>
           <div className="grid grid-cols-3 grid-rows-1 items-center gap-5">
             {selectDrawersList.map((item, i) => (
               <div
                 key={i}
                 className="cursor-pointer"
                 onClick={() => {
-                  newStep(100);
-                  newOption({ selectDrawers: item.value });
+                  /*   newStep(100);
+                  newOption({ selectDrawers: item.value }); */
                   setSelectDrawers(item.value);
-
+                  nextStep(100, { selectDrawers: item.value });
                   const itemHTML: HTMLInputElement | null =
                     document.getElementById(item.value) as HTMLInputElement;
                   if (itemHTML !== null) {

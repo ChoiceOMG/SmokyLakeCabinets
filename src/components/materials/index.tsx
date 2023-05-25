@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '~/store';
-
-import router from 'next/router';
+import { useRouter } from 'next/router';
 
 import RoomsForm from '@components/RoomsForm/RoomsForm';
 
@@ -28,6 +27,7 @@ const Materials: React.FC<Props> = ({ handleStepChange }) => {
   const [selectedRoom, setSelectedRoom] = useState<string>(
     selectedRooms[0] || ''
   );
+  const router = useRouter();
 
   const roomCount = {
     kitchen: hasKitchen,
@@ -42,13 +42,14 @@ const Materials: React.FC<Props> = ({ handleStepChange }) => {
     basementVanity: hasBasementVanity,
     other: hasOther,
   };
+
   useEffect(() => {
-    const handleRouteChange = (url: any) => {
+    const handleRouteChange = (url: string) => {
       const regex = /&room=([^&]+)/;
       const match = url.match(regex);
       const newUrl = match && match[1];
 
-      if (newUrl !== null) {
+      if (newUrl) {
         setSelectedRoom(newUrl);
       }
     };
@@ -56,7 +57,8 @@ const Materials: React.FC<Props> = ({ handleStepChange }) => {
     return () => {
       router.events.off('routeChangeStart', handleRouteChange);
     };
-  }, []); // Fix router
+  }, []);
+
   useEffect(() => {
     if (selectedRoom) {
       router.push({

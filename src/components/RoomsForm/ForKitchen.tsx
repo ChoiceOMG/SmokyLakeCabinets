@@ -5,9 +5,8 @@ import MultiSelect from '@components/MultiSelect/MultiSelect';
 import { CSSTransition } from 'react-transition-group';
 import CheckBox from '@components/inputs/CheckBox';
 import type { RootState } from '~/store';
-
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import Image from 'next/image';
+import { useDispatch, useSelector } from 'react-redux';
 
 type Props = {
   newStep: (e: number) => void;
@@ -117,7 +116,6 @@ const ForKitchen: React.FC<Props> = ({
       ) as any;
       if (propsObj?.room) {
         setLocalProgress(propsObj.room.progress);
-        // setHasDiffUpLower(propsObj.room.props.hasDiffUpLower);
         if (propsObj.room.props.wallHeights) {
           setWallHeights(propsObj.room.props.wallHeights);
         }
@@ -184,8 +182,7 @@ const ForKitchen: React.FC<Props> = ({
             </div>
           </label>
           <Card
-            title="Here are the biggest enterprise technology acquisitions of 2021 so
-            far, in reverse chronological order."
+            title="Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order."
             img="/images/kitchen.jpg"
           />
         </div>
@@ -204,7 +201,6 @@ const ForKitchen: React.FC<Props> = ({
           nextStep={(e) => {
             newStep(20);
             newOption({ wallHeights: e, hasDiffUpLower: true });
-            // setHasDiffUpLower(false);
           }}
           wallHeights={wallHeights}
         />
@@ -248,10 +244,16 @@ const ForKitchen: React.FC<Props> = ({
                 >
                   {el.value}
                 </label>
-                <img
+                <Image
                   src={el.img}
                   className="block w-full rounded-lg"
                   alt={el.value}
+                  width={200}
+                  height={200}
+                  layout="responsive"
+                  loader={({ src }) => {
+                    return src;
+                  }}
                 />
               </div>
             ))}
@@ -277,15 +279,8 @@ const ForKitchen: React.FC<Props> = ({
                 key={i}
                 onClick={() => {
                   setSelectedPantryTall(el.value);
-
                   newStep(30);
                   newOption({ selectedPantryTall: el.value });
-
-                  /* let itemHTML: HTMLInputElement | null =
-                    document.getElementById(el.value) as HTMLInputElement;
-                  if (itemHTML !== null && itemHTML.checked) {
-                    itemHTML.checked = true;
-                  } */
                 }}
               >
                 <input
@@ -303,10 +298,16 @@ const ForKitchen: React.FC<Props> = ({
                 >
                   {el.value}
                 </label>
-                <img
+                <Image
+                  width={200}
+                  height={200}
                   src={el.img}
                   className="block w-full rounded-lg"
                   alt={el.value}
+                  layout="responsive"
+                  loader={({ src }) => {
+                    return src;
+                  }}
                 />
               </div>
             ))}

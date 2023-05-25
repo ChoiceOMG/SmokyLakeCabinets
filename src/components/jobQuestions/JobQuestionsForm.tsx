@@ -154,18 +154,26 @@ const JobQuestionsForm: React.FC<Props> = ({ handleStepChange }) => {
             </label>
           </div>
           {/* Has Drawings */}
-          <div className="relative flex flex-wrap	items-center">
-            <CheckBox
-              checkedBox={localHasDrawings}
-              onChangeBox={handleHasDrawingsChange}
-            />
+          <div className="relative items-center">
+            <div className="flex py-3.5">
+              {' '}
+              <CheckBox
+                checkedBox={localHasDrawings}
+                onChangeBox={handleHasDrawingsChange}
+              />
+              <div className=" flex flex-col text-gray-500">
+                <p className=" whitespace-nowrap text-lg font-bold">
+                  Has Drawings
+                </p>
+                <p className="text-left text-xs">
+                  If you upload drawings, you will have the option to skip most
+                  of the questions in this form. With drawings, we can get the
+                  measurements and the design answers directly from the
+                  document.
+                </p>
+              </div>
+            </div>
 
-            <label
-              htmlFor="hasDrawings"
-              className=" py-3.5 text-lg font-bold text-gray-500"
-            >
-              Has Drawings
-            </label>
             {localHasDrawings && (
               <div className="w-full">
                 <form className="space-6 mb-3 flex w-full flex-col items-center 	">

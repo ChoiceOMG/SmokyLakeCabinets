@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '~/store';
-
 import { FaPlusCircle } from 'react-icons/fa';
 import {
   addMaterialsFinishes,
@@ -27,9 +26,11 @@ import CheckBox from '@components/inputs/CheckBox';
 type Props = {
   handleStepChange: (step: number) => void;
 };
+
 interface InputsState {
   value: string;
 }
+
 const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
   const dispatch = useDispatch();
   const {
@@ -46,54 +47,67 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
     hasOther,
     finishQ,
   } = useSelector((state: RootState) => state.jobQuestionsConfig);
+
   const { materialsFinishes } = useSelector(
     (state: any) => state.materialsFinishesReducer
   );
-  const [localKitchen, Setktchn] = useState(hasKitchen);
-  const [localIsland, setIslnd] = useState(hasIsland);
-  const [localPantry, setPntry] = useState(hasPantry);
-  const [localVanity, setVty] = useState(hasVanity);
-  const [localEnsuite, setEnst] = useState(hasEnsuite);
-  const [localJackJill, setJckJll] = useState(hasJackJill);
-  const [localBasementVanity, setBsmtVty] = useState(hasBasementVanity);
-  const [localMudroom, setMdrm] = useState(hasMudroom);
-  const [localLaundry, setLdy] = useState(hasLaundry);
-  const [localBar, setBr] = useState(hasBar);
-  const [localOther, setOthr] = useState(hasOther);
+
+  const [localKitchen, setLocalKitchen] = useState(hasKitchen);
+  const [localIsland, setLocalIsland] = useState(hasIsland);
+  const [localPantry, setLocalPantry] = useState(hasPantry);
+  const [localVanity, setLocalVanity] = useState(hasVanity);
+  const [localEnsuite, setLocalEnsuite] = useState(hasEnsuite);
+  const [localJackJill, setLocalJackJill] = useState(hasJackJill);
+  const [localBasementVanity, setLocalBasementVanity] =
+    useState(hasBasementVanity);
+  const [localMudroom, setLocalMudroom] = useState(hasMudroom);
+  const [localLaundry, setLocalLaundry] = useState(hasLaundry);
+  const [localBar, setLocalBar] = useState(hasBar);
+  const [localOther, setLocalOther] = useState(hasOther);
   const [addOther, setAddOther] = useState<InputsState[]>([]);
 
   const handleKitchenChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    Setktchn(event.target.checked);
+    setLocalKitchen(event.target.checked);
   };
+
   const handleIslandChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIslnd(event.target.checked);
+    setLocalIsland(event.target.checked);
   };
+
   const handlePantryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPntry(event.target.checked);
+    setLocalPantry(event.target.checked);
   };
+
   const handleVanityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setVty(event.target.checked);
+    setLocalVanity(event.target.checked);
   };
+
   const handleEnsuiteChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEnst(event.target.checked);
+    setLocalEnsuite(event.target.checked);
   };
+
   const handleJackJillChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setJckJll(event.target.checked);
+    setLocalJackJill(event.target.checked);
   };
+
   const handleBasementVanityChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setBsmtVty(event.target.checked);
+    setLocalBasementVanity(event.target.checked);
   };
+
   const handleMudroomChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMdrm(event.target.checked);
+    setLocalMudroom(event.target.checked);
   };
+
   const handleLaundryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLdy(event.target.checked);
+    setLocalLaundry(event.target.checked);
   };
+
   const handleBarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setBr(event.target.checked);
+    setLocalBar(event.target.checked);
   };
+
   const handleOtherChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.target.checked
       ? setAddOther([...addOther, { value: '' }])
@@ -127,6 +141,7 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
       !!localLaundry && 'laundry',
       !!localBar && 'bar',
     ].filter(Boolean);
+
     if (addOther.length > 0) {
       for (let i = 0; i < addOther.length; i++) {
         if (addOther[i] !== undefined) {
@@ -137,7 +152,7 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
         }
       }
     }
-    console.log(Object.keys(addOther));
+
     event.preventDefault();
     dispatch(setKitchen(localKitchen));
     dispatch(setIsland(localIsland));
@@ -151,15 +166,19 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
     dispatch(setBar(localBar));
     dispatch(setOther(addOther));
     dispatch(setSelectedRooms(selectedRooms as string[]));
-    finishQ ? handleStepChange(4) : handleStepChange(3);
+
+    if (finishQ) {
+      handleStepChange(4);
+    } else {
+      handleStepChange(3);
+    }
+
     dispatch(deleteFinishes());
 
     selectedRooms.map((room) => {
       const roomString = typeof room === 'string' ? room : String(room);
       dispatch(addMaterialsFinishes(roomString, []));
     });
-
-    // handleStepChange(3);
   };
 
   return (
@@ -169,7 +188,6 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
           <p className="mb-2 block text-left text-sm font-bold text-gray-500">
             Check items to include in your plan:
           </p>
-
           <div className="grid grid-cols-2">
             {/* Kitchen */}
             <div className="flex items-center">
@@ -192,7 +210,6 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
                 checkedBox={localIsland}
                 onChangeBox={handleIslandChange}
               />
-
               <label
                 htmlFor="island"
                 className=" py-3.5 text-lg font-bold text-gray-500"
@@ -207,7 +224,6 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
                 checkedBox={localPantry}
                 onChangeBox={handlePantryChange}
               />
-
               <label
                 htmlFor="pantry"
                 className=" py-3.5 text-lg font-bold text-gray-500"
@@ -222,7 +238,6 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
                 checkedBox={localVanity}
                 onChangeBox={handleVanityChange}
               />
-
               <label
                 htmlFor="Vanity"
                 className=" py-3.5 text-lg font-bold text-gray-500"
@@ -237,7 +252,6 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
                 checkedBox={localEnsuite}
                 onChangeBox={handleEnsuiteChange}
               />
-
               <label
                 htmlFor="Ensuite"
                 className=" py-3.5 text-lg font-bold text-gray-500"
@@ -252,7 +266,6 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
                 checkedBox={localJackJill}
                 onChangeBox={handleJackJillChange}
               />
-
               <label
                 htmlFor="JackJill"
                 className=" py-3.5 text-lg font-bold text-gray-500"
@@ -267,7 +280,6 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
                 checkedBox={localBasementVanity}
                 onChangeBox={handleBasementVanityChange}
               />
-
               <label
                 htmlFor="BasementVanity"
                 className=" py-3.5 text-lg font-bold text-gray-500"
@@ -282,7 +294,6 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
                 checkedBox={localMudroom}
                 onChangeBox={handleMudroomChange}
               />
-
               <label
                 htmlFor="Mudroom"
                 className=" py-3.5 text-lg font-bold text-gray-500"
@@ -297,7 +308,6 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
                 checkedBox={localLaundry}
                 onChangeBox={handleLaundryChange}
               />
-
               <label
                 htmlFor="Laundry"
                 className=" py-3.5 text-lg font-bold text-gray-500"
@@ -312,7 +322,6 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
                 checkedBox={localBar}
                 onChangeBox={handleBarChange}
               />
-
               <label
                 htmlFor="Bar"
                 className=" py-3.5 text-lg font-bold text-gray-500"
@@ -379,7 +388,6 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
           </div>
         </div>
       </div>
-
       <button
         type="submit"
         className="block w-full rounded-full bg-blue-500 px-8 py-3.5 text-center text-lg font-bold text-white hover:bg-blue-600 focus:ring-4 focus:ring-blue-200 md:px-16"
