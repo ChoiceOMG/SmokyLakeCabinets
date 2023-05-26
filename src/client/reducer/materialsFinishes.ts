@@ -25,7 +25,6 @@ export const DELETE_FINISHES = 'DELETE_FINISHES';
 export const UPDATE_MATERIALS_FINISHES = 'UPDATE_MATERIALS_FINISHES';
 // Action Creators
 export const addMaterialsFinishes = (roomName: string, props: any) => {
-  console.log('addMaterialsFinishes', roomName, props);
   return {
     type: ADD_MATERIALS_FINISHES,
     payload: { roomName, props },

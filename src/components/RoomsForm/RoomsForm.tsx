@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import ProgressBar from '@components/ProgressBar/ProgressBar';
-import ForKitchen from '@components/RoomsForm/ForKitchen';
-import ForAnyRooms from '@components/RoomsForm/ForAnyRooms';
 import { CSSTransition } from 'react-transition-group';
-import { updateMaterialsFinishes } from '~/reducer/materialsFinishes';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '~/store';
-import { setFormStep } from '~/reducer/trackProgress';
+import ForAllRooms from '@components/RoomsForm/ForAllRooms';
+import {
+  ResetProgressAction,
+  SetCurrentSlideAction,
+  saveRoomAnswers,
+} from '~/reducer/steps';
 
 type Props = {
   nameRoom: string;
@@ -21,63 +23,71 @@ const RoomsForm: React.FC<Props> = ({
   setUDPLink,
   allRooms,
 }) => {
-  const [progress, setProgress] = useState<number>(0);
-  const [newStep, setNewStep] = useState<number>(0);
-  const [newOption, setNewOption] = useState<object>({});
+  const [cabinetStyles, setCabinetStyles] = useState<boolean>(false);
+  const { answers } = useSelector((state: RootState) => state.Steps);
+
   const [openApplyInterioRooms, setOpenApplyInterioRooms] =
     useState<boolean>(false);
-  const [kitchenQuestion, setKitchenQuestion] = useState<boolean>(false);
-  const [checkMaterialsFinishes, setCheckMaterialsFinishes] = useState<object>(
-    {}
+
+  const [direction, setDirection] = useState<number>(0);
+  const slideNames = useSelector((state: RootState) => state.Steps.slideNames);
+  const currentSlide = useSelector(
+    (state: RootState) => state.Steps.currentSlide
   );
+  const progressPercentage = useSelector(
+    (state: RootState) => state.Steps.progressPercentage
+  );
+
   const dispatch = useDispatch();
 
   const { materialsFinishes } = useSelector(
     (state: RootState) => state.materialsFinishesReducer
   );
-  const { formStep } = useSelector((state: RootState) => state.progressChange);
 
-  useEffect(() => {
-    if (progress > 100) {
-      setProgress(100);
+  const handleSlide = (direction: number) => {
+    const currentIndex = slideNames.indexOf(currentSlide);
+    setDirection(direction);
+    let nextIndex = currentIndex + direction;
+    if (
+      !cabinetStyles &&
+      currentIndex === 0 &&
+      nameRoom === 'kitchen' &&
+      direction === 1
+    ) {
+      nextIndex = 2;
     }
-  }, [progress]);
-
-  // Functions
-  const nextStep = (e: number, o?: object) => {
-    console.log('nextStep', e, o);
-    nextProgress(e, o);
-
-    if (o && o.hasOwnProperty('hasDiffUpLower')) {
-      dispatch(setFormStep(2));
-    } else {
-      dispatch(setFormStep(formStep + 1));
+    if (
+      !cabinetStyles &&
+      currentIndex === 2 &&
+      nameRoom === 'kitchen' &&
+      direction === -1
+    ) {
+      nextIndex = 0;
     }
 
-    if (nameRoom === 'kitchen' && formStep === 3 && !kitchenQuestion) {
-      setKitchenQuestion(true);
-      dispatch(setFormStep(0));
+    if (nextIndex >= 0 && nextIndex < slideNames.length) {
+      const nextSlide = slideNames[nextIndex];
+
+      // Prevent going back to PantryTall from Kitchen
+      if (
+        !(
+          nameRoom !== 'kitchen' &&
+          currentSlide === 'PantryTall' &&
+          direction === -1
+        )
+      ) {
+        dispatch({ type: 'SET_CURRENT_SLIDE', payload: nextSlide });
+      }
     }
   };
-  const prevStep = (e: number) => {
-    nextProgress(e);
-    dispatch(setFormStep(formStep - 1));
-  };
-
   const applyInteriorToRooms = () => {
-    const currentProps = Object.values(materialsFinishes).reduce(
-      (props: object | undefined, item: any) => {
-        if (item.room.name === nameRoom && item.room.progress === 100) {
-          return item.room.props;
-        }
-        return props;
-      },
-      undefined
-    );
+    const currentRoomAnswers = answers[nameRoom] || {};
 
-    // Update all the rooms with the same props
+    // Update all rooms with the same answers as the current room
     allRooms.forEach((room) => {
-      dispatch(updateMaterialsFinishes(room, currentProps, 100));
+      Object.entries(currentRoomAnswers).forEach(([question, answer]) => {
+        dispatch(saveRoomAnswers(room, question, answer));
+      });
     });
 
     setOpenApplyInterioRooms(false);
@@ -86,130 +96,122 @@ const RoomsForm: React.FC<Props> = ({
   const ListCurrentRooms = () => {
     return (
       <div className="mt-4 flex h-fit w-full justify-center gap-5">
-        {Object.values(materialsFinishes).map((item: any, i: number) => (
-          <span
-            onClick={() => {
-              setUDPLink(item.room.name);
-            }}
-            className={`cursor-pointer rounded-full px-3 capitalize ${
-              item.room.progress === 100
-                ? 'bg-green-200 text-green-600'
-                : 'bg-red-200 text-red-600'
-            }`}
-            key={i}
-            title={item.room.progress === 100 ? 'Done' : 'Not done'}
-          >
-            {item.room.name}
-          </span>
-        ))}
+        {Object.values(materialsFinishes).map((item: any, i: number) => {
+          const roomAnswers = answers[item.room.name] || {};
+          const allQuestionsAnsweredRoom =
+            item.room.name === 'kitchen'
+              ? Object.keys(roomAnswers).length >= 7
+              : Object.keys(roomAnswers).length >= 4;
+          return (
+            <span
+              onClick={() => {
+                setUDPLink(item.room.name);
+              }}
+              className={`cursor-pointer rounded-full px-3 capitalize ${
+                allQuestionsAnsweredRoom
+                  ? 'bg-green-200 text-green-600'
+                  : 'bg-red-200 text-red-600'
+              }`}
+              key={i}
+              title={allQuestionsAnsweredRoom ? 'Done' : 'Not done'}
+            >
+              {item.room.name}
+              {allQuestionsAnsweredRoom && <span> &#10003;</span>}
+            </span>
+          );
+        })}
       </div>
     );
   };
 
-  const nextProgress = (e?: number, option?: object) => {
-    if (e) {
-      if (e === 100) {
-        setProgress(100);
-        dispatch(updateMaterialsFinishes(nameRoom, option, 100));
-        return;
-      }
-      if (e === 0) {
-        setProgress(0);
-        dispatch(updateMaterialsFinishes(nameRoom, option, 0));
-        return;
-      }
-      setProgress((prevProgress) => prevProgress + e);
-      dispatch(updateMaterialsFinishes(nameRoom, option, progress));
+  const FirstSlide = () => {
+    if (nameRoom === 'kitchen') {
+      const setCurrentSlideAction: SetCurrentSlideAction = {
+        type: 'SET_CURRENT_SLIDE',
+        payload: 'CabinetStyles',
+      };
+      dispatch(setCurrentSlideAction);
+    } else {
+      const setCurrentSlideAction: SetCurrentSlideAction = {
+        type: 'SET_CURRENT_SLIDE',
+        payload: 'PantryTall',
+      };
+      dispatch(setCurrentSlideAction);
     }
-
-    if (!e && option) {
-      dispatch(updateMaterialsFinishes(nameRoom, option, progress));
-    }
+    const resetProgressAction: ResetProgressAction = { type: 'RESET_PROGRESS' };
+    dispatch(resetProgressAction);
   };
 
   useEffect(() => {
-    setCheckMaterialsFinishes(materialsFinishes);
-  }, [materialsFinishes]);
-
-  useEffect(() => {
-    dispatch(setFormStep(0));
+    FirstSlide();
   }, [nameRoom]);
+
+  const ClientAnswer = (question: string, answer: any) => {
+    dispatch(saveRoomAnswers(nameRoom, question, answer));
+    question === 'CabinetStyles' &&
+      setCabinetStyles(answer === 'Yes' ? true : false);
+  };
 
   return (
     <form className="container mx-auto p-4">
-      <div className="flex pb-5">
-        {progress > 10 && (
-          <button
-            className={`block w-1/5 rounded-full bg-blue-600 px-8 py-3.5 text-center text-base font-bold text-white hover:bg-blue-500 focus:ring-4 focus:ring-blue-200`}
-            type="button"
-            onClick={() => {
-              prevStep(-10);
-              setNewOption({});
-              setNewStep(0);
-            }}
-            disabled={!newStep}
-          >
-            Prev Step
-          </button>
-        )}
-        {progress < 90 && (
-          <button
-            className={`ml-auto block w-1/5 rounded-full px-8 py-3.5 text-center text-base font-bold text-white ${
-              newStep > 0
-                ? 'bg-blue-600 hover:bg-blue-500 focus:ring-4 focus:ring-blue-200'
-                : 'bg-gray-500'
-            }`}
-            type="button"
-            onClick={() => {
-              nextStep(newStep, newOption);
-              setNewOption({});
-              setNewStep(0);
-            }}
-            disabled={!newStep}
-          >
-            Next Step
-          </button>
-        )}
+      <div className="flex justify-between pb-5">
+        <button
+          className={` bg-blue-500 px-4 py-2 font-semibold text-white rounded-full hover:bg-blue-600 focus:ring-4 focus:ring-blue-200 ${
+            currentSlide === slideNames[0] ||
+            (nameRoom !== 'Kitchen' && currentSlide === 'PantryTall')
+              ? 'cursor-not-allowed opacity-50'
+              : ''
+          }`}
+          onClick={() => handleSlide(-1)}
+          disabled={
+            currentSlide === slideNames[0] ||
+            (nameRoom !== 'kitchen' && currentSlide === 'PantryTall')
+          }
+          type="button"
+        >
+          Previous
+        </button>
+        <button
+          className={` bg-blue-500 px-4 rounded-full py-2 font-semibold text-white hover:bg-blue-600 focus:ring-4 focus:ring-blue-200 ${
+            currentSlide === slideNames[slideNames.length - 1]
+              ? 'cursor-not-allowed opacity-50'
+              : ''
+          }`}
+          type="button"
+          onClick={() => handleSlide(1)}
+          disabled={currentSlide === slideNames[slideNames.length - 1]}
+        >
+          Next
+        </button>
       </div>
       <h1 className="mb-3 text-left text-2xl font-bold capitalize text-gray-500">
         {nameRoom} Materials & Finishes Exterior
       </h1>
 
-      <ProgressBar progressPercentage={progress} />
+      <ProgressBar progressPercentage={progressPercentage} />
       <div
         className="overflow-hidde h-full w-full max-w-full"
         style={{ minHeight: '45vh' }}
       >
-        {nameRoom === 'kitchen' && !kitchenQuestion ? (
-          <ForKitchen
-            checkMaterialsFinishes={checkMaterialsFinishes}
-            newStep={setNewStep}
-            newOption={setNewOption}
-          />
-        ) : (
-          <ForAnyRooms
-            nameRoom={nameRoom}
-            checkMaterialsFinishes={checkMaterialsFinishes}
-            newStep={setNewStep}
-            newOption={setNewOption}
-            nextStep={(e, o) => nextStep(e, o)}
-          />
-        )}
+        <ForAllRooms
+          currentSlide={currentSlide}
+          answers={ClientAnswer}
+          direction={direction}
+        />
       </div>
       {/* Footer form */}
       <div className="mt-5 flex flex-wrap items-center justify-between">
         <button
           className={`block w-1/5 rounded-full px-8 py-3.5 text-center text-base font-bold text-white ${
-            progress === 100
+            progressPercentage === 100
               ? 'bg-blue-600 hover:bg-blue-500 focus:ring-4 focus:ring-blue-200'
               : 'bg-gray-500'
           }`}
           type="button"
           onClick={() => {
             setSelectedRoom(nameRoom);
-            setProgress(0);
           }}
-          disabled={progress !== 100}
+          disabled={progressPercentage !== 100}
         >
           Next Room
         </button>
@@ -217,7 +219,7 @@ const RoomsForm: React.FC<Props> = ({
         {nameRoom !== 'kitchen' && (
           <button
             className={`ml-3 mr-auto block w-1/5 rounded-full px-4 py-3.5 text-center text-base font-bold text-white ${
-              progress < 100
+              progressPercentage < 100
                 ? 'bg-gray-500'
                 : 'bg-blue-600 hover:bg-blue-500 focus:ring-4 focus:ring-blue-200'
             }`}
@@ -225,7 +227,7 @@ const RoomsForm: React.FC<Props> = ({
             onClick={() => {
               setOpenApplyInterioRooms(true);
             }}
-            disabled={progress !== 100}
+            disabled={progressPercentage !== 100}
           >
             Apply Interior to All Rooms
           </button>

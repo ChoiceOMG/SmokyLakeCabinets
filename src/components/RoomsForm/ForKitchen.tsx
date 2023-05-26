@@ -195,7 +195,7 @@ const ForKitchen: React.FC<Props> = ({
         unmountOnExit
         ref={transitionRef}
       >
-        <MultiSelect
+      {/*   <MultiSelect
           Title="Wall Heights"
           allSelectItems={allSelectItems}
           nextStep={(e) => {
@@ -203,7 +203,7 @@ const ForKitchen: React.FC<Props> = ({
             newOption({ wallHeights: e, hasDiffUpLower: true });
           }}
           wallHeights={wallHeights}
-        />
+        /> */}
       </CSSTransition>
 
       <CSSTransition

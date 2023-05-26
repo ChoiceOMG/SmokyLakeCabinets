@@ -18,6 +18,11 @@
   ],
 
   "rules": {
-    "@typescript-eslint/consistent-type-imports": "warn"
-  }
+  "@typescript-eslint/consistent-type-imports": "warn",
+  "no-irregular-whitespace": "off",
+  "no-multi-spaces": "off",
+  "no-trailing-spaces": "off",
+  "no-multiple-empty-lines": "off",
+}
+
 }

@@ -16,12 +16,13 @@ import jobQuestions from '~/reducer/jobQuestions';
 import progressChange from '~/reducer/trackProgress';
 import materialsFinishesReducer from '~/reducer/materialsFinishes';
 import userConfig from './reducer/userConfig';
-
+import Steps from './reducer/steps';
 const rootReducer = combineReducers({
   userConfig,
   jobQuestionsConfig: jobQuestions,
   progressChange,
   materialsFinishesReducer,
+  Steps
 });
 
 const persistConfig = {

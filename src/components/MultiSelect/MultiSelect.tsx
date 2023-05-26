@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { FaAngleDown, FaPlusCircle } from 'react-icons/fa';
-
+import Image from 'next/image';
 type Props = {
   Title: string;
-  allSelectItems: Array<any>;
+allSelectItems: {
+    size: string;
+    img: string;
+  }[];
   nextStep: (event: any) => void;
   wallHeights?: Array<string>;
 };
@@ -40,7 +43,8 @@ const MultiSelect: React.FC<Props> = ({
     }
   }, [selectedItems]);
   return (
-    <div className="h-64 w-1/2">
+    <div className='h-64 grid grid-cols-2 gap-5'    >
+    <div>
       <span className=" mb-2 block text-left text-sm font-bold text-gray-500">
         {Title}
       </span>
@@ -49,20 +53,21 @@ const MultiSelect: React.FC<Props> = ({
         <div className="flex items-center rounded border border-gray-200 bg-white p-1">
           {selectedItems.length > 0 ? (
             <div className="flex flex-auto flex-wrap">
-              {selectedItems.map((item) => (
-                <div
-                  key={item}
-                  className="m-1 flex items-center justify-center rounded-lg border border-gray-200 bg-gray-100 p-2"
-                >
-                  <span className="text-xs text-gray-700">{item}</span>
+  {selectedItems.map((item) => (
+    <div
+      key={item}
+      className="m-1 flex items-center justify-center rounded-lg border border-gray-200 bg-gray-100 p-2"
+    >
+      <span className="text-xs text-gray-700">{item}</span>
+      <FaPlusCircle
+        onClick={() => handleSelectItem(item)}
+        className="ml-5 rotate-45 cursor-pointer fill-blue-500 text-sm hover:fill-blue-600"
+      />
+    </div>
+  ))}
+  
+</div>
 
-                  <FaPlusCircle
-                    onClick={() => handleSelectItem(item + '')}
-                    className=" ml-5	rotate-45 cursor-pointer fill-blue-500 text-sm hover:fill-blue-600"
-                  />
-                </div>
-              ))}
-            </div>
           ) : (
             <div
               className="flex flex-auto cursor-pointer flex-wrap"
@@ -79,8 +84,8 @@ const MultiSelect: React.FC<Props> = ({
         </div>
 
         <div
-          className={`items--center justify--center zindex--10  absolute top--0 left--0 h-3/4 h-full w-full	overflow-y-hidden	${
-            openSelect ? 'max-h-full' : 'max-h-0'
+          className={`items--center justify--center zindex--10  absolute top--0 left--0 h-full  w-full	overflow-y-hidden	${
+            openSelect ? 'max-h-[calc(100%-30%)]' : 'max-h-0'
           }`}
         >
           <div className=" h-full rounded border border-gray-200 bg-white p-4">
@@ -88,13 +93,13 @@ const MultiSelect: React.FC<Props> = ({
               STANDARD HEIGHTS
             </span>
             <div className="flex flex-wrap items-center">
-              {allSelectItems.map((item) => (
+              {allSelectItems.map((item, i) => (
                 <div
-                  key={item}
+                  key={i}
                   className=" m-1 max-w-fit cursor-pointer	 rounded-lg border border-gray-200 bg-gray-100 px-5 text-left hover:border-gray-500"
-                  onClick={() => handleSelectItem(item + '')}
+                  onClick={() => handleSelectItem(item.size + '')}
                 >
-                  <span className="text-xs  text-gray-700">{item}</span>
+                  <span className="text-xs  text-gray-700">{item.size}</span>
                 </div>
               ))}
             </div>
@@ -128,10 +133,24 @@ const MultiSelect: React.FC<Props> = ({
                 </form>
               )}
             </div>
+            
           </div>
         </div>
+        
       </div>
-    </div>
+      </div>
+      <div>
+      {selectedItems.length > 0 && (
+          <Image
+            src={allSelectItems.find((selectItem) => selectItem.size === selectedItems[selectedItems.length - 1])?.img || '/images/other-size.png'} alt={selectedItems[selectedItems.length - 1] || ''} width={500} height={500} loader={
+              ({ src, width, quality }) => {
+                return `${src}?w=${width}&q=${quality || 75}`
+              }
+            } />
+  )}
+      </div>
+      
+      </div>
   );
 };
 export default MultiSelect;
