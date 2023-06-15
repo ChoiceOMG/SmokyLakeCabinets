@@ -11,7 +11,8 @@ import { setKitchenProgressStep } from '~/reducer/trackProgress';
 import RoomSections from '@components/jobQuestions/RoomSections';
 import Materials from '@components/materials';
 import { useRouter } from 'next/router';
-
+  import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function Kitchen() {
   const dispatch = useDispatch();
   const { kitchenStep } = useSelector(
@@ -44,7 +45,6 @@ export default function Kitchen() {
       },
     });
 
-    console.log(localKitchenStep);
   }, [dispatch, localKitchenStep]);
 
   return (
@@ -56,7 +56,17 @@ export default function Kitchen() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-
+    <ToastContainer
+position="bottom-center"
+autoClose={5000}
+hideProgressBar
+newestOnTop
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+/>
       <section className="overflow-hidden bg-gray-50 pb-16">
         <div className="container mx-auto px-4">
           <div className="rounded-3xl bg-white py-16 px-8">

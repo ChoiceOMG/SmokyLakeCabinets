@@ -118,3 +118,58 @@ model Appointment {
   project           Project   @relation(fields: [projectId], references: [id])
   projectId         String
 }
+
+model WallHeight {
+  id               Int                @id @default(autoincrement())
+  size             String
+  img              String
+  kitchenQuestions KitchenQuestions[]
+}
+
+model GlassStyle {
+  id               Int                @id @default(autoincrement())
+  value            String
+  img              String
+  kitchenQuestions KitchenQuestions[]
+}
+
+model PantryTall {
+  id               Int                @id @default(autoincrement())
+  value            String
+  img              String
+  kitchenQuestions KitchenQuestions[]
+}
+
+model BoxMaterial {
+  id               Int                @id @default(autoincrement())
+  value            String
+  img              String
+  title            String
+  kitchenQuestions KitchenQuestions[]
+}
+
+model HardwarePackage {
+  id               Int                @id @default(autoincrement())
+  value            String
+  img              String
+  title            String
+  kitchenQuestions KitchenQuestions[]
+}
+
+model Drawer {
+  id               Int                @id @default(autoincrement())
+  value            String
+  img              String
+  title            String
+  kitchenQuestions KitchenQuestions[]
+}
+
+model KitchenQuestions {
+  id               Int               @id @default(autoincrement())
+  wallHeights      WallHeight[]
+  glassStyles      GlassStyle[]
+  pantryTalls      PantryTall[]
+  boxMaterials     BoxMaterial[]
+  hardwarePackages HardwarePackage[]
+  drawers          Drawer[]
+}

@@ -19,6 +19,7 @@ export default function Header({ className }: HeaderProps) {
     setNavbarMenu(!mobileNavType);
     console.log(mobileNavType, 'navbarMenu');
   };
+
   return (
     <section className="overflow-hidden bg-gray-50 pt-6 pb-20">
       <div className="container mx-auto px-4">
@@ -72,6 +73,7 @@ export default function Header({ className }: HeaderProps) {
                 </div>
               </div>
             </div>
+            { status !== 'authenticated' ? (
             <div className="w-auto">
               <div className="flex flex-wrap items-center">
                 <div className="hidden w-auto lg:block">
@@ -121,7 +123,89 @@ export default function Header({ className }: HeaderProps) {
                   </button>
                 </div>
               </div>
-            </div>
+              </div>
+            ) : (
+              <div>
+                      <div
+                        className="group flex cursor-pointer flex-row items-center"
+                        onClick={() => setShowUserMenu(!showUserMenu)}
+                      >
+                        {session.user?.image && (
+                          <Image
+                            src={session.user.image}
+                            alt="Profile image"
+                            width={32}
+                            height={32}
+                            loader={({ src }) => src
+                              ? `${src}?w=32&h=32&fit=crop&auto=format`
+                              : '/images/avatar-placeholder.webp'}
+                            
+                            className="mr-3 h-8 w-8 rounded-full object-cover"
+                          />
+                        )}
+                        <h4 className="mr-4 dark:text-slate-200">
+                          {session.user?.name}
+                        </h4>
+                        <button
+                          className="text-slate-200 group-hover:text-slate-100"
+                          role="button"
+                        >
+                          <svg
+                            width="10"
+                            height="6"
+                            viewBox="0 0 10 6"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            {showUserMenu ? (
+                              <path
+                                d="M1 5L5 1L9 5"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              ></path>
+                            ) : (
+                              <path
+                                d="M1 1L5 5L9 1"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              ></path>
+                            )}
+                          </svg>
+                        </button>
+                      </div>
+                      <div
+                        className={clsx(
+                          'fixed top-20 right-6 mt-2 w-56 origin-bottom-right rounded-md shadow-lg',
+                          {
+                            hidden: !showUserMenu,
+                          }
+                        )}
+                      >
+                        <div className="shadow-xs rounded-md bg-white py-1">
+                          <a
+                            href="/profile"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          >
+                            Your Profile
+                          </a>
+                          <Link
+                            href="/api/auth/signout"
+                            // TODO: Do we want to use signout() instead?
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          >
+                            Sign out
+                          </Link>
+                        </div>
+                      </div>
+                   
+                </div>
+              
+            )
+}
           </div>
           <div
             className={clsx(
@@ -208,6 +292,10 @@ export default function Header({ className }: HeaderProps) {
                             alt="Profile image"
                             width={32}
                             height={32}
+                            loader={({ src }) => src
+                              ? `${src}?w=32&h=32&fit=crop&auto=format`
+                              : '/images/avatar-placeholder.webp'}
+                            
                             className="mr-3 h-8 w-8 rounded-full object-cover"
                           />
                         )}

@@ -9,28 +9,44 @@ import {
   SetCurrentSlideAction,
   saveRoomAnswers,
 } from '~/reducer/steps';
-
+import { motion } from 'framer-motion';
+import { useSession } from 'next-auth/react';
+import { trpc } from '@utils/trpc';
 type Props = {
   nameRoom: string;
-  setSelectedRoom: React.Dispatch<React.SetStateAction<string>>;
+  handleStepChange: (step: number) => void;
   allRooms: string[];
   setUDPLink: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const RoomsForm: React.FC<Props> = ({
   nameRoom,
-  setSelectedRoom,
+  handleStepChange,
   setUDPLink,
   allRooms,
 }) => {
-  const [cabinetStyles, setCabinetStyles] = useState<boolean>(false);
+  //session
+  const { data: session, status } = useSession();
+  console.log('session', session);
+//getRole
+  
+  const { data:role } = trpc.auth.getRole.useQuery(
+   session?.user?.id || '',
+  );
   const { answers } = useSelector((state: RootState) => state.Steps);
 
   const [openApplyInterioRooms, setOpenApplyInterioRooms] =
     useState<boolean>(false);
 
   const [direction, setDirection] = useState<number>(0);
-  const slideNames = useSelector((state: RootState) => state.Steps.slideNames);
+  const slideNames = useSelector((state: RootState) => {
+  if (nameRoom === 'kitchen') {
+    return state.Steps.slideNames;
+  } else {
+    return state.Steps.slideNames.filter((slideName) => slideName !== 'CabinetStyles');
+  }
+});
+
   const currentSlide = useSelector(
     (state: RootState) => state.Steps.currentSlide
   );
@@ -44,42 +60,37 @@ const RoomsForm: React.FC<Props> = ({
     (state: RootState) => state.materialsFinishesReducer
   );
 
-  const handleSlide = (direction: number) => {
-    const currentIndex = slideNames.indexOf(currentSlide);
-    setDirection(direction);
-    let nextIndex = currentIndex + direction;
-    if (
-      !cabinetStyles &&
-      currentIndex === 0 &&
-      nameRoom === 'kitchen' &&
-      direction === 1
-    ) {
-      nextIndex = 2;
-    }
-    if (
-      !cabinetStyles &&
-      currentIndex === 2 &&
-      nameRoom === 'kitchen' &&
-      direction === -1
-    ) {
-      nextIndex = 0;
-    }
+const handleSlide = (direction: number) => {
+  const currentIndex = slideNames.indexOf(currentSlide);
+  setDirection(direction);
+  let nextIndex = currentIndex + direction;
 
-    if (nextIndex >= 0 && nextIndex < slideNames.length) {
-      const nextSlide = slideNames[nextIndex];
-
-      // Prevent going back to PantryTall from Kitchen
-      if (
-        !(
-          nameRoom !== 'kitchen' &&
-          currentSlide === 'PantryTall' &&
-          direction === -1
-        )
-      ) {
-        dispatch({ type: 'SET_CURRENT_SLIDE', payload: nextSlide });
-      }
+  if (nextIndex >= 0 && nextIndex < slideNames.length) {
+    const nextSlide = slideNames[nextIndex];
+    dispatch({ type: 'SET_CURRENT_SLIDE', payload: nextSlide });
+  } else if (nextIndex < 0 && direction === -1) {
+    const prevRoomIndex = allRooms.indexOf(nameRoom) - 1;
+    if (prevRoomIndex < 0) {
+      handleStepChange(2)
+    } else {
+      const prevRoom = allRooms[prevRoomIndex];
+      setUDPLink(prevRoom || '');
     }
-  };
+  } else if (currentIndex === slideNames.length - 1 && direction === 1) {
+    const nextRoomIndex = allRooms.indexOf(nameRoom) + 1;
+    if (nextRoomIndex >= 0 && nextRoomIndex < allRooms.length) {
+      const nextRoom = allRooms[nextRoomIndex];
+      console.log('nextRoom', nextRoom)
+      setUDPLink(nextRoom || '');
+    } else {
+      
+      handleStepChange(4)
+    }
+  }
+};
+
+
+
   const applyInteriorToRooms = () => {
     const currentRoomAnswers = answers[nameRoom] || {};
 
@@ -98,10 +109,8 @@ const RoomsForm: React.FC<Props> = ({
       <div className="mt-4 flex h-fit w-full justify-center gap-5">
         {Object.values(materialsFinishes).map((item: any, i: number) => {
           const roomAnswers = answers[item.room.name] || {};
-          const allQuestionsAnsweredRoom =
-            item.room.name === 'kitchen'
-              ? Object.keys(roomAnswers).length >= 7
-              : Object.keys(roomAnswers).length >= 4;
+          const allQuestionsAnsweredRoom = Object.keys(roomAnswers).length >= slideNames.length;
+         
           return (
             <span
               onClick={() => {
@@ -125,19 +134,12 @@ const RoomsForm: React.FC<Props> = ({
   };
 
   const FirstSlide = () => {
-    if (nameRoom === 'kitchen') {
-      const setCurrentSlideAction: SetCurrentSlideAction = {
-        type: 'SET_CURRENT_SLIDE',
-        payload: 'CabinetStyles',
-      };
-      dispatch(setCurrentSlideAction);
-    } else {
-      const setCurrentSlideAction: SetCurrentSlideAction = {
-        type: 'SET_CURRENT_SLIDE',
-        payload: 'PantryTall',
-      };
-      dispatch(setCurrentSlideAction);
-    }
+    const setCurrentSlideAction: SetCurrentSlideAction = {
+      type: 'SET_CURRENT_SLIDE',
+      payload: 'glassStyles',
+    };
+    dispatch(setCurrentSlideAction);
+
     const resetProgressAction: ResetProgressAction = { type: 'RESET_PROGRESS' };
     dispatch(resetProgressAction);
   };
@@ -148,38 +150,53 @@ const RoomsForm: React.FC<Props> = ({
 
   const ClientAnswer = (question: string, answer: any) => {
     dispatch(saveRoomAnswers(nameRoom, question, answer));
-    question === 'CabinetStyles' &&
-      setCabinetStyles(answer === 'Yes' ? true : false);
   };
 
   return (
     <form className="container mx-auto p-4">
-      <div className="flex justify-between pb-5">
+        <div className="flex justify-between pb-5">
         <button
-          className={` bg-blue-500 px-4 py-2 font-semibold text-white rounded-full hover:bg-blue-600 focus:ring-4 focus:ring-blue-200 ${
-            currentSlide === slideNames[0] ||
-            (nameRoom !== 'Kitchen' && currentSlide === 'PantryTall')
-              ? 'cursor-not-allowed opacity-50'
-              : ''
-          }`}
+          className={`rounded-full bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-600 focus:ring-4 focus:ring-blue-200`}
           onClick={() => handleSlide(-1)}
-          disabled={
-            currentSlide === slideNames[0] ||
-            (nameRoom !== 'kitchen' && currentSlide === 'PantryTall')
-          }
           type="button"
         >
           Previous
         </button>
+        <div className="flex items-center gap-1">
+          {slideNames.map(
+            (slideName, index) => {
+              const isAnswered = answers[nameRoom]?.hasOwnProperty(slideName);
+              console.log(isAnswered);
+              console.log(slideName);
+              console.log(answers[nameRoom]);
+              const bgColor = isAnswered ? 'bg-green-600 text-white' : '';
+              return (
+                <motion.span
+                  key={index}
+                  className={`inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full capitalize ${bgColor} ${
+                    slideName === currentSlide
+                      ? '!bg-blue-600 text-white'
+                      : 'bg-gray-200'
+                  }`}
+                  whileHover={{ scale: 1.1 }}
+                  onClick={() => {
+                    const setCurrentSlideAction: SetCurrentSlideAction = {
+                      type: 'SET_CURRENT_SLIDE',
+                      payload: slideName,
+                    };
+                    dispatch(setCurrentSlideAction);
+                  }}
+                >
+                  {index + 1}
+                </motion.span>
+              );
+            }
+          )}
+        </div>
         <button
-          className={` bg-blue-500 px-4 rounded-full py-2 font-semibold text-white hover:bg-blue-600 focus:ring-4 focus:ring-blue-200 ${
-            currentSlide === slideNames[slideNames.length - 1]
-              ? 'cursor-not-allowed opacity-50'
-              : ''
-          }`}
+          className={`rounded-full bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-600 focus:ring-4 focus:ring-blue-200`}
           type="button"
           onClick={() => handleSlide(1)}
-          disabled={currentSlide === slideNames[slideNames.length - 1]}
         >
           Next
         </button>
@@ -197,26 +214,12 @@ const RoomsForm: React.FC<Props> = ({
           currentSlide={currentSlide}
           answers={ClientAnswer}
           direction={direction}
+          role={role?.role || ''}
         />
       </div>
       {/* Footer form */}
       <div className="mt-5 flex flex-wrap items-center justify-between">
-        <button
-          className={`block w-1/5 rounded-full px-8 py-3.5 text-center text-base font-bold text-white ${
-            progressPercentage === 100
-              ? 'bg-blue-600 hover:bg-blue-500 focus:ring-4 focus:ring-blue-200'
-              : 'bg-gray-500'
-          }`}
-          type="button"
-          onClick={() => {
-            setSelectedRoom(nameRoom);
-          }}
-          disabled={progressPercentage !== 100}
-        >
-          Next Room
-        </button>
-
-        {nameRoom !== 'kitchen' && (
+        {nameRoom !== 'kitchen' && progressPercentage === 100 && (
           <button
             className={`ml-3 mr-auto block w-1/5 rounded-full px-4 py-3.5 text-center text-base font-bold text-white ${
               progressPercentage < 100
@@ -244,7 +247,7 @@ const RoomsForm: React.FC<Props> = ({
         unmountOnExit
       >
         <div className="fixed inset-0 z-10 overflow-y-auto">
-          <div className="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+          <div className="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
             <div
               className="fixed inset-0 transition-opacity"
               aria-hidden="true"
@@ -258,9 +261,9 @@ const RoomsForm: React.FC<Props> = ({
               aria-modal="true"
               aria-labelledby="modal-headline"
             >
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-start">
-                  <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                  <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                     <h3
                       className="text-lg font-medium leading-6 text-gray-900"
                       id="modal-headline"
@@ -296,7 +299,7 @@ const RoomsForm: React.FC<Props> = ({
                 </button>
                 <button
                   type="button"
-                  className="mt-3 inline-flex w-full justify-center rounded-full border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                  className="mt-3 inline-flex w-full justify-center rounded-full border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm"
                   onClick={() => {
                     setOpenApplyInterioRooms(false);
                   }}

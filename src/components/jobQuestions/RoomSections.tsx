@@ -45,8 +45,8 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
     hasLaundry,
     hasBar,
     hasOther,
-    finishQ,
-  } = useSelector((state: RootState) => state.jobQuestionsConfig);
+    hasDrawingsFile
+  } = useSelector((state: RootState) => state.jobQuestions);
 
   const { materialsFinishes } = useSelector(
     (state: any) => state.materialsFinishesReducer
@@ -167,7 +167,7 @@ const RoomSections: React.FC<Props> = ({ handleStepChange }) => {
     dispatch(setOther(addOther));
     dispatch(setSelectedRooms(selectedRooms as string[]));
 
-    if (finishQ) {
+    if (hasDrawingsFile) {
       handleStepChange(4);
     } else {
       handleStepChange(3);

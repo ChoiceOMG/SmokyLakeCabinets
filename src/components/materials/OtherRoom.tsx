@@ -9,7 +9,7 @@ type Props = {
 const OtherRoom: React.FC<Props> = ({ nextRoom, otherCount }) => {
   console.log('otherCount', otherCount);
   const { hasOther } = useSelector(
-    (state: RootState) => state.jobQuestionsConfig
+    (state: RootState) => state.jobQuestions
   );
   return (
     <div>

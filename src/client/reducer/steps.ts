@@ -4,7 +4,7 @@ export interface QuizState {
   slideNames: string[];
   currentSlide: string;
   progressPercentage: number;
-  answers: Record<string, Record<string, any>>; // Обновленная структура ответов
+  answers: Record<string, Record<string, any>>;
 }
 
 export interface SetCurrentSlideAction extends Action {
@@ -27,17 +27,17 @@ export interface ResetProgressAction extends Action {
 
 const initialState: QuizState = {
   slideNames: [
-    "CabinetStyles",
-    "WallHeights",
-    "GlassStyle",
-    "PantryTall",
-    "SelectBoxMaterial",
-    "SelectHardwarePackage",
-    "SelectDrawers"
+    "glassStyles",
+    "pantryTalls",
+    "boxMaterials",
+    "hardwarePackages",
+    "drawers",
+    "CabinetStyles"
   ],
+ 
   currentSlide: "",
   progressPercentage: 0,
-  answers: {}, // Инициализируем пустой объект для хранения ответов
+  answers: {}, 
 };
 
 const Steps = (

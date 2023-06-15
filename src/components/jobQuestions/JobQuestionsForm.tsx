@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '~/store';
 import {
@@ -7,84 +7,73 @@ import {
   setCabinets,
   setJobQuoteOn,
   setCountertops,
-  setDrawings,
   setDrawingsFile,
-  setFinishQ,
 } from '~/reducer/jobQuestions';
 import CheckBox from '@components/inputs/CheckBox';
+import FileUpload from '@components/FileUpload';
+import { useRouter } from 'next/router';
 
 type Props = {
   handleStepChange: (step: number) => void;
 };
-/* interface FileState {
-  file: File | null;
-} */
+
 const JobQuestionsForm: React.FC<Props> = ({ handleStepChange }) => {
+  const Router = useRouter();
   const dispatch = useDispatch();
-  const {
-    jobLocation,
-    jobQuoteOn,
-    cabinets,
-    countertops,
-    hasDrawings,
-    hasDrawingsFile,
-    finishQ,
-  } = useSelector((state: RootState) => state.jobQuestionsConfig);
-  console.log('jobLocation', jobLocation);
-  console.log('cabinets', cabinets);
+ const {
+  jobLocation,
+  jobQuoteOn,
+  cabinets,
+  countertops,
+} = useSelector((state: RootState) => state.jobQuestions);
+
   const [localJobLocation, setJobLoc] = useState(jobLocation);
   const [localJobQuoteOn, setJobOn] = useState(jobQuoteOn);
   const [localCabinets, setCab] = useState(cabinets);
   const [localCountertops, setCtops] = useState(countertops);
-  const [localHasDrawings, setDs] = useState(hasDrawings);
-  //const [fileDrawing, setFileDrawing] = useState<FileState>({ file: null });
-  const [fileDrawing, setFileDrawing] = useState(hasDrawingsFile);
-  const [finish, setFinish] = useState(finishQ);
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log({ file: event.target.files![0] });
-    setFileDrawing({ file: event.target.files![0] || null });
-  };
-  const handleJobLocationChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const [localDrawingsFile, setLocalDrawingsFile] = useState(null);
+  const [locationError, setLocationError] = useState(false);
+
+
+  useEffect(() => {
+    dispatch(setDrawingsFile(localDrawingsFile))
+  }, [localDrawingsFile]);
+  
+  
+   const handleJobLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setJobLoc(event.target.value);
+    dispatch(setJobLocation(event.target.value));
+    setLocationError(false);
   };
   const handleJobQuoteOnChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setJobOn(event.target.value);
+    dispatch(setJobQuoteOn(event.target.value));
   };
 
   const handleCabinetsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCab(event.target.checked);
+    dispatch(setCabinets(event.target.checked));
   };
   const handleCountertopsChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setCtops(event.target.checked);
+    dispatch(setCountertops(event.target.checked));
   };
-  const handleHasDrawingsChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setDs(event.target.checked);
-  };
-
+ 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    dispatch(setJobLocation(localJobLocation));
-    dispatch(setJobQuoteOn(localJobQuoteOn));
-    dispatch(setCabinets(localCabinets));
-    dispatch(setCountertops(localCountertops));
-    dispatch(setDrawings(localHasDrawings));
-    /*   dispatch(
-      setDrawingsFile({
-        file: fileDrawing,
-        lastModifiedDate: new Date(),
-      })
-    ); */
-    dispatch(setFinishQ(finish));
-
+     if (!localJobLocation) {
+      setLocationError(true);
+      return;
+    }
+    if (Router.pathname === '/') {
+      Router.push('/kitchen?step=2')
+    } else {
     handleStepChange(2);
+    }
   };
 
   return (
@@ -101,9 +90,14 @@ const JobQuestionsForm: React.FC<Props> = ({ handleStepChange }) => {
             type="text"
             id="jobLocation"
             value={localJobLocation}
-            className="w-full appearance-none rounded-full border border-gray-200 bg-white px-6 py-3.5 text-lg font-bold text-gray-500 placeholder-gray-500 outline-none focus:ring-4 focus:ring-blue-200"
+            className={`w-full appearance-none rounded-full border border-gray-200 bg-white px-6 py-3.5 text-lg font-bold text-gray-500 placeholder-gray-500 outline-none focus:ring-4 focus:ring-blue-200 ${
+              locationError ? 'border-red-500' : ''
+            }`}
             onChange={handleJobLocationChange}
           />
+          {locationError && (
+            <p className="mt-2 text-sm text-red-500">Please enter a job location</p>
+          )}
         </div>
         <div className="w-full p-3">
           <label
@@ -155,62 +149,32 @@ const JobQuestionsForm: React.FC<Props> = ({ handleStepChange }) => {
           </div>
           {/* Has Drawings */}
           <div className="relative items-center">
-            <div className="flex py-3.5">
-              {' '}
-              <CheckBox
-                checkedBox={localHasDrawings}
-                onChangeBox={handleHasDrawingsChange}
-              />
-              <div className=" flex flex-col text-gray-500">
-                <p className=" whitespace-nowrap text-lg font-bold">
-                  Has Drawings
-                </p>
+            <div className="flex flex-col py-3.5">
+             
+              
+               
                 <p className="text-left text-xs">
                   If you upload drawings, you will have the option to skip most
                   of the questions in this form. With drawings, we can get the
                   measurements and the design answers directly from the
                   document.
                 </p>
-              </div>
-            </div>
-
-            {localHasDrawings && (
-              <div className="w-full">
-                <form className="space-6 mb-3 flex w-full flex-col items-center 	">
+                  <div className="w-full">
+                <form className="space-6 my-3 flex w-full flex-col items-center 	">
                   <label className="block">
                     <span className="sr-only">
                       Select files to upload (accept most file types)
                     </span>
-                    <input
-                      type="file"
-                      className="block w-full text-sm text-slate-500
-      file:mr-4 file:rounded-full file:border-0
-      file:bg-violet-50 file:py-2
-      file:px-4 file:text-sm
-      file:font-semibold file:text-violet-700
-      hover:file:bg-violet-100
-    "
-                      onChange={handleFileChange}
-                    />
+                   
+                      <FileUpload onUploadSuccess={setLocalDrawingsFile} />
                   </label>
                 </form>
 
-                {fileDrawing && (
-                  <div className="mx-auto mb-3">
-                    <p className="py-1 text-sm font-bold text-gray-500">
-                      Would you like to skip to finishes?
-                    </p>
-                    <button
-                      type="submit"
-                      className=" m-auto block rounded-full bg-blue-500 px-8 py-3.5 text-center text-lg font-bold text-white hover:bg-blue-600 focus:ring-4 focus:ring-blue-200 md:px-16"
-                      onClick={() => setFinish(true)}
-                    >
-                      Skip to Finishes
-                    </button>
-                  </div>
-                )}
+               
               </div>
-            )}
+            </div>
+
+         
           </div>
         </div>
       </div>
@@ -218,7 +182,6 @@ const JobQuestionsForm: React.FC<Props> = ({ handleStepChange }) => {
       <button
         type="submit"
         className="block w-full rounded-full bg-blue-500 px-8 py-3.5 text-center text-lg font-bold text-white hover:bg-blue-600 focus:ring-4 focus:ring-blue-200 md:px-16"
-        onClick={() => setFinish(false)}
       >
         Save and Continue
       </button>

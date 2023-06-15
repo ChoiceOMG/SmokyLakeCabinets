@@ -19,7 +19,7 @@ import userConfig from './reducer/userConfig';
 import Steps from './reducer/steps';
 const rootReducer = combineReducers({
   userConfig,
-  jobQuestionsConfig: jobQuestions,
+  jobQuestions,
   progressChange,
   materialsFinishesReducer,
   Steps

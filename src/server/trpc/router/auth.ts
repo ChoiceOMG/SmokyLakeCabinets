@@ -1,4 +1,5 @@
 import { router, publicProcedure, protectedProcedure } from '../trpc';
+import { z } from 'zod';
 
 export const authRouter = router({
   getSession: publicProcedure.query(({ ctx }) => {
@@ -7,4 +8,18 @@ export const authRouter = router({
   getSecretMessage: protectedProcedure.query(() => {
     return 'You are logged in and can see this secret message!';
   }),
+  getRole:  protectedProcedure
+    .input(z.string())
+    .query(({ ctx, input }) => {
+      if (input) {
+        return ctx.prisma.user.findUnique({
+          where: {
+            id: input,
+          },
+          select: {
+            role: true,
+          },
+        });
+      }
+    } ),
 });

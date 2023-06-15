@@ -1,11 +1,11 @@
-// userConfig.ts
+import { Action } from "redux";
+
 export interface JobQuestionsState {
   jobLocation: string;
   jobQuoteOn: string;
   cabinets: boolean;
   countertops: boolean;
-  hasDrawings: boolean;
-  hasDrawingsFile: object;
+  hasDrawingsFile: File | null;
   hasKitchen: boolean;
   hasIsland: boolean;
   hasPantry: boolean;
@@ -17,7 +17,6 @@ export interface JobQuestionsState {
   hasLaundry: boolean;
   hasBar: boolean;
   hasOther: object;
-  finishQ: boolean;
   selectedRooms: Array<string>;
 }
 
@@ -25,71 +24,84 @@ interface SetJobLocationAction {
   type: 'SET_JOB_LOCATION';
   payload: string;
 }
+
 interface SetJobQuoteOnAction {
   type: 'SET_JOB_QUOTE_ON';
   payload: string;
 }
+
 interface SetCabinetsAction {
   type: 'SET_CABINETS';
   payload: boolean;
 }
+
 interface SetCountertopsAction {
   type: 'SET_COUNTERTOPS';
   payload: boolean;
 }
+
 interface SetDrawingsAction {
   type: 'SET_DRAWINGS';
   payload: boolean;
 }
-interface SetFinishQAction {
-  type: 'SET_FINISHQ';
-  payload: boolean;
-}
-interface SetDrawingsFileAction {
+
+
+
+interface SetDrawingsFileAction extends Action {
   type: 'SET_DRAWINGSFILE';
-  payload: object;
+  payload: File;
 }
 
 interface SetKitchenAction {
   type: 'SET_KITCHEN';
   payload: boolean;
 }
+
 interface SetIslandAction {
   type: 'SET_ISLAND';
   payload: boolean;
 }
+
 interface SetPantryAction {
   type: 'SET_PANTRY';
   payload: boolean;
 }
+
 interface SetVanityAction {
   type: 'SET_VANITY';
   payload: boolean;
 }
+
 interface SetEnsuiteAction {
   type: 'SET_ENSUITE';
   payload: boolean;
 }
+
 interface SetJackJillAction {
   type: 'SET_JACK_JILL';
   payload: boolean;
 }
+
 interface SetBasementVanityAction {
   type: 'SET_BASEMENT_VANITY';
   payload: boolean;
 }
+
 interface SetMudroomAction {
   type: 'SET_MUDROOM';
   payload: boolean;
 }
+
 interface SetLaundryAction {
   type: 'SET_LAUNDRY';
   payload: boolean;
 }
+
 interface SetBarAction {
   type: 'SET_BAR';
   payload: boolean;
 }
+
 interface SetOtherAction {
   type: 'SET_OTHER';
   payload: object;
@@ -108,7 +120,6 @@ type JobQuestionsActions =
   | SetDrawingsAction
   | SetKitchenAction
   | SetDrawingsFileAction
-  | SetFinishQAction
   | SetIslandAction
   | SetPantryAction
   | SetVanityAction
@@ -126,8 +137,7 @@ const initialState: JobQuestionsState = {
   jobQuoteOn: '',
   cabinets: false,
   countertops: false,
-  hasDrawings: false,
-  hasDrawingsFile: {},
+  hasDrawingsFile: null,
   hasKitchen: false,
   hasIsland: false,
   hasPantry: false,
@@ -139,7 +149,6 @@ const initialState: JobQuestionsState = {
   hasLaundry: false,
   hasBar: false,
   hasOther: {},
-  finishQ: false,
   selectedRooms: [],
 };
 
@@ -156,12 +165,9 @@ const jobQuestions = (
       return { ...state, cabinets: action.payload };
     case 'SET_COUNTERTOPS':
       return { ...state, countertops: action.payload };
-    case 'SET_DRAWINGS':
-      return { ...state, hasDrawings: action.payload };
-    case 'SET_FINISHQ':
-      return { ...state, finishQ: action.payload };
-    case 'SET_DRAWINGSFILE':
+    case 'SET_DRAWINGSFILE': {
       return { ...state, hasDrawingsFile: action.payload };
+    }
     case 'SET_KITCHEN':
       return { ...state, hasKitchen: action.payload };
     case 'SET_ISLAND':
@@ -195,6 +201,7 @@ export const setJobLocation = (location: string) => ({
   type: 'SET_JOB_LOCATION',
   payload: location,
 });
+
 export const setJobQuoteOn = (quoteOn: string) => ({
   type: 'SET_JOB_QUOTE_ON',
   payload: quoteOn,
@@ -204,73 +211,82 @@ export const setCabinets = (cabinets: boolean) => ({
   type: 'SET_CABINETS',
   payload: cabinets,
 });
+
 export const setCountertops = (countertops: boolean) => ({
   type: 'SET_COUNTERTOPS',
   payload: countertops,
 });
-export const setDrawings = (drawings: boolean) => ({
+
+
+export const setDrawings = (drawings: File | null) => ({
   type: 'SET_DRAWINGS',
   payload: drawings,
 });
-export const setDrawingsFile = (drawingsfile: object) => ({
+
+export const setDrawingsFile = (drawingsfile: File | null) => ({
   type: 'SET_DRAWINGSFILE',
   payload: drawingsfile,
 });
 
-export const setFinishQ = (finishq: boolean) => ({
-  type: 'SET_FINISHQ',
-  payload: finishq,
-});
 
 export const setKitchen = (kitchen: boolean) => ({
   type: 'SET_KITCHEN',
   payload: kitchen,
 });
+
 export const setIsland = (island: boolean) => ({
   type: 'SET_ISLAND',
   payload: island,
 });
+
 export const setPantry = (pantry: boolean) => ({
   type: 'SET_PANTRY',
   payload: pantry,
 });
+
 export const setVanity = (vanity: boolean) => ({
   type: 'SET_VANITY',
   payload: vanity,
 });
+
 export const setEnsuite = (ensuite: boolean) => ({
   type: 'SET_ENSUITE',
   payload: ensuite,
 });
+
 export const setJackJill = (jackJill: boolean) => ({
   type: 'SET_JACK_JILL',
   payload: jackJill,
 });
+
 export const setBasementVanity = (basementVanity: boolean) => ({
   type: 'SET_BASEMENT_VANITY',
   payload: basementVanity,
 });
+
 export const setMudroom = (mudroom: boolean) => ({
   type: 'SET_MUDROOM',
   payload: mudroom,
 });
+
 export const setLaundry = (laundry: boolean) => ({
   type: 'SET_LAUNDRY',
   payload: laundry,
 });
+
 export const setBar = (bar: boolean) => ({
   type: 'SET_BAR',
   payload: bar,
 });
-export const setOther = (other: object) => (
-  console.log(other),
-  {
-    type: 'SET_OTHER',
-    payload: other,
-  }
-);
+
+export const setOther = (other: object) => ({
+  type: 'SET_OTHER',
+  payload: other,
+});
+
 export const setSelectedRooms = (select: Array<string>) => ({
   type: 'SET_SELECTED_ROOMS',
   payload: select,
 });
+
 export default jobQuestions;

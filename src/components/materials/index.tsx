@@ -23,7 +23,7 @@ const Materials: React.FC<Props> = ({ handleStepChange }) => {
     selectedRooms,
     hasPantry,
     hasVanity,
-  } = useSelector((state: RootState) => state.jobQuestionsConfig);
+  } = useSelector((state: RootState) => state.jobQuestions);
   const [selectedRoom, setSelectedRoom] = useState<string>(
     selectedRooms[0] || ''
   );
@@ -72,22 +72,13 @@ const Materials: React.FC<Props> = ({ handleStepChange }) => {
     }
   }, [selectedRoom]);
 
-  const handleNextRoom = () => {
-    const currentRoomIndex = selectedRooms.indexOf(selectedRoom);
-    const nextRoom = selectedRooms[currentRoomIndex + 1];
 
-    if (nextRoom) {
-      setSelectedRoom(nextRoom);
-    } else {
-      handleStepChange(4);
-    }
-  };
 
   return (
     <div className="min-w-full">
       <RoomsForm
         nameRoom={selectedRoom}
-        setSelectedRoom={handleNextRoom}
+        handleStepChange={(e)=>handleStepChange(e)}
         setUDPLink={(e) => setSelectedRoom(e)}
         allRooms={selectedRooms}
       />
