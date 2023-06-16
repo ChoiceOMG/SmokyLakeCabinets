@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 
 import { trpc } from '@utils/trpc';
-import { BoxMaterial, Drawer, GlassStyle, HardwarePackage, PantryTall, WallHeight } from '@prisma/client';
+import { BoxMaterial, CabinetStyle, Drawer, GlassStyle, HardwarePackage, PantryTall, WallHeight } from '@prisma/client';
 import { HiPencilAlt } from 'react-icons/hi';
 import { Question, newImage } from '@utils/types';
 
@@ -34,7 +34,8 @@ const Quiz: React.FC<Props> = ({ currentSlide, answers, direction,role }) => {
 
 const [wallHeightsList, setWallHeightsList] = useState<Array<WallHeight>>([]);
 const [glassStyleList, setGlassStyleList] = useState<Array<GlassStyle>>([]);
-const [pantryTallList, setPantryTallList] = useState<Array<PantryTall>>([]);
+  const [pantryTallList, setPantryTallList] = useState<Array<PantryTall>>([]);
+  const [cabinetStylesList, setCabinetStylesList] = useState<Array<CabinetStyle>>([]);
 const [selectBoxMaterialList, setSelectBoxMaterialList] = useState<Array<BoxMaterial>>([]);
 const [selectHardwarePackageList, setSelectHardwarePackageList] = useState<Array<HardwarePackage>>([]);
 const [selectDrawersList, setSelectDrawersList] = useState<Array<Drawer>>([]);
@@ -54,52 +55,33 @@ console.log(glassStyleList)
 
 
    // Handle saving changes
-  const saveChanges = async (quest: Question[]) => {
+  const saveChanges = async (quest: Question[], model: string) => {
+  
     // Update the questions in the database using Prisma
-     {/* Нужно отправлять все данные в бд  */}
     console.log('quest', quest);
-    const model = currentSlide;
     await updateQuestion({ model, id: 1, questionUpdateData: quest }).then((res: any) => {
       console.log('res', res);
       switch (model) {
         case 'glassStyles':
-          setGlassStyleList((prev) => {
-            const updatedList = [...prev];
-            return updatedList.map((item) => {
-              
-              if (item.id === res.id) {
-                item.img = res.img as string;
-                item.value = res.value as string;
-              }
-              return item;
-            }
-            );
-          });
+          console.log('res',res);
+          setGlassStyleList(res);
           break;
         case 'pantryTalls':
-          setPantryTallList((prev) => {
-            const updatedList = [...prev];
-            return updatedList;
-          });
+          setPantryTallList(res);
           break;
         case 'boxMaterials':
-          setSelectBoxMaterialList((prev) => {
-            const updatedList = [...prev];
-            return updatedList;
-          });
+          setSelectBoxMaterialList(res);
           break;
         case 'hardwarePackages':
-          setSelectHardwarePackageList((prev) => {
-            const updatedList = [...prev];
-            return updatedList;
-          });
+          setSelectHardwarePackageList(res);
           break;
         case 'drawers':
-          setSelectDrawersList((prev) => {
-            const updatedList = [...prev];
-            return updatedList;
-          });
+          setSelectDrawersList(res);
           break;
+        case 'CabinetStyles':
+          setCabinetStylesList(res);
+          break;
+        
         default:
           break;
       }
@@ -118,9 +100,11 @@ useEffect(() => {
     const pantryTalls = data[0].pantryTalls;
     const boxMaterials = data[0].boxMaterials;
     const hardwarePackages = data[0].hardwarePackages;
+    const cabinetStyles = data[0].cabinetStyles;
     const drawers = data[0].drawers;
     console.log(data)
     setWallHeightsList(wallHeights);
+    setCabinetStylesList(cabinetStyles);
     setGlassStyleList(glassStyles);
     setPantryTallList(pantryTalls);
     setSelectBoxMaterialList(boxMaterials);
@@ -157,7 +141,7 @@ useEffect(() => {
             selectedGlassStyle={selectedGlassStyle}
             setSelectedGlassStyle={setSelectedGlassStyle}
             answers={answers}
-            saveChanges={(e)=>saveChanges(e)}
+            saveChanges={(e: Question[], m: string)=>saveChanges(e, m)}
             editingMode={editingMode}
             direction={direction}
             
@@ -175,7 +159,7 @@ useEffect(() => {
             setLocalClosedCeiling={setLocalClosedCeiling}
             setLocalCrownFlat={setLocalCrownFlat}
             answers={answers}
-            saveChanges={(e)=>saveChanges(e)}
+            saveChanges={(e: Question[], m: string)=>saveChanges(e, m)}
             editingMode={editingMode}
             direction={direction}
           />
@@ -188,7 +172,7 @@ useEffect(() => {
             selectBoxMaterial={selectBoxMaterial}
             answers={answers}
             setSelectBoxMaterial={setSelectBoxMaterial}
-             saveChanges={(e)=>saveChanges(e)}
+           saveChanges={(e: Question[], m: string)=>saveChanges(e, m)}
             editingMode={editingMode}
             direction={direction}
           />
@@ -201,7 +185,7 @@ useEffect(() => {
             selectHardwarePackage={selectHardwarePackage}
             setSelectHardwarePackage={setSelectHardwarePackage}
             answers={answers}
-            saveChanges={(e)=>saveChanges(e)}
+            saveChanges={(e: Question[], m: string)=>saveChanges(e, m)}
             editingMode={editingMode}
             direction={direction}
           />
@@ -214,7 +198,7 @@ useEffect(() => {
             selectDrawers={selectDrawers}
             setSelectDrawers={setSelectDrawers}
             answers={answers}
-              saveChanges={(e)=>saveChanges(e)}
+            saveChanges={(e: Question[], m: string)=>saveChanges(e, m)}
             editingMode={editingMode}
             direction={direction}
           />
@@ -226,8 +210,9 @@ useEffect(() => {
             cabinetStyles={cabinetStyles}
             setCabinetStyles={handleCabinetStyles}
             answers={answers}
+            cabinetStylesList={cabinetStylesList}
             direction={direction}
-              saveChanges={(e)=>saveChanges(e)}
+              saveChanges={(e: Question[], m: string)=>saveChanges(e, m)}
             editingMode={editingMode}
             wallHeightsList={wallHeightsList}
           />

@@ -11,7 +11,7 @@ type BoxMaterialSlideProps = {
   answers: (q: string, a: any) => void;
   direction: number;
   setSelectBoxMaterial: (e: string) => void;
-    saveChanges: (e:Question[]) => void;
+    saveChanges: (e:Question[], m: string) => void;
   editingMode: boolean;
 };
 

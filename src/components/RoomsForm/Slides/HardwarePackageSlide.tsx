@@ -11,7 +11,7 @@ type HardwarePackageSlideProps = {
   direction: number;
   setSelectHardwarePackage: (e: string) => void;
   answers: (q: string, a: any) => void;
-    saveChanges: (e:Question[]) => void;
+    saveChanges: (e:Question[], m: string) => void;
   editingMode: boolean
 };
 

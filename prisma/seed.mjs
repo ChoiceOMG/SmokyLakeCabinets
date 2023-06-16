@@ -12,7 +12,8 @@
 
 
   const prisma = new PrismaClient()
-  async function main() {
+async function main() {
+    
     console.log('Seeding service categories...')
     for (const serviceCategory of serviceCategories) {
       await prisma.serviceCategory.upsert({
@@ -110,35 +111,48 @@
       })
     }
 
-  const glassStyles = await Promise.all([
-  prisma.glassStyle.create({ data: { value: "Clear", img: "/images/kitchen.jpg" } }),
-  prisma.glassStyle.create({ data: { value: "Frosted", img: "/images/kitchen.jpg" } }),
-  prisma.glassStyle.create({ data: { value: "Etched", img: "/images/kitchen.jpg" } }),
-  prisma.glassStyle.create({ data: { value: "Patterned", img: "/images/kitchen.jpg" } }),
-  prisma.glassStyle.create({ data: { value: "Tinted", img: "/images/kitchen.jpg" } }),
-  prisma.glassStyle.create({ data: { value: "Other", img: "/images/kitchen.jpg" } }),
+const glassStyles = await Promise.all([
+  prisma.glassStyle.create({
+    data: { id: 1, value: "Clear", img: "/images/kitchen.jpg" },
+  }),
+  prisma.glassStyle.create({
+    data: { id: 2, value: "Frosted", img: "/images/kitchen.jpg" },
+  }),
+  prisma.glassStyle.create({
+    data: { id: 3, value: "Etched", img: "/images/kitchen.jpg" },
+  }),
+  prisma.glassStyle.create({
+    data: { id: 4, value: "Patterned", img: "/images/kitchen.jpg" },
+  }),
+  prisma.glassStyle.create({
+    data: { id: 5, value: "Tinted", img: "/images/kitchen.jpg" },
+  }),
+  prisma.glassStyle.create({
+    data: { id: 6, value: "Other", img: "/images/kitchen.jpg" },
+  }),
 ]);
 
 const pantryTalls = await Promise.all([
-  prisma.pantryTall.create({ data: { value: "1", img: "/images/kitchen.jpg" } }),
-  prisma.pantryTall.create({ data: { value: "2", img: "/images/kitchen.jpg" } }),
-  prisma.pantryTall.create({ data: { value: "3", img: "/images/kitchen.jpg" } }),
-  prisma.pantryTall.create({ data: { value: "4", img: "/images/kitchen.jpg" } }),
-  prisma.pantryTall.create({ data: { value: "5", img: "/images/kitchen.jpg" } }),
-  prisma.pantryTall.create({ data: { value: "6", img: "/images/kitchen.jpg" } }),
+  prisma.pantryTall.create({ data: { id: 1, value: "1", img: "/images/kitchen.jpg" } }),
+  prisma.pantryTall.create({ data: { id: 2, value: "2", img: "/images/kitchen.jpg" } }),
+  prisma.pantryTall.create({ data: { id: 3, value: "3", img: "/images/kitchen.jpg" } }),
+  prisma.pantryTall.create({ data: { id: 4, value: "4", img: "/images/kitchen.jpg" } }),
+  prisma.pantryTall.create({ data: { id: 5, value: "5", img: "/images/kitchen.jpg" } }),
+  prisma.pantryTall.create({ data: { id: 6, value: "6", img: "/images/kitchen.jpg" } }),
 ]);
 
 const wallHeights = await Promise.all([
-  prisma.wallHeight.create({ data: { size: "30", img: "/images/kitchen.jpg" } }),
-  prisma.wallHeight.create({ data: { size: "33", img: "/images/kitchen.jpg" } }),
-  prisma.wallHeight.create({ data: { size: "38", img: "/images/kitchen.jpg" } }),
-  prisma.wallHeight.create({ data: { size: "41", img: "/images/kitchen.jpg" } }),
-  prisma.wallHeight.create({ data: { size: "48", img: "/images/kitchen.jpg" } }),
+  prisma.wallHeight.create({ data: { id: 1, size: "30", img: "/images/kitchen.jpg" } }),
+  prisma.wallHeight.create({ data: { id: 2, size: "33", img: "/images/kitchen.jpg" } }),
+  prisma.wallHeight.create({ data: { id: 3, size: "38", img: "/images/kitchen.jpg" } }),
+  prisma.wallHeight.create({ data: { id: 4, size: "41", img: "/images/kitchen.jpg" } }),
+  prisma.wallHeight.create({ data: { id: 5, size: "48", img: "/images/kitchen.jpg" } }),
 ]);
 
 const boxMaterials = await Promise.all([
   prisma.boxMaterial.create({
     data: {
+      id: 1,
       value: "Melamine White",
       img: "/images/kitchen.jpg",
       title: "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
@@ -146,6 +160,7 @@ const boxMaterials = await Promise.all([
   }),
   prisma.boxMaterial.create({
     data: {
+      id: 2,
       value: "Prefinished Plywood Standard",
       img: "/images/kitchen.jpg",
       title: "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
@@ -153,6 +168,7 @@ const boxMaterials = await Promise.all([
   }),
   prisma.boxMaterial.create({
     data: {
+      id: 3,
       value: "Prefinished Plywood Domestic",
       img: "/images/kitchen.jpg",
       title: "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
@@ -163,6 +179,7 @@ const boxMaterials = await Promise.all([
 const hardwarePackages = await Promise.all([
   prisma.hardwarePackage.create({
     data: {
+      id: 1,
       value: "Standard",
       img: "/images/kitchen.jpg",
       title: "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
@@ -170,6 +187,7 @@ const hardwarePackages = await Promise.all([
   }),
   prisma.hardwarePackage.create({
     data: {
+      id: 2,
       value: "Upgraded",
       img: "/images/kitchen.jpg",
       title: "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
@@ -180,6 +198,7 @@ const hardwarePackages = await Promise.all([
 const drawers = await Promise.all([
   prisma.drawer.create({
     data: {
+      id: 1,
       value: "Metal Drawers",
       img: "/images/kitchen.jpg",
       title: "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
@@ -187,6 +206,7 @@ const drawers = await Promise.all([
   }),
   prisma.drawer.create({
     data: {
+      id: 2,
       value: "Standard Drawers",
       img: "/images/kitchen.jpg",
       title: "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
@@ -194,6 +214,7 @@ const drawers = await Promise.all([
   }),
   prisma.drawer.create({
     data: {
+      id: 3,
       value: "Dovetail",
       img: "/images/kitchen.jpg",
       title: "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
@@ -201,30 +222,50 @@ const drawers = await Promise.all([
   }),
 ]);
 
-    await prisma.kitchenQuestions.create({  
-      data: {
-    
-        
+const cabinetStyles = await Promise.all([
+  prisma.cabinetStyle.create({
+    data: {
+      value: "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
+      img: "/images/kitchen.jpg"
+    },
+  }),
+]);
+
+const kitchenQuestions = await prisma.kitchenQuestions.create({
+  data: {
     wallHeights: {
-      connect: wallHeights.map((height) => ({ id: height.id })),
+      connect: wallHeights.map((item) => ({ id: item.id })),
     },
     glassStyles: {
-      connect: glassStyles.map((style) => ({ id: style.id })),
+      connect: glassStyles.map((item) => ({ id: item.id })),
     },
     pantryTalls: {
-      connect: pantryTalls.map((tall) => ({ id: tall.id })),
+      connect: pantryTalls.map((item) => ({ id: item.id })),
     },
     boxMaterials: {
-      connect: boxMaterials.map((material) => ({ id: material.id })),
+      connect: boxMaterials.map((item) => ({ id: item.id })),
     },
     hardwarePackages: {
-      connect: hardwarePackages.map((hardwarePackage) => ({ id: hardwarePackage.id })),
+      connect: hardwarePackages.map((item) => ({ id: item.id })),
     },
     drawers: {
-      connect: drawers.map((drawer) => ({ id: drawer.id })),
+      connect: drawers.map((item) => ({ id: item.id })),
+    },
+    cabinetStyles: {},
+  },
+});
+
+await prisma.kitchenQuestions.update({
+  where: { id: kitchenQuestions.id },
+  data: {
+    cabinetStyles: {
+      connect: cabinetStyles.map((item) => ({ id: item.id })),
     },
   },
 });
+
+
+
 
 console.log("Data seeding completed.");
 

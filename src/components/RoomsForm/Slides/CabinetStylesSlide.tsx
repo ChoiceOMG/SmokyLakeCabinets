@@ -3,18 +3,21 @@ import { motion } from 'framer-motion';
 import { VscChevronLeft } from 'react-icons/vsc';
 import Card from '@components/Card/Card';
 import MultiSelect from '@components/MultiSelect/MultiSelect';
-import { WallHeight } from '@prisma/client';
+import { CabinetStyle, WallHeight } from '@prisma/client';
 import Editor from '@components/RoomsForm/Slides/Editor';
 import { Question } from '@utils/types';
-
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 type CabinetStylesSlideProps = {
   cabinetStyles: string;
   setCabinetStyles: (value: string) => void;
   answers: (q: string, a: any) => void;
   direction: number;
-   saveChanges: (e:Question[]) => void;
+   saveChanges: (e:Question[], m: string) => void;
   editingMode: boolean;
-    wallHeightsList: Array<WallHeight>;
+  wallHeightsList: Array<WallHeight>;
+  cabinetStylesList: Array<CabinetStyle>;
 };
 
 const CabinetStylesSlide: React.FC<CabinetStylesSlideProps> = ({
@@ -25,6 +28,7 @@ const CabinetStylesSlide: React.FC<CabinetStylesSlideProps> = ({
   editingMode,
   saveChanges,
   wallHeightsList,
+  cabinetStylesList,
 
 }) => {
   const [showWallHeights, setShowWallHeights] = React.useState(false);
@@ -39,7 +43,7 @@ const CabinetStylesSlide: React.FC<CabinetStylesSlideProps> = ({
       {editingMode ? (
         <Editor
           saveChanges={saveChanges}
-          List={wallHeightsList}
+          List={showWallHeights?wallHeightsList:cabinetStylesList}
           mode={showWallHeights ? "WallHeights":"CabinetStyles"}
         />
       ) : (
@@ -84,10 +88,21 @@ const CabinetStylesSlide: React.FC<CabinetStylesSlideProps> = ({
                     </label>
                   </div>
                 </label>
-                <Card
-                  title="Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order."
-                  img="/images/kitchen.jpg"
-                />
+               
+                 {cabinetStylesList && cabinetStylesList.length > 1 ? (
+                    <Slider className='
+                max-w-[80%]
+'>
+                    {cabinetStylesList.map((item) => (
+                      <Card key={item.id} className='mx-auto' title={item.value} img={item.img} />
+                    ))}
+                  </Slider>
+                ) : (
+                  cabinetStylesList && cabinetStylesList.map((item) => (
+                    <Card key={item.id} title={item.value} img={item.img} />
+                  ))
+                )}
+
               </div>
 
            

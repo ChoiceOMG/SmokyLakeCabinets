@@ -16,7 +16,7 @@ type PantryTallSlideProps = {
   setLocalCrownFlat: (crownFlat: boolean) => void;
   answers: (q: string, a: any) => void;
   direction: number;
-    saveChanges: (e:Question[]) => void;
+   saveChanges: (e:Question[], m: string) => void;
   editingMode: boolean;
 };
 
@@ -83,15 +83,17 @@ const PantryTallSlide: React.FC<PantryTallSlideProps> = ({
             >
               {el.value}
             </label>
-            <Image
-              width={200}
-              height={200}
-              src={el.img}
-              className="block w-full rounded-lg"
-              alt={el.value}
-              layout="responsive"
-              loader={({ src }) => src}
-            />
+             {el.img && (
+              <Image
+                src={el.img}
+                className="block w-full rounded-lg"
+                alt={el.value}
+                width={200}
+                height={200}
+                layout="responsive"
+                loader={({ src }) => src}
+                />
+              )}
           </div>
         ))}
       </div>

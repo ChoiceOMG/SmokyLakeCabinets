@@ -164,6 +164,13 @@ model Drawer {
   kitchenQuestions KitchenQuestions[]
 }
 
+model CabinetStyle {
+  id               Int                @id @default(autoincrement())
+  img              String
+  value            String
+  kitchenQuestions KitchenQuestions[]
+}
+
 model KitchenQuestions {
   id               Int               @id @default(autoincrement())
   wallHeights      WallHeight[]
@@ -172,4 +179,5 @@ model KitchenQuestions {
   boxMaterials     BoxMaterial[]
   hardwarePackages HardwarePackage[]
   drawers          Drawer[]
+  cabinetStyles    CabinetStyle[]
 }

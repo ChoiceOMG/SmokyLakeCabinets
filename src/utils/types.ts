@@ -5,6 +5,7 @@ export type newImage = {
 }
 
 export type Question = {
+  length?: number;
   id: number;
 
     img?: string;

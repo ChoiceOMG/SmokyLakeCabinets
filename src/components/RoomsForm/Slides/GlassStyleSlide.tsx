@@ -11,7 +11,7 @@ type GlassStyleSlideProps = {
   selectedGlassStyle: string;
   setSelectedGlassStyle: (glassStyle: string) => void;
   answers: (q: string, a: any) => void;
-  saveChanges: (e:Question[]) => void;
+   saveChanges: (e:Question[], m: string) => void;
   editingMode: boolean;
   direction: number;
 };
@@ -71,6 +71,7 @@ const GlassStyleSlide: React.FC<GlassStyleSlideProps> = ({
                   {el.value}
                 </label>
               </div>
+              {el.img && (
               <Image
                 src={el.img}
                 className="block w-full rounded-lg"
@@ -79,7 +80,8 @@ const GlassStyleSlide: React.FC<GlassStyleSlideProps> = ({
                 height={200}
                 layout="responsive"
                 loader={({ src }) => src}
-              />
+                />
+              )}
             </div>
           ))}
         </div>
